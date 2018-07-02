@@ -15,7 +15,7 @@ public class ReplicationScenario {
     
     public void run(){
         
-        DatacenterBroker broker = new InitReplicationScenarioWithInternalNetwork().init(); 
+        DatacenterBroker broker = new InitializeReplicationScenarioWithInternalNetwork().init(); 
         broker.getSimulation().start();
         List<Cloudlet> finished = broker.getCloudletFinishedList();
         new CloudletsTableBuilder(finished).build();
