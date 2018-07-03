@@ -10,12 +10,12 @@ import org.cloudsimplus.builders.tables.CloudletsTableBuilder;
 
 
 
-public class ReplicationScenario {
+public class RunReplicationScenario {
 	
     
     public void run(){
         
-        DatacenterBroker broker = new InitializeReplicationScenarioWithInternalNetwork().init(); 
+        DatacenterBroker broker = new InitializeReplicationScenarioBasicTreeTopology().init(); 
         broker.getSimulation().start();
         List<Cloudlet> finished = broker.getCloudletFinishedList();
         new CloudletsTableBuilder(finished).build();

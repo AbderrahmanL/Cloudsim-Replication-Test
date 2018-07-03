@@ -6,7 +6,7 @@ public class App {
 
 	public static void main(String[] args) {
 		Log.printLine("Starting replication scenario ...");
-        new ReplicationScenario().run();
+        new RunReplicationScenario().run();
         Log.printLine("Replication scenario finished!");
 //        File f = new File("file", 50);
 //        System.out.println(f.getRegistrationID());

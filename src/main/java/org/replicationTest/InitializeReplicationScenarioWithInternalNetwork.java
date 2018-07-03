@@ -32,8 +32,15 @@ import org.cloudbus.cloudsim.vms.network.NetworkVm;
 import org.replicationTest.cloudsim.RackHost;
 import org.replicationTest.cloudsim.RackSanStorage;
 
-public class InitializeReplicationScenarioWithInternalNetwork extends InitializeReplicationScenario {
+public abstract class InitializeReplicationScenarioWithInternalNetwork extends InitializeReplicationScenario {
 
+	/**
+     * Creates internal Datacenter network.
+     *
+     * @param datacenter Datacenter where the network will be created
+     */
+    protected abstract void createNetwork(NetworkDatacenter datacenter);
+	
 	@Override
 	protected DatacenterBroker createBroker(CloudSim simulation) {
 		DatacenterBroker broker = new DatacenterBrokerSimple(simulation);
@@ -142,32 +149,5 @@ public class InitializeReplicationScenarioWithInternalNetwork extends Initialize
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	/**
-     * Creates internal Datacenter network.
-     *
-     * @param datacenter Datacenter where the network will be created
-     */
-    private void createNetwork(NetworkDatacenter datacenter) {
-        EdgeSwitch[] edgeSwitches = new EdgeSwitch[1];
-        AggregateSwitch[] aggregateSwitches = new AggregateSwitch[1];
-        RootSwitch[] rootSwitches = new RootSwitch[1];
-        for (int i = 0; i < ((RackHost) datacenter.getHostList().get(0)).getHostCount()/(SimulationConstParameters.Hosts_PER_RACK * SimulationConstParameters.RACKS_PER_SWITCH); i++) {
-            edgeSwitches[i] = new EdgeSwitch((CloudSim) datacenter.getSimulation(), datacenter);
-            datacenter.addSwitch(edgeSwitches[i]);
-        }
-
-        for (NetworkHost host : datacenter.<NetworkHost>getHostList()) {
-            int switchNum = host.getId() / edgeSwitches[0].getPorts();
-            /*
-            @TODO these two calls below are redundant.
-            When connecting a host to a switch, the
-            switch should be automatically linked to the Host
-            to create the bi-directional association.
-            */
-            edgeSwitches[switchNum].connectHost(host);
-            host.setEdgeSwitch(edgeSwitches[switchNum]);
-        }
-    }
 
 }
