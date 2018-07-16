@@ -1,5 +1,5 @@
-package org.replicationTest.cloudsim;
-
-public class AbstractRack {
-
-}
+//package org.replicationTest.cloudsim;
+//
+//public class AbstractRack {
+//
+//}

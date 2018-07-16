@@ -1,6 +1,5 @@
 package org.replicationTest;
 
-import org.cloudbus.cloudsim.cloudlets.Cloudlet;
 import org.cloudbus.cloudsim.cloudlets.network.CloudletReceiveTask;
 import org.cloudbus.cloudsim.cloudlets.network.CloudletSendTask;
 import org.cloudbus.cloudsim.cloudlets.network.NetworkCloudlet;
@@ -11,13 +10,12 @@ import org.cloudbus.cloudsim.network.switches.AggregateSwitch;
 import org.cloudbus.cloudsim.network.switches.EdgeSwitch;
 import org.cloudbus.cloudsim.network.switches.RootSwitch;
 import org.cloudbus.cloudsim.vms.Vm;
-import org.replicationTest.cloudsim.RackHost;
 
 public class InitializeReplicationScenarioBasicTreeTopology extends InitializeReplicationScenarioWithInternalNetwork{
 
 	private static final long TASK_RAM = 100;
 	private static final int NUMBER_OF_PACKETS_TO_SEND = 1;
-	private static final long PACKET_DATA_LENGTH_IN_BYTES = 400000;
+	private static final long PACKET_DATA_LENGTH_IN_BYTES = 2000;
 
 	/**
      * Creates internal Datacenter network.
@@ -26,23 +24,23 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
      */
 	@Override
 	protected void createNetwork(NetworkDatacenter datacenter) {
-        EdgeSwitch[] edgeSwitches = new EdgeSwitch[4];
+          EdgeSwitch[] edgeSwitches = new EdgeSwitch[4];
         AggregateSwitch[] aggregateSwitches = new AggregateSwitch[4];
         RootSwitch rootSwitch = new RootSwitch((CloudSim) datacenter.getSimulation(), datacenter);
         datacenter.addSwitch(rootSwitch);
-        for (int i = 0; i < ((RackHost) datacenter.getHostList().get(0)).getHostCount()/(SimulationConstParameters.Hosts_PER_RACK * SimulationConstParameters.RACKS_PER_SWITCH); i++) {
+        for (int i = 0; i < datacenter.getHostList().size()/(SimulationConstParameters.Hosts_PER_RACK * SimulationConstParameters.RACKS_PER_SWITCH); i++) {
             edgeSwitches[i] = new EdgeSwitch((CloudSim) datacenter.getSimulation(), datacenter);
             aggregateSwitches[i] = new AggregateSwitch((CloudSim) datacenter.getSimulation(), datacenter);
-
             aggregateSwitches[i].getDownlinkSwitches().add(edgeSwitches[i]);
+            edgeSwitches[i].getUplinkSwitches().add(aggregateSwitches[i]);
             aggregateSwitches[i].getUplinkSwitches().add(rootSwitch);
-            
+            rootSwitch.getDownlinkSwitches().add(aggregateSwitches[i]);
             datacenter.addSwitch(aggregateSwitches[i]);
             datacenter.addSwitch(edgeSwitches[i]);
         }
 
+        int indexCurrentSwitch = 0, hostPerSwitchcounter = 0;
         for (NetworkHost host : datacenter.<NetworkHost>getHostList()) {
-        	int indexCurrentSwitch = 0, hostPerSwitchcounter = 0;
         	
             int switchNum = host.getId() / edgeSwitches[indexCurrentSwitch].getPorts();
             /**
@@ -53,6 +51,7 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
             */
             edgeSwitches[switchNum].connectHost(host);
             host.setEdgeSwitch(edgeSwitches[switchNum]);
+            System.out.println(hostPerSwitchcounter + " , "+ indexCurrentSwitch);
             hostPerSwitchcounter++;
             if(hostPerSwitchcounter == 4){
             	hostPerSwitchcounter = 0;
@@ -88,9 +87,12 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
 	            cloudletList.add(cloudlet);
 	        }
 	    }
-//
-        addSendTask((NetworkCloudlet)cloudletList.get(0), (NetworkCloudlet)cloudletList.get(1));
-//        addReceiveTask((NetworkCloudlet)cloudletList.get(1), (NetworkCloudlet)cloudletList.get(0));
+	    for(int i = 0 ; i < 16 ; i++){
+	    	addSendTask((NetworkCloudlet)cloudletList.get(i), (NetworkCloudlet)cloudletList.get(16+i));
+	    	addReceiveTask((NetworkCloudlet)cloudletList.get(16+i), (NetworkCloudlet)cloudletList.get(i));	 
+//	    	addSendTask((NetworkCloudlet)cloudletList.get(16+i), (NetworkCloudlet)cloudletList.get(i));
+//	    	addReceiveTask((NetworkCloudlet)cloudletList.get(i), (NetworkCloudlet)cloudletList.get(16+i));	
+	    } 
 	    broker.submitVmList(vmList);
 	    broker.submitCloudletList(cloudletList);
 	    

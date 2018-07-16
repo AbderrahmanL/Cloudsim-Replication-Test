@@ -102,7 +102,9 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 	@Override
 	protected Datacenter createDatacenter(CloudSim simulation,
 			List<Host> hostList, VmAllocationPolicy vmAllocationPolicy) {
-		Datacenter dc = new NetworkDatacenter(simulation, hostList, new VmAllocationPolicySimple());
+		NetworkDatacenter dc = new NetworkDatacenter(simulation, hostList, new VmAllocationPolicySimple());
+		createNetwork(dc);
+		dc.setSchedulingInterval(5);
     	return dc;
 	}
 
@@ -149,5 +151,6 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 
 }
