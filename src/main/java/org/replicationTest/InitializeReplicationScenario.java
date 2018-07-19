@@ -45,6 +45,7 @@ public abstract class InitializeReplicationScenario {
 			
 			public DatacenterBroker init(){
 				CloudSim simulation = new CloudSim();
+//				simulation.terminateAt(40);
 			    dcs = createDatacenters(simulation);
 			    
 			    broker = createBroker(simulation);
@@ -58,11 +59,8 @@ public abstract class InitializeReplicationScenario {
 			    
 			    NetworkTopology networkTopology = BriteNetworkTopology.getInstance("topology.brite");
 			  	simulation.setNetworkTopology(networkTopology);
-			  	for (int i=1 ; i<18 ; i++)
-			  	networkTopology.mapNode(i, i-1);
-			  	networkTopology.mapNode(broker.getId(),17);
-			    for(Datacenter dc : dcs)
-			    	System.out.println(dc.getId());
+			  	for (int i=1 ; i<22 ; i++)
+			  	networkTopology.mapNode(i, i);
 				return broker;
 				}
 			
@@ -72,7 +70,7 @@ public abstract class InitializeReplicationScenario {
 			protected void createVms(){
 				
 			    for (int i = 0; i < SimulationConstParameters.HOST_SUPER*SimulationConstParameters.DC_SUPER; i++) {
-			        Vm vm = createVm(vmList.size(), 32768,4000,8);
+			        Vm vm = createVm(vmList.size(), 32768,4000,16);
 			        vmList.add(vm);
 			        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
 			            Cloudlet cloudlet = createCloudlet(cloudletList.size(), broker, vm);

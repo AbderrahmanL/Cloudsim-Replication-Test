@@ -15,7 +15,7 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
 
 	private static final long TASK_RAM = 100;
 	private static final int NUMBER_OF_PACKETS_TO_SEND = 1;
-	private static final long PACKET_DATA_LENGTH_IN_BYTES = 2000;
+	private static final long PACKET_DATA_LENGTH_IN_BYTES = 2000000000;
 
 	/**
      * Creates internal Datacenter network.
@@ -51,7 +51,6 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
             */
             edgeSwitches[switchNum].connectHost(host);
             host.setEdgeSwitch(edgeSwitches[switchNum]);
-            System.out.println(hostPerSwitchcounter + " , "+ indexCurrentSwitch);
             hostPerSwitchcounter++;
             if(hostPerSwitchcounter == 4){
             	hostPerSwitchcounter = 0;
@@ -64,7 +63,7 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
 	protected void createVms(){
 		
 	    for (int i = 0; i < SimulationConstParameters.HOST_SUPER*SimulationConstParameters.DC_SUPER; i++) {
-	        Vm vm = createVm(vmList.size(), 32768,4000,8);
+	        Vm vm = createVm(vmList.size(), 32768,4000,16);
 	        vmList.add(vm);
 	        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
 	            NetworkCloudlet cloudlet = (NetworkCloudlet)createCloudlet(cloudletList.size(), broker, vm);
@@ -87,12 +86,13 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
 	            cloudletList.add(cloudlet);
 	        }
 	    }
-	    for(int i = 0 ; i < 16 ; i++){
-	    	addSendTask((NetworkCloudlet)cloudletList.get(i), (NetworkCloudlet)cloudletList.get(16+i));
-	    	addReceiveTask((NetworkCloudlet)cloudletList.get(16+i), (NetworkCloudlet)cloudletList.get(i));	 
+//	    for(int i = 0 ; i < 16 ; i++){
 //	    	addSendTask((NetworkCloudlet)cloudletList.get(16+i), (NetworkCloudlet)cloudletList.get(i));
 //	    	addReceiveTask((NetworkCloudlet)cloudletList.get(i), (NetworkCloudlet)cloudletList.get(16+i));	
-	    } 
+
+    	addSendTask((NetworkCloudlet)cloudletList.get(15), (NetworkCloudlet)cloudletList.get(17));
+    	addReceiveTask((NetworkCloudlet)cloudletList.get(17), (NetworkCloudlet)cloudletList.get(15));	
+//	    } 
 	    broker.submitVmList(vmList);
 	    broker.submitCloudletList(cloudletList);
 	    

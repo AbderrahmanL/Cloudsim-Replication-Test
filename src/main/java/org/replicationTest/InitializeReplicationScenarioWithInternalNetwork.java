@@ -119,7 +119,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 		List<FileStorage> storageList = new ArrayList<FileStorage>();
         for(int j = 0; j < SimulationConstParameters.HOST_SUPER; j++) {
         	int currentRack = 0;
-        	Host host = ((RackHost)createHost(32768,4000,8));
+        	Host host = ((RackHost)createHost(32768,4000,16));
         	((RackHost)host).setRackId(((RackHost)host).getHostCount()/SimulationConstParameters.Hosts_PER_RACK);
             hostList.add(host);
             if(currentRack == 0){ 
