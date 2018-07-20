@@ -64,7 +64,7 @@ public class InitializeReplicationScenarioNoInternalNetwork extends InitializeRe
                 .setCloudletScheduler(new CloudletSchedulerTimeShared());
     }
 
-    protected Cloudlet createCloudlet(int id, DatacenterBroker broker, Vm vm) {
+    protected Cloudlet createCloudlet(int id, Vm vm) {
         final long length = 10000; //in Million Structions (MI)
         final long fileSize = 300; //Size (in bytes) before execution
         final long outputSize = 300; //Size (in bytes) after execution
@@ -144,6 +144,5 @@ public class InitializeReplicationScenarioNoInternalNetwork extends InitializeRe
 	    dc.setDatacenterStorage(datacenterStorage);
 	    return dc;
 	}
-
 
 }

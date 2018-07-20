@@ -66,7 +66,7 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
 	        Vm vm = createVm(vmList.size(), 32768,4000,16);
 	        vmList.add(vm);
 	        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
-	            NetworkCloudlet cloudlet = (NetworkCloudlet)createCloudlet(cloudletList.size(), broker, vm);
+	            NetworkCloudlet cloudlet = (NetworkCloudlet)createCloudlet(cloudletList.size(), vm);
 	            cloudletList.add(cloudlet);
 	        }
 	    }
@@ -74,27 +74,27 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
 	        Vm vm = createVm(vmList.size(), 16348,2500,6);
 	        vmList.add(vm);
 	        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
-	        	NetworkCloudlet cloudlet = (NetworkCloudlet)createCloudlet(cloudletList.size(), broker, vm);
-	            cloudletList.add(cloudlet);
+//	        	NetworkCloudlet cloudlet = (NetworkCloudlet)createCloudlet(cloudletList.size(), broker, vm);
+//	            cloudletList.add(cloudlet);
 	        }
 	    }
 	    for (int i = 0; i < SimulationConstParameters.HOST_STANDARD*SimulationConstParameters.DC_STANDARD; i++) {
 	        Vm vm = createVm(vmList.size(), 8192,1000,4);
 	        vmList.add(vm);
 	        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
-	        	NetworkCloudlet cloudlet = (NetworkCloudlet)createCloudlet(cloudletList.size(), broker, vm);
-	            cloudletList.add(cloudlet);
+//	        	NetworkCloudlet cloudlet = (NetworkCloudlet)createCloudlet(cloudletList.size(), broker, vm);
+//	            cloudletList.add(cloudlet);
 	        }
 	    }
 //	    for(int i = 0 ; i < 16 ; i++){
 //	    	addSendTask((NetworkCloudlet)cloudletList.get(16+i), (NetworkCloudlet)cloudletList.get(i));
 //	    	addReceiveTask((NetworkCloudlet)cloudletList.get(i), (NetworkCloudlet)cloudletList.get(16+i));	
 
-    	addSendTask((NetworkCloudlet)cloudletList.get(15), (NetworkCloudlet)cloudletList.get(17));
-    	addReceiveTask((NetworkCloudlet)cloudletList.get(17), (NetworkCloudlet)cloudletList.get(15));	
+//    	addSendTask((NetworkCloudlet)cloudletList.get(15), (NetworkCloudlet)cloudletList.get(17));
+//    	addReceiveTask((NetworkCloudlet)cloudletList.get(17), (NetworkCloudlet)cloudletList.get(15));	
 //	    } 
 	    broker.submitVmList(vmList);
-	    broker.submitCloudletList(cloudletList);
+//	    broker.submitCloudletList(cloudletList);
 	    
 	}
 	

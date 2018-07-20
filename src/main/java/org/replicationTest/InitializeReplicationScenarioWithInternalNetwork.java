@@ -60,7 +60,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 	}
 
 	@Override
-	protected Cloudlet createCloudlet(int id, DatacenterBroker broker, Vm vm) {
+	protected Cloudlet createCloudlet(int id, Vm vm) {
 		 final long length = 10000; //in Million Structions (MI)
 	        final long fileSize = 300; //Size (in bytes) before execution
 	        final long outputSize = 300; //Size (in bytes) after execution

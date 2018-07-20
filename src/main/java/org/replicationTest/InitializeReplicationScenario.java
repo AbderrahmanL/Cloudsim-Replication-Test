@@ -4,19 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
-import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicySimple;
 import org.cloudbus.cloudsim.brokers.DatacenterBroker;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
 import org.cloudbus.cloudsim.core.CloudSim;
+import org.cloudbus.cloudsim.core.CloudSimEntity;
+import org.cloudbus.cloudsim.core.CloudSimTags;
 import org.cloudbus.cloudsim.datacenters.Datacenter;
 import org.cloudbus.cloudsim.hosts.Host;
 import org.cloudbus.cloudsim.network.topologies.BriteNetworkTopology;
 import org.cloudbus.cloudsim.network.topologies.NetworkTopology;
-import org.cloudbus.cloudsim.resources.DatacenterStorage;
+import org.cloudbus.cloudsim.resources.File;
 import org.cloudbus.cloudsim.resources.FileStorage;
-import org.cloudbus.cloudsim.resources.SanStorage;
 import org.cloudbus.cloudsim.vms.Vm;
-import org.replicationTest.cloudsim.ObjectFile;
 
 public abstract class InitializeReplicationScenario {
 	
@@ -29,7 +28,7 @@ public abstract class InitializeReplicationScenario {
 
 			protected abstract Vm createVm(int id, int ram,long mips,int pes);
 			
-			protected abstract Cloudlet createCloudlet(int id, DatacenterBroker broker, Vm vm);
+			protected abstract Cloudlet createCloudlet(int id, Vm vm);
 			
 			protected abstract  Host createHost(int ram,long mips,int pes);
 
@@ -45,7 +44,7 @@ public abstract class InitializeReplicationScenario {
 			
 			public DatacenterBroker init(){
 				CloudSim simulation = new CloudSim();
-//				simulation.terminateAt(40);
+//				simulation.terminateAt(10);
 			    dcs = createDatacenters(simulation);
 			    
 			    broker = createBroker(simulation);
@@ -54,8 +53,6 @@ public abstract class InitializeReplicationScenario {
 			    cloudletList = new ArrayList<>();
 			    
 			    createVms();
-		
-			    
 			    
 			    NetworkTopology networkTopology = BriteNetworkTopology.getInstance("topology.brite");
 			  	simulation.setNetworkTopology(networkTopology);
@@ -73,7 +70,7 @@ public abstract class InitializeReplicationScenario {
 			        Vm vm = createVm(vmList.size(), 32768,4000,16);
 			        vmList.add(vm);
 			        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
-			            Cloudlet cloudlet = createCloudlet(cloudletList.size(), broker, vm);
+			            Cloudlet cloudlet = createCloudlet(cloudletList.size(), vm);
 			            cloudletList.add(cloudlet);
 			        }
 			    }
@@ -81,20 +78,19 @@ public abstract class InitializeReplicationScenario {
 			        Vm vm = createVm(vmList.size(), 16348,2500,6);
 			        vmList.add(vm);
 			        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
-			            Cloudlet cloudlet = createCloudlet(cloudletList.size(), broker, vm);
-			            cloudletList.add(cloudlet);
+//			            Cloudlet cloudlet = createCloudlet(cloudletList.size(), broker, vm);
+//			            cloudletList.add(cloudlet);
 			        }
 			    }
 			    for (int i = 0; i < SimulationConstParameters.HOST_STANDARD*SimulationConstParameters.DC_STANDARD; i++) {
 			        Vm vm = createVm(vmList.size(), 8192,1000,4);
 			        vmList.add(vm);
 			        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
-			            Cloudlet cloudlet = createCloudlet(cloudletList.size(), broker, vm);
-			            cloudletList.add(cloudlet);
+//			            Cloudlet cloudlet = createCloudlet(cloudletList.size(), broker, vm);
+//			            cloudletList.add(cloudlet);
 			        }
 			    }
 			    broker.submitVmList(vmList);
-			    broker.submitCloudletList(cloudletList);
 			    
 			}
 			
@@ -119,6 +115,5 @@ public abstract class InitializeReplicationScenario {
 				        
 					return datacenters;
 				}
-			
 			
 }
