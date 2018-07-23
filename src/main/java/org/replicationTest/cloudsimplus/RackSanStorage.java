@@ -1,4 +1,4 @@
-package org.replicationTest.cloudsim;
+package org.replicationTest.cloudsimplus;
 
 import org.cloudbus.cloudsim.resources.FileStorage;
 import org.cloudbus.cloudsim.resources.SanStorage;

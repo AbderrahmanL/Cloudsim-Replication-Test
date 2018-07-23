@@ -29,8 +29,8 @@ import org.cloudbus.cloudsim.schedulers.vm.VmSchedulerSpaceShared;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelFull;
 import org.cloudbus.cloudsim.vms.Vm;
 import org.cloudbus.cloudsim.vms.network.NetworkVm;
-import org.replicationTest.cloudsim.RackHost;
-import org.replicationTest.cloudsim.RackSanStorage;
+import org.replicationTest.cloudsimplus.RackHost;
+import org.replicationTest.cloudsimplus.RackSanStorage;
 
 public abstract class InitializeReplicationScenarioWithInternalNetwork extends InitializeReplicationScenario {
 

@@ -1,7 +1,7 @@
 package org.replicationTest.replication;
 
 import org.cloudbus.cloudsim.resources.File;
-import org.replicationTest.cloudsim.ObjectFile;
+import org.replicationTest.cloudsimplus.ObjectFile;
 
 public class Replica extends ObjectFile implements IReplica{
 
