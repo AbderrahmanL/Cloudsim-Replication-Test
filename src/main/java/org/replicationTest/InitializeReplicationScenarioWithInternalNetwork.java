@@ -15,22 +15,18 @@ import org.cloudbus.cloudsim.datacenters.Datacenter;
 import org.cloudbus.cloudsim.datacenters.network.NetworkDatacenter;
 import org.cloudbus.cloudsim.hosts.Host;
 import org.cloudbus.cloudsim.hosts.network.NetworkHost;
-import org.cloudbus.cloudsim.network.switches.AggregateSwitch;
-import org.cloudbus.cloudsim.network.switches.EdgeSwitch;
-import org.cloudbus.cloudsim.network.switches.RootSwitch;
 import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.ResourceProvisionerSimple;
 import org.cloudbus.cloudsim.resources.DatacenterStorage;
 import org.cloudbus.cloudsim.resources.FileStorage;
 import org.cloudbus.cloudsim.resources.Pe;
 import org.cloudbus.cloudsim.resources.PeSimple;
+import org.cloudbus.cloudsim.resources.SanStorage;
 import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerTimeShared;
 import org.cloudbus.cloudsim.schedulers.vm.VmSchedulerSpaceShared;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelFull;
 import org.cloudbus.cloudsim.vms.Vm;
 import org.cloudbus.cloudsim.vms.network.NetworkVm;
-import org.replicationTest.cloudsimplus.RackHost;
-import org.replicationTest.cloudsimplus.RackSanStorage;
 
 public abstract class InitializeReplicationScenarioWithInternalNetwork extends InitializeReplicationScenario {
 
@@ -93,7 +89,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 	            pesList.add(new PeSimple(mips, new PeProvisionerSimple()));
 	        }
 
-	        return (RackHost) new RackHost(ram, bw, storage, pesList)
+	        return (NetworkHost) new NetworkHost(ram, bw, storage, pesList)
 	                .setRamProvisioner(new ResourceProvisionerSimple())
 	                .setBwProvisioner(new ResourceProvisionerSimple())
 	                .setVmScheduler(new VmSchedulerSpaceShared());
@@ -110,7 +106,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 
 	@Override
 	protected FileStorage createStorage(int i, double d, int j) {	
-		return new RackSanStorage(1000000000, 10.0, 5);
+		return new SanStorage(1000000000, 10.0, 5);
 	}
 
 	@Override
@@ -119,16 +115,9 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 		List<FileStorage> storageList = new ArrayList<FileStorage>();
         for(int j = 0; j < SimulationConstParameters.HOST_SUPER; j++) {
         	int currentRack = 0;
-        	Host host = ((RackHost)createHost(32768,4000,16));
-        	((RackHost)host).setRackId(((RackHost)host).getHostCount()/SimulationConstParameters.Hosts_PER_RACK);
+        	Host host = createHost(32768,4000,16);
             hostList.add(host);
-            if(currentRack == 0){ 
-            	storageList.add(((RackSanStorage)createStorage(1000000000, 10.0, 5)).setRackId(currentRack));
-            }
-            if(((RackHost)host).getHostCount()/SimulationConstParameters.Hosts_PER_RACK != currentRack){ 
-            	currentRack++;
-            	storageList.add(((RackSanStorage)createStorage(1000000000, 10.0, 5)).setRackId(currentRack));
-            }
+            	storageList.add((createStorage(1000000000, 10.0, 5)));              
         }
 //	    storageList.get(0).addFile(new ObjectFile("file1.dat", 20));
 //	    storageList.get(0).addFile(new ObjectFile("file2.dat", 100));

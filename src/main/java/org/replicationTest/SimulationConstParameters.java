@@ -10,7 +10,7 @@ public class SimulationConstParameters {
 	public static final int HOST_SUPER = 16;
 	public static final int HOST_MID = 0;
 	public static final int HOST_STANDARD = 0;
-	public static final int Hosts_PER_RACK = 2;
-	public static final int RACKS_PER_SWITCH = 2;
+	public static final int STORAGE_NODES_SUPER = 10;
+	public static final int HOSTS_PER_SWITCH = 4;
 
 }

@@ -28,7 +28,7 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
         AggregateSwitch[] aggregateSwitches = new AggregateSwitch[4];
         RootSwitch rootSwitch = new RootSwitch((CloudSim) datacenter.getSimulation(), datacenter);
         datacenter.addSwitch(rootSwitch);
-        for (int i = 0; i < datacenter.getHostList().size()/(SimulationConstParameters.Hosts_PER_RACK * SimulationConstParameters.RACKS_PER_SWITCH); i++) {
+        for (int i = 0; i < datacenter.getHostList().size()/SimulationConstParameters.HOSTS_PER_SWITCH; i++) {
             edgeSwitches[i] = new EdgeSwitch((CloudSim) datacenter.getSimulation(), datacenter);
             aggregateSwitches[i] = new AggregateSwitch((CloudSim) datacenter.getSimulation(), datacenter);
             aggregateSwitches[i].getDownlinkSwitches().add(edgeSwitches[i]);

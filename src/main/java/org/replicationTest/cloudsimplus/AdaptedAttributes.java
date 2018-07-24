@@ -5,11 +5,11 @@ import java.util.Date;
 import org.cloudbus.cloudsim.resources.File;
 import org.cloudbus.cloudsim.resources.FileAttribute;
 
-public class ObjectAttribute extends FileAttribute{
+public class AdaptedAttributes extends FileAttribute{
 	
 	private String id;
 	
-	public ObjectAttribute(File file, int fileSize) {
+	public AdaptedAttributes(File file, int fileSize) {
 		super(file, fileSize);
 		setCreationTime();
 		setRegistrationId();

@@ -26,7 +26,7 @@ import org.cloudbus.cloudsim.schedulers.vm.VmSchedulerSpaceShared;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelDynamic;
 import org.cloudbus.cloudsim.vms.Vm;
 import org.cloudbus.cloudsim.vms.VmSimple;
-import org.replicationTest.cloudsimplus.ObjectFile;
+import org.replicationTest.cloudsimplus.AdaptedFile;
 
 
 public class InitializeReplicationScenarioNoInternalNetwork extends InitializeReplicationScenario{
@@ -103,9 +103,9 @@ public class InitializeReplicationScenarioNoInternalNetwork extends InitializeRe
         }
         List<FileStorage> storageList = new ArrayList<FileStorage>();
 	    storageList.add(createStorage(1000000000, 10.0, 5));
-	    storageList.get(0).addFile(new ObjectFile("file1.dat", 20));
-	    storageList.get(0).addFile(new ObjectFile("file2.dat", 100));
-	    storageList.get(0).addFile(new ObjectFile("file3.dat", 700));
+	    storageList.get(0).addFile(new AdaptedFile("file1.dat", 20));
+	    storageList.get(0).addFile(new AdaptedFile("file2.dat", 100));
+	    storageList.get(0).addFile(new AdaptedFile("file3.dat", 700));
 	    DatacenterStorage datacenterStorage = new  DatacenterStorage();
         Datacenter dc = createDatacenter(simulation, hostList3, new VmAllocationPolicySimple());
         dc.setDatacenterStorage(datacenterStorage);

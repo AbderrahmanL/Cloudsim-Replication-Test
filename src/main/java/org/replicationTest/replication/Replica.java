@@ -1,9 +1,9 @@
 package org.replicationTest.replication;
 
 import org.cloudbus.cloudsim.resources.File;
-import org.replicationTest.cloudsimplus.ObjectFile;
+import org.replicationTest.cloudsimplus.AdaptedFile;
 
-public class Replica extends ObjectFile implements IReplica{
+public class Replica extends AdaptedFile implements IReplica{
 
 	
 	public Replica(File file) throws IllegalArgumentException {
