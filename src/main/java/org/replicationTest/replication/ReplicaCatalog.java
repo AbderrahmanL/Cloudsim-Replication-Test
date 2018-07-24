@@ -1,10 +1,12 @@
 package org.replicationTest.replication;
 
-import java.util.List;
 import java.util.HashSet;
+import java.util.List;
+
+import org.replicationTest.cloudsimplus.AdaptedFile;
 
 
-public class ReplicaCatalog extends HashSet<IReplica> implements IReplicaCatalog {
+public class ReplicaCatalog extends HashSet<AdaptedFile> implements MetadataCatalog {
 
 	/**
 	 * 
@@ -12,7 +14,7 @@ public class ReplicaCatalog extends HashSet<IReplica> implements IReplicaCatalog
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public List<IReplica> getAllReplicas(IReplica replica) {
+	public List<AdaptedFile> getAllReplicas(AdaptedFile replica) {
 		// TODO Auto-generated method stub
 		return null;
 	}

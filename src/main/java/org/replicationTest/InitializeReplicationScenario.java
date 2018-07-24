@@ -44,7 +44,7 @@ public abstract class InitializeReplicationScenario {
 			
 			public DatacenterBroker init(){
 				CloudSim simulation = new CloudSim();
-//				simulation.terminateAt(10);
+
 			    dcs = createDatacenters(simulation);
 			    
 			    broker = createBroker(simulation);

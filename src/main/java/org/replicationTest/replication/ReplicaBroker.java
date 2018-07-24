@@ -1,5 +1,5 @@
 package org.replicationTest.replication;
 
-public class ReplicaBroker implements IReplicaBroker{
+public class ReplicaBroker implements MetadataBroker{
 
 }

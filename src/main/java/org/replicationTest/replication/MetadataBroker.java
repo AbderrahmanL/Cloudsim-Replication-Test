@@ -7,6 +7,6 @@ package org.replicationTest.replication;
  * what files to replicate in order to meet availability 
  * requirements. 
  */
-public interface IReplicaBroker {
+public interface MetadataBroker {
 
 }
