@@ -1,8 +1,7 @@
 package org.scenario.replication;
 
 /*
- * A replica manager is responsible for creating new replicas
- * placing, storing and deleting old or unused replicas.
+ * A metadata manager is responsible for handling metadata catalog
  */
 public interface MetadataManager {
 	

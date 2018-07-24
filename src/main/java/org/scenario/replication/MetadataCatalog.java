@@ -2,7 +2,7 @@ package org.scenario.replication;
 
 import java.util.List;
 
-import org.scenario.cloudsimplus.AdaptedFile;
+import org.scenario.cloudsimplus.FileMetadata;
 
 /**
  * A replica catalog is holding a list of all replicas
@@ -17,6 +17,6 @@ public interface MetadataCatalog {
 	 * @param replica a given file/object
 	 * @return list of replicas
 	 */
-	List<AdaptedFile> getAllReplicas(AdaptedFile file);
+	List<FileMetadata> getAllReplicas(FileMetadata file);
 
 }
