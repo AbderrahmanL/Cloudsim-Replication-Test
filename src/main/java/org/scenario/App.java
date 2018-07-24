@@ -1,4 +1,4 @@
-package org.replicationTest;
+package org.scenario;
 
 
 public class App {

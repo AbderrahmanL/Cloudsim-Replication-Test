@@ -1,4 +1,4 @@
-package org.replicationTest.replication;
+package org.scenario.replication;
 
 /*
  * A replica manager is responsible for creating new replicas

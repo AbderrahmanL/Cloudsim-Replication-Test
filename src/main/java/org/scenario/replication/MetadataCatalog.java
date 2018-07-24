@@ -1,8 +1,8 @@
-package org.replicationTest.replication;
+package org.scenario.replication;
 
 import java.util.List;
 
-import org.replicationTest.cloudsimplus.AdaptedFile;
+import org.scenario.cloudsimplus.AdaptedFile;
 
 /**
  * A replica catalog is holding a list of all replicas

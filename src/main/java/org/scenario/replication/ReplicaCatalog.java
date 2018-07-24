@@ -1,9 +1,9 @@
-package org.replicationTest.replication;
+package org.scenario.replication;
 
 import java.util.HashSet;
 import java.util.List;
 
-import org.replicationTest.cloudsimplus.AdaptedFile;
+import org.scenario.cloudsimplus.AdaptedFile;
 
 
 public class ReplicaCatalog extends HashSet<AdaptedFile> implements MetadataCatalog {

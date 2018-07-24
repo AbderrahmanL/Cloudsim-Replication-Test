@@ -1,4 +1,4 @@
-package org.replicationTest.cloudsimplus;
+package org.scenario.cloudsimplus;
 
 import org.cloudbus.cloudsim.cloudlets.network.NetworkCloudlet;
 

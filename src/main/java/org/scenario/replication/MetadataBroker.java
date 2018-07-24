@@ -1,4 +1,4 @@
-package org.replicationTest.replication;
+package org.scenario.replication;
 
 /*
  * A replica broker acts as an intermediate between the catalog

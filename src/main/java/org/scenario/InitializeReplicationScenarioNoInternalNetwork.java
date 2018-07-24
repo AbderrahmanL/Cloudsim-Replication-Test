@@ -1,4 +1,4 @@
-package org.replicationTest;
+package org.scenario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ import org.cloudbus.cloudsim.schedulers.vm.VmSchedulerSpaceShared;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelDynamic;
 import org.cloudbus.cloudsim.vms.Vm;
 import org.cloudbus.cloudsim.vms.VmSimple;
-import org.replicationTest.cloudsimplus.AdaptedFile;
+import org.scenario.cloudsimplus.AdaptedFile;
 
 
 public class InitializeReplicationScenarioNoInternalNetwork extends InitializeReplicationScenario{
