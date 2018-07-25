@@ -4,12 +4,12 @@ import org.cloudbus.cloudsim.cloudlets.network.CloudletReceiveTask;
 import org.cloudbus.cloudsim.cloudlets.network.CloudletSendTask;
 import org.cloudbus.cloudsim.cloudlets.network.NetworkCloudlet;
 import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.datacenters.network.NetworkDatacenter;
 import org.cloudbus.cloudsim.hosts.network.NetworkHost;
 import org.cloudbus.cloudsim.network.switches.AggregateSwitch;
 import org.cloudbus.cloudsim.network.switches.EdgeSwitch;
 import org.cloudbus.cloudsim.network.switches.RootSwitch;
 import org.cloudbus.cloudsim.vms.Vm;
+import org.scenario.cloudsimplus.AdaptedDatacenter;
 
 public class InitializeReplicationScenarioBasicTreeTopology extends InitializeReplicationScenarioWithInternalNetwork{
 
@@ -23,7 +23,7 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
      * @param datacenter Datacenter where the network will be created
      */
 	@Override
-	protected void createNetwork(NetworkDatacenter datacenter) {
+	protected void createNetwork(AdaptedDatacenter datacenter) {
           EdgeSwitch[] edgeSwitches = new EdgeSwitch[4];
         AggregateSwitch[] aggregateSwitches = new AggregateSwitch[4];
         RootSwitch rootSwitch = new RootSwitch((CloudSim) datacenter.getSimulation(), datacenter);
@@ -94,7 +94,7 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
 //    	addReceiveTask((NetworkCloudlet)cloudletList.get(17), (NetworkCloudlet)cloudletList.get(15));	
 //	    } 
 	    broker.submitVmList(vmList);
-//	    broker.submitCloudletList(cloudletList);
+	    broker.submitCloudletList(cloudletList);
 	    
 	}
 	

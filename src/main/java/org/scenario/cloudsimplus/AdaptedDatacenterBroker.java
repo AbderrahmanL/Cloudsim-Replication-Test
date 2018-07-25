@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class AdaptedDatacenterBroker extends DatacenterBrokerSimple{
+	
 	private static final Logger logger = LoggerFactory.getLogger(AdaptedDatacenterBroker.class.getSimpleName());
 	
 	private final Map<Cloudlet, Datacenter> cloudletCreationRequestsMap;
@@ -41,7 +42,9 @@ public class AdaptedDatacenterBroker extends DatacenterBrokerSimple{
 	                    String.format(" with a requested delay of %.0f seconds", cloudlet.getSubmissionDelay()) :
 	                    "";
             Datacenter electedDc = Datacenter.NULL;
-            // TODO Here the dc was selected using the vm but vm wont be chosen until dc
+            /* TODO Here the dc should be elected, in the cloudsimplus it's done using the vm but vm wont be chosen until arrival to dc
+             this next line is a dummy dc selection for test*/
+            electedDc = this.getDatacenterList().get(0); // TODO replace this
             logger.info(
                     "{}: {}: Sending {} to {} in {}.",
                     getSimulation().clock(), getName(), cloudlet,

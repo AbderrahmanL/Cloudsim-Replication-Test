@@ -6,7 +6,6 @@ import java.util.List;
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicySimple;
 import org.cloudbus.cloudsim.brokers.DatacenterBroker;
-import org.cloudbus.cloudsim.brokers.DatacenterBrokerSimple;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
 import org.cloudbus.cloudsim.cloudlets.network.CloudletExecutionTask;
 import org.cloudbus.cloudsim.cloudlets.network.NetworkCloudlet;
@@ -27,6 +26,8 @@ import org.cloudbus.cloudsim.schedulers.vm.VmSchedulerSpaceShared;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelFull;
 import org.cloudbus.cloudsim.vms.Vm;
 import org.cloudbus.cloudsim.vms.network.NetworkVm;
+import org.scenario.cloudsimplus.AdaptedDatacenter;
+import org.scenario.cloudsimplus.AdaptedDatacenterBroker;
 
 public abstract class InitializeReplicationScenarioWithInternalNetwork extends InitializeReplicationScenario {
 
@@ -35,11 +36,11 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
      *
      * @param datacenter Datacenter where the network will be created
      */
-    protected abstract void createNetwork(NetworkDatacenter datacenter);
+    protected abstract void createNetwork(AdaptedDatacenter datacenter);
 	
 	@Override
 	protected DatacenterBroker createBroker(CloudSim simulation) {
-		DatacenterBroker broker = new DatacenterBrokerSimple(simulation);
+		DatacenterBroker broker = new AdaptedDatacenterBroker(simulation);
 		return broker;
 	}
 
@@ -98,7 +99,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 	@Override
 	protected Datacenter createDatacenter(CloudSim simulation,
 			List<Host> hostList, VmAllocationPolicy vmAllocationPolicy) {
-		NetworkDatacenter dc = new NetworkDatacenter(simulation, hostList, new VmAllocationPolicySimple());
+		AdaptedDatacenter dc = new AdaptedDatacenter(simulation, hostList, new VmAllocationPolicySimple());
 		createNetwork(dc);
 		dc.setSchedulingInterval(5);
     	return dc;
