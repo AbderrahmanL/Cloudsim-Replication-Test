@@ -1,4 +1,4 @@
-package org.scenario;
+package org.scenario.config;
 
 import org.cloudbus.cloudsim.cloudlets.network.CloudletReceiveTask;
 import org.cloudbus.cloudsim.cloudlets.network.CloudletSendTask;

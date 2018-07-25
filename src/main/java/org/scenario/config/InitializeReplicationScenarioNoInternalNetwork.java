@@ -1,4 +1,4 @@
-package org.scenario;
+package org.scenario.config;
 
 import java.util.ArrayList;
 import java.util.List;

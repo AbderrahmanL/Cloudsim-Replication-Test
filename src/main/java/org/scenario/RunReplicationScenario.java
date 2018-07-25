@@ -5,6 +5,7 @@ import java.util.List;
 import org.cloudbus.cloudsim.brokers.DatacenterBroker;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
 import org.cloudsimplus.builders.tables.CloudletsTableBuilder;
+import org.scenario.config.InitializeReplicationScenarioBasicTreeTopology;
 
 
 

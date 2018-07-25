@@ -1,4 +1,4 @@
-package org.scenario;
+package org.scenario.config;
 
 public class SimulationConstParameters {
 	

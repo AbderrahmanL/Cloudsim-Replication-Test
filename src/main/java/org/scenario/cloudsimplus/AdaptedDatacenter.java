@@ -15,6 +15,13 @@ import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Adapted dc with possibility to inject strategies to choose execution node
+ * in the superclass it was done in the broker, we believe its the dc's job
+ * 
+ * @author Abderrahman Lahiaouni
+ *
+ */
 public class AdaptedDatacenter extends NetworkDatacenter{
 	private static final Logger logger = LoggerFactory.getLogger(DatacenterSimple.class.getSimpleName());
 
