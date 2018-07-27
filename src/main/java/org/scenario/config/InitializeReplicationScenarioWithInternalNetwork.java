@@ -8,10 +8,8 @@ import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicySimple;
 import org.cloudbus.cloudsim.brokers.DatacenterBroker;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
 import org.cloudbus.cloudsim.cloudlets.network.CloudletExecutionTask;
-import org.cloudbus.cloudsim.cloudlets.network.NetworkCloudlet;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.datacenters.Datacenter;
-import org.cloudbus.cloudsim.datacenters.network.NetworkDatacenter;
 import org.cloudbus.cloudsim.hosts.Host;
 import org.cloudbus.cloudsim.hosts.network.NetworkHost;
 import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
@@ -26,8 +24,10 @@ import org.cloudbus.cloudsim.schedulers.vm.VmSchedulerSpaceShared;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelFull;
 import org.cloudbus.cloudsim.vms.Vm;
 import org.cloudbus.cloudsim.vms.network.NetworkVm;
+import org.scenario.cloudsimplus.AdaptedCloudlet;
 import org.scenario.cloudsimplus.AdaptedDatacenter;
 import org.scenario.cloudsimplus.AdaptedDatacenterBroker;
+import org.scenario.cloudsimplus.AdaptedHost;
 
 public abstract class InitializeReplicationScenarioWithInternalNetwork extends InitializeReplicationScenario {
 
@@ -63,8 +63,8 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 	        final long outputSize = 300; //Size (in bytes) after execution
 	        final int  numberOfCpuCores = 2; // cores used by cloudlet
 
-	        NetworkCloudlet cloudlet
-	                = (NetworkCloudlet) new NetworkCloudlet(
+	        AdaptedCloudlet cloudlet
+	                = (AdaptedCloudlet) new AdaptedCloudlet(
 			        id, length, numberOfCpuCores)
 			        .setFileSize(fileSize)
 			        .setOutputSize(outputSize)
@@ -90,7 +90,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 	            pesList.add(new PeSimple(mips, new PeProvisionerSimple()));
 	        }
 
-	        return (NetworkHost) new NetworkHost(ram, bw, storage, pesList)
+	        return (AdaptedHost) new AdaptedHost(ram, bw, storage, pesList)
 	                .setRamProvisioner(new ResourceProvisionerSimple())
 	                .setBwProvisioner(new ResourceProvisionerSimple())
 	                .setVmScheduler(new VmSchedulerSpaceShared());

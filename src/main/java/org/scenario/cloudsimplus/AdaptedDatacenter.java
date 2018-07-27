@@ -11,7 +11,11 @@ import org.cloudbus.cloudsim.core.events.SimEvent;
 import org.cloudbus.cloudsim.datacenters.DatacenterSimple;
 import org.cloudbus.cloudsim.datacenters.network.NetworkDatacenter;
 import org.cloudbus.cloudsim.hosts.Host;
+import org.cloudbus.cloudsim.network.HostPacket;
+import org.cloudbus.cloudsim.network.VmPacket;
+import org.cloudbus.cloudsim.network.switches.Switch;
 import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletScheduler;
+import org.cloudbus.cloudsim.vms.Vm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +28,11 @@ import org.slf4j.LoggerFactory;
  */
 public class AdaptedDatacenter extends NetworkDatacenter{
 	private static final Logger logger = LoggerFactory.getLogger(DatacenterSimple.class.getSimpleName());
+	
+	/**
+	 * in bytes
+	 */
+	public static final int TCP_PACKET_SIZE = 1500;
 
 	
 	public AdaptedDatacenter(Simulation simulation,
@@ -45,14 +54,24 @@ public class AdaptedDatacenter extends NetworkDatacenter{
         	sendCloudletReturn(cl);
             return;
         }
+        ((AdaptedCloudlet)cl).setDcReceiveTime(this.getSimulation().clock());
         cl.assignToDatacenter(this);
         // TODO assign to vm, next line is a dummy assignement for test
-        cl.setVm(this.getVmList().get(0)); // TODO replace this
-        submitCloudletToVm(cl,ack);
-        
+        Vm vm = this.getVmList().get(0);// TODO replace this
+//        cl.setVm(vm); 
+        send(this,
+                this.getSchedulingInterval(),
+                CloudSimTags.VM_UPDATE_CLOUDLET_PROCESSING_EVENT);	
+        	HostPacket pkt = new HostPacket(null, new VmPacket(null, vm, TCP_PACKET_SIZE + cl.getFileSize(), null, cl));
+        	for (Switch sw : this.getSwitchMap()){
+        		if(sw.getLevel() == 0){
+        			sendNow(sw, CloudSimTags.NETWORK_EVENT_UP, pkt);
+        		}
+        		
+        	}
 	}
 	
-	private void submitCloudletToVm(final Cloudlet cl, final boolean ack) {
+	public void submitCloudletToVm(final Cloudlet cl, final boolean ack) {
         // time to transfer cloudlet's files
         final double fileTransferTime = getDatacenterStorage().predictFileTransferTime(cl.getRequiredFiles());
 

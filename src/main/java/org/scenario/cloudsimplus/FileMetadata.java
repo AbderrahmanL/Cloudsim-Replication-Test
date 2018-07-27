@@ -22,6 +22,7 @@ public class FileMetadata extends FileAttribute{
     }
 	
 	private boolean setRegistrationId(){
+		//  TODO generate id using a more convenient way
 		
 		this.id = String.valueOf(this.hashCode())+this.getCreationTime();  
 		return false;

@@ -5,11 +5,12 @@ import org.cloudbus.cloudsim.cloudlets.network.CloudletSendTask;
 import org.cloudbus.cloudsim.cloudlets.network.NetworkCloudlet;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.hosts.network.NetworkHost;
-import org.cloudbus.cloudsim.network.switches.AggregateSwitch;
-import org.cloudbus.cloudsim.network.switches.EdgeSwitch;
 import org.cloudbus.cloudsim.network.switches.RootSwitch;
 import org.cloudbus.cloudsim.vms.Vm;
+import org.scenario.cloudsimplus.AdaptedAggregateSwitch;
 import org.scenario.cloudsimplus.AdaptedDatacenter;
+import org.scenario.cloudsimplus.AdaptedEdgeSwitch;
+import org.scenario.cloudsimplus.AdaptedRootSwitch;
 
 public class InitializeReplicationScenarioBasicTreeTopology extends InitializeReplicationScenarioWithInternalNetwork{
 
@@ -24,13 +25,13 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
      */
 	@Override
 	protected void createNetwork(AdaptedDatacenter datacenter) {
-          EdgeSwitch[] edgeSwitches = new EdgeSwitch[4];
-        AggregateSwitch[] aggregateSwitches = new AggregateSwitch[4];
-        RootSwitch rootSwitch = new RootSwitch((CloudSim) datacenter.getSimulation(), datacenter);
+          AdaptedEdgeSwitch[] edgeSwitches = new AdaptedEdgeSwitch[4];
+          AdaptedAggregateSwitch[] aggregateSwitches = new AdaptedAggregateSwitch[4];
+          AdaptedRootSwitch rootSwitch = new AdaptedRootSwitch((CloudSim) datacenter.getSimulation(), datacenter);
         datacenter.addSwitch(rootSwitch);
         for (int i = 0; i < datacenter.getHostList().size()/SimulationConstParameters.HOSTS_PER_SWITCH; i++) {
-            edgeSwitches[i] = new EdgeSwitch((CloudSim) datacenter.getSimulation(), datacenter);
-            aggregateSwitches[i] = new AggregateSwitch((CloudSim) datacenter.getSimulation(), datacenter);
+            edgeSwitches[i] = new AdaptedEdgeSwitch((CloudSim) datacenter.getSimulation(), datacenter);
+            aggregateSwitches[i] = new AdaptedAggregateSwitch((CloudSim) datacenter.getSimulation(), datacenter);
             aggregateSwitches[i].getDownlinkSwitches().add(edgeSwitches[i]);
             edgeSwitches[i].getUplinkSwitches().add(aggregateSwitches[i]);
             aggregateSwitches[i].getUplinkSwitches().add(rootSwitch);
@@ -90,8 +91,8 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
 //	    	addSendTask((NetworkCloudlet)cloudletList.get(16+i), (NetworkCloudlet)cloudletList.get(i));
 //	    	addReceiveTask((NetworkCloudlet)cloudletList.get(i), (NetworkCloudlet)cloudletList.get(16+i));	
 
-//    	addSendTask((NetworkCloudlet)cloudletList.get(15), (NetworkCloudlet)cloudletList.get(17));
-//    	addReceiveTask((NetworkCloudlet)cloudletList.get(17), (NetworkCloudlet)cloudletList.get(15));	
+    	addSendTask((NetworkCloudlet)cloudletList.get(15), (NetworkCloudlet)cloudletList.get(17));
+    	addReceiveTask((NetworkCloudlet)cloudletList.get(17), (NetworkCloudlet)cloudletList.get(15));	
 //	    } 
 	    broker.submitVmList(vmList);
 	    broker.submitCloudletList(cloudletList);

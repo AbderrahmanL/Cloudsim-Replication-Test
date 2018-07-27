@@ -4,17 +4,7 @@ import org.cloudbus.cloudsim.cloudlets.network.NetworkCloudlet;
 import org.cloudbus.cloudsim.core.SimEntity;
 import org.cloudbus.cloudsim.network.NetworkPacket;
 
-public class AdaptedCloudlet extends NetworkCloudlet implements NetworkPacket<SimEntity>{
-
-	/**
-	 * @see #getSource()
-	 */
-	private SimEntity src;
-	
-	/**
-	 * @see #getDestination()
-	 */
-	private SimEntity dest;
+public class AdaptedCloudlet extends NetworkCloudlet{
 	
 	/**
 	 * @see #getSendTime()
@@ -22,9 +12,22 @@ public class AdaptedCloudlet extends NetworkCloudlet implements NetworkPacket<Si
 	private double sendTime;
 	
 	/**
-	 * @see #getReceiveTime()
+	 * @see #getDcReceiveTime()
 	 */
-	private double receiveTime;
+	private double dcReceiveTime;
+	
+	/**
+	 * @see #getVmReceiveTime()
+	 */
+	private double vmReceiveTime;
+	
+	/**
+	 * @see #getReturnTime()
+	 */
+	private double returnTime;
+	
+	
+//	private requestedFile
 	
 	/**
 	 * @param id
@@ -36,54 +39,48 @@ public class AdaptedCloudlet extends NetworkCloudlet implements NetworkPacket<Si
 		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * @return input size of the cloudlet plus the tcp minimum packet size
-	 */
-	@Override
-	public long getSize() {
-		return this.getFileSize() + 1500;
-	}
 
-	@Override
-	public SimEntity getSource() {
-		return src;
-	}
-
-	@Override
-	public void setSource(SimEntity source) {
-		this.src = source;
-		
-	}
-
-	@Override
-	public SimEntity getDestination() {
-		return dest;
-	}
-
-	@Override
-	public void setDestination(SimEntity destination) {
-		this.dest = destination;
-	}
-
-	@Override
 	public double getSendTime() {
 		return sendTime;
 	}
 
-	@Override
-	public void setSendTime(double time) {
-		this.sendTime = time;
+
+	public void setSendTime(double sendTime) {
+		this.sendTime = sendTime;
 	}
 
-	@Override
-	public double getReceiveTime() {
-		return receiveTime;
+	
+	public double getDcReceiveTime() {
+		return dcReceiveTime;
 	}
 
-	@Override
-	public void setReceiveTime(double time) {
-		this.receiveTime = time;
+
+	public void setDcReceiveTime(double dcReceiveTime) {
+		this.dcReceiveTime = dcReceiveTime;
 	}
+
+
+	public double getVmReceiveTime() {
+		return vmReceiveTime;
+	}
+
+
+	public void setVmReceiveTime(double VmReceiveTime) {
+		this.vmReceiveTime = VmReceiveTime;
+	}
+
+
+	public double getReturnTime() {
+		return returnTime;
+	}
+
+
+	public void setReturnTime(double returnTime) {
+		this.returnTime = returnTime;
+	}
+
+	
+	
 
 	
 
