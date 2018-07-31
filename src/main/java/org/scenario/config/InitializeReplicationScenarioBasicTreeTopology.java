@@ -91,8 +91,8 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
 //	    	addSendTask((NetworkCloudlet)cloudletList.get(16+i), (NetworkCloudlet)cloudletList.get(i));
 //	    	addReceiveTask((NetworkCloudlet)cloudletList.get(i), (NetworkCloudlet)cloudletList.get(16+i));	
 
-    	addSendTask((NetworkCloudlet)cloudletList.get(15), (NetworkCloudlet)cloudletList.get(17));
-    	addReceiveTask((NetworkCloudlet)cloudletList.get(17), (NetworkCloudlet)cloudletList.get(15));	
+//    	addSendTask((NetworkCloudlet)cloudletList.get(15), (NetworkCloudlet)cloudletList.get(17));
+//    	addReceiveTask((NetworkCloudlet)cloudletList.get(17), (NetworkCloudlet)cloudletList.get(15));	
 //	    } 
 	    broker.submitVmList(vmList);
 	    broker.submitCloudletList(cloudletList);

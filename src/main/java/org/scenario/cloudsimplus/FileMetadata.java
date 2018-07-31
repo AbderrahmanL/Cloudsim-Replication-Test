@@ -1,33 +1,46 @@
 package org.scenario.cloudsimplus;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.cloudbus.cloudsim.resources.File;
 import org.cloudbus.cloudsim.resources.FileAttribute;
 
 public class FileMetadata extends FileAttribute{
 	
-	private String id;
+	private static int latestInode = 0;
+	
+	private int noOfAccesses = 0; 
+	
+	private UUID containingDevice;
 	
 	public FileMetadata(File file, int fileSize) {
 		super(file, fileSize);
-		setCreationTime();
-		setRegistrationId();
+		setCreationTime(new Date().getTime());
+		setRegistrationId(latestInode++);
 	}
 	
-	public boolean setCreationTime() {
-
-        setCreationTime(new Date().getTime());
-        return true;
-    }
-	
-	private boolean setRegistrationId(){
-		//  TODO generate id using a more convenient way
-		
-		this.id = String.valueOf(this.hashCode())+this.getCreationTime();  
-		return false;
-		
+	@Override
+	public boolean setRegistrationId(int latestInode) {
+		return super.setRegistrationId(latestInode);
 	}
 
+	public int getNoOfAccesses() {
+		return noOfAccesses;
+	}
+
+	public void incrementNoOfAccesses() {
+		this.noOfAccesses++;
+	}
+
+	public UUID getContainingDevice() {
+		return containingDevice;
+	}
+
+	public void setContainingDevice(UUID containingDevice) {
+		this.containingDevice = containingDevice;
+	}
+	
+	
 
 }

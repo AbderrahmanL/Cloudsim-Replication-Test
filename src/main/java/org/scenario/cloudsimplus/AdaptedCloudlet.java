@@ -1,8 +1,6 @@
 package org.scenario.cloudsimplus;
 
 import org.cloudbus.cloudsim.cloudlets.network.NetworkCloudlet;
-import org.cloudbus.cloudsim.core.SimEntity;
-import org.cloudbus.cloudsim.network.NetworkPacket;
 
 public class AdaptedCloudlet extends NetworkCloudlet{
 	
@@ -22,13 +20,26 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	private double vmReceiveTime;
 	
 	/**
+	 * @see #getExecutionStartTime()
+	 */
+	private double executionStartTime;
+	
+	/**
+	 * @see #getFileRetrievalTime()
+	 */
+	private double fileRetrievalTime;
+
+	/**
 	 * @see #getReturnTime()
 	 */
 	private double returnTime;
 	
+	/**
+	 * @see #getRequestedFileId()
+	 */
+	private int requestedFileId;
 	
-//	private requestedFile
-	
+
 	/**
 	 * @param id
 	 * @param cloudletLength
@@ -69,6 +80,14 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 		this.vmReceiveTime = VmReceiveTime;
 	}
 
+	public double getFileRetrievalTime() {
+		return fileRetrievalTime;
+	}
+	
+	
+	public void setFileRetrievalTime(double fileRetrievalTime) {
+		this.fileRetrievalTime = fileRetrievalTime;
+	}
 
 	public double getReturnTime() {
 		return returnTime;
@@ -80,8 +99,26 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	}
 
 	
+	public int getRequestedFileId() {
+		return requestedFileId;
+	}
 	
+	
+	public void setRequestedFileId(int requestedFileId) {
+		this.requestedFileId = requestedFileId;
+	}
 
+
+	public double getExecutionStartTime() {
+		return executionStartTime;
+	}
+
+
+	public void setExecutionStartTime(double executionStartTime) {
+		this.executionStartTime = executionStartTime;
+	}
+	
+	
 	
 
 }

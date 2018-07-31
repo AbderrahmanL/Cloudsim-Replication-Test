@@ -12,6 +12,7 @@ import org.cloudbus.cloudsim.network.switches.Switch;
 import org.cloudbus.cloudsim.network.topologies.BriteNetworkTopology;
 import org.cloudbus.cloudsim.util.Conversion;
 import org.cloudbus.cloudsim.vms.Vm;
+import org.cloudbus.cloudsim.vms.VmSimple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,31 +53,45 @@ public class AdaptedRootSwitch extends AbstractSwitch {
 	@Override
     protected void processPacketUp(SimEvent ev) {
         super.processPacketUp(ev);
-
+        
         final HostPacket netPkt = (HostPacket) ev.getData();
-        final Vm receiverVm = netPkt.getVmPacket().getDestination();
-        final Switch edgeSwitch = getVmEdgeSwitch(receiverVm);
-        final Switch aggSwitch = findAggregateSwitchConnectedToGivenEdgeSwitch(edgeSwitch);
 
-        if (aggSwitch == Switch.NULL && aggSwitch.getDatacenter().getId() == netPkt.getSource().getDatacenter().getId()) {
-            logger.error("No destination switch for this packet");
-            return;
-        }
         final int srcID = this.getDatacenter().getId();
-        final int destID = netPkt.getVmPacket().getDestination().getHost().getDatacenter().getId();
-
-        if(aggSwitch == Switch.NULL && srcID != destID)
-        		        {
-        		        	double transferTime = this.getSimulation().getNetworkTopology().getDelay(srcID, destID);
-        		        	double bw =  ((BriteNetworkTopology)this.getSimulation().getNetworkTopology()).getBwMatrix()[srcID][destID] * 1000;
-        		        	double fileSize = Conversion.bytesToMegaBytes((double)netPkt.getSize());
-        		        	transferTime += fileSize / (bw);
-        		        	send(((AdaptedDatacenter)netPkt.getDestination().getDatacenter()).getSwitchMap().get(0) ,transferTime, CloudSimTags.NETWORK_EVENT_UP, netPkt);
-        		        }
-    	        	else
-        		        {
-        	      		addPacketToBeSentToDownlinkSwitch(aggSwitch, netPkt);
-        		        }
+        final Vm receiverVm = netPkt.getVmPacket().getDestination();
+        int destID = 0;
+        if(receiverVm == null){
+        	destID = netPkt.getVmPacket().getSource().getBroker().getId();        	
+        }
+        else{        	
+        	destID = receiverVm.getHost().getDatacenter().getId();    
+        }
+        	
+        double transferTime = this.getSimulation().getNetworkTopology().getDelay(srcID, destID);
+        double bw =  ((BriteNetworkTopology)this.getSimulation().getNetworkTopology()).getBwMatrix()[srcID][destID] * 1000;
+        double fileSize = Conversion.bytesToMegaBytes((double)netPkt.getSize());
+        transferTime += fileSize / (bw);
+        
+        if(receiverVm == null){
+        	//dc to broker
+        	send(netPkt.getVmPacket().getSource().getBroker() ,transferTime, CloudSimTags.CLOUDLET_RETURN, netPkt.getVmPacket().getReceiverCloudlet());
+    		netPkt.getVmPacket().getSource().getCloudletScheduler().addCloudletToReturnedList(netPkt.getVmPacket().getReceiverCloudlet());
+        }
+        else {
+        	// broker submit cloudlet to dc or cloudlet to cloudlet same dc
+        	final Switch edgeSwitch = getVmEdgeSwitch(receiverVm);
+        	final Switch aggSwitch = findAggregateSwitchConnectedToGivenEdgeSwitch(edgeSwitch);
+        	if (destID == srcID ){	
+	        	if (aggSwitch == Switch.NULL) {
+	                logger.error("No destination switch for this packet");
+	                return;
+	            }
+        	addPacketToBeSentToDownlinkSwitch(aggSwitch, netPkt);
+        	}
+	        else {
+	        	// cloudlet to cloudlet diff dc
+	        	send(((AdaptedDatacenter)netPkt.getDestination().getDatacenter()).getSwitchMap().get(0) ,transferTime, CloudSimTags.NETWORK_EVENT_UP, netPkt);        	
+	        }
+        }
     }
 	
 	private Switch findAggregateSwitchConnectedToGivenEdgeSwitch(Switch edgeSwitch) {

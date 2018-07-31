@@ -1,10 +1,13 @@
 package org.scenario.cloudsimplus;
 
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.List;
 
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
+import org.cloudbus.cloudsim.cloudlets.CloudletExecution;
 import org.cloudbus.cloudsim.core.CloudSimTags;
 import org.cloudbus.cloudsim.core.Simulation;
 import org.cloudbus.cloudsim.core.events.SimEvent;
@@ -13,8 +16,10 @@ import org.cloudbus.cloudsim.datacenters.network.NetworkDatacenter;
 import org.cloudbus.cloudsim.hosts.Host;
 import org.cloudbus.cloudsim.network.HostPacket;
 import org.cloudbus.cloudsim.network.VmPacket;
+import org.cloudbus.cloudsim.network.switches.EdgeSwitch;
 import org.cloudbus.cloudsim.network.switches.Switch;
 import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletScheduler;
+import org.cloudbus.cloudsim.util.Conversion;
 import org.cloudbus.cloudsim.vms.Vm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +63,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
         cl.assignToDatacenter(this);
         // TODO assign to vm, next line is a dummy assignement for test
         Vm vm = this.getVmList().get(0);// TODO replace this
-//        cl.setVm(vm); 
+//        cl.setVm(vm); // its done after initializing also for test
         send(this,
                 this.getSchedulingInterval(),
                 CloudSimTags.VM_UPDATE_CLOUDLET_PROCESSING_EVENT);	
@@ -74,7 +79,9 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 	public void submitCloudletToVm(final Cloudlet cl, final boolean ack) {
         // time to transfer cloudlet's files
         final double fileTransferTime = getDatacenterStorage().predictFileTransferTime(cl.getRequiredFiles());
-
+        
+        
+        
         final CloudletScheduler scheduler = cl.getVm().getCloudletScheduler();
         final double estimatedFinishTime = scheduler.cloudletSubmit(cl, fileTransferTime);
 
@@ -99,5 +106,41 @@ public class AdaptedDatacenter extends NetworkDatacenter{
         }
 		sendNow(cl.getBroker(), CloudSimTags.CLOUDLET_SUBMIT_ACK, cl);	
 	}
-
+	
+	@Override
+	protected void checkCloudletsCompletionForAllHosts() {
+		final List<? extends Host> hosts = this.getVmAllocationPolicy().getHostList();
+        hosts.forEach(this::checkCloudletsCompletionForGivenHost);
+	}
+	
+	private void checkCloudletsCompletionForGivenHost(final Host host) {
+        host.getVmList().forEach(this::checkCloudletsCompletionForGivenVm);
+    }
+	
+	private void checkCloudletsCompletionForGivenVm(final Vm vm) {
+        final List<Cloudlet> nonReturnedCloudlets =
+            vm.getCloudletScheduler().getCloudletFinishedList().stream()
+                .map(CloudletExecution::getCloudlet)
+                .filter(c -> !vm.getCloudletScheduler().isCloudletReturned(c))
+                .collect(toList());
+        
+        nonReturnedCloudlets.forEach(this::returnFinishedCloudletToBroker);
+    }
+	
+	private void returnFinishedCloudletToBroker(final Cloudlet cloudlet) {
+		long fileSize = 0;
+		try{
+			fileSize = ((AdaptedDatacenterStorage)this.getDatacenterStorage()).getFile(cloudlet.getRequiredFiles().get(0)).getSize();			
+		}
+		catch (IndexOutOfBoundsException e){
+			System.out.print("");
+		}
+		HostPacket pkt = new HostPacket((AdaptedHost)cloudlet.getVm().getHost(), new VmPacket(cloudlet.getVm(), null, TCP_PACKET_SIZE + cloudlet.getFileSize() + (long)(fileSize * Conversion.MEGABYTE) , null, cloudlet));
+		EdgeSwitch sw = ((AdaptedHost)cloudlet.getVm().getHost()).getEdgeSwitch();
+		getSimulation().sendNow(
+                this, sw, CloudSimTags.NETWORK_EVENT_UP, pkt);
+		// these tow lines are invoked in root switch
+//        sendNow(cloudlet.getBroker(), CloudSimTags.CLOUDLET_RETURN, cloudlet);
+//        cloudlet.getVm().getCloudletScheduler().addCloudletToReturnedList(cloudlet);
+    }
 }

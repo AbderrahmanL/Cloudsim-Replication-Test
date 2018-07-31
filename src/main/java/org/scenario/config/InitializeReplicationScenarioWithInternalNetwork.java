@@ -11,7 +11,6 @@ import org.cloudbus.cloudsim.cloudlets.network.CloudletExecutionTask;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.datacenters.Datacenter;
 import org.cloudbus.cloudsim.hosts.Host;
-import org.cloudbus.cloudsim.hosts.network.NetworkHost;
 import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.ResourceProvisionerSimple;
 import org.cloudbus.cloudsim.resources.DatacenterStorage;
@@ -27,6 +26,8 @@ import org.cloudbus.cloudsim.vms.network.NetworkVm;
 import org.scenario.cloudsimplus.AdaptedCloudlet;
 import org.scenario.cloudsimplus.AdaptedDatacenter;
 import org.scenario.cloudsimplus.AdaptedDatacenterBroker;
+import org.scenario.cloudsimplus.AdaptedDatacenterStorage;
+import org.scenario.cloudsimplus.AdaptedFile;
 import org.scenario.cloudsimplus.AdaptedHost;
 
 public abstract class InitializeReplicationScenarioWithInternalNetwork extends InitializeReplicationScenario {
@@ -120,10 +121,11 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
             hostList.add(host);
             	storageList.add((createStorage(1000000000, 10.0, 5)));              
         }
-//	    storageList.get(0).addFile(new ObjectFile("file1.dat", 20));
-//	    storageList.get(0).addFile(new ObjectFile("file2.dat", 100));
-//	    storageList.get(0).addFile(new ObjectFile("file3.dat", 700));
-	    DatacenterStorage datacenterStorage = new  DatacenterStorage();
+	    storageList.get(0).addFile(new AdaptedFile("file1.dat", 1));
+	    storageList.get(0).addFile(new AdaptedFile("file2.dat", 10));
+	    storageList.get(0).addFile(new AdaptedFile("file3.dat", 150));
+	    storageList.get(0).addFile(new AdaptedFile("file4.dat", 1000));
+	    DatacenterStorage datacenterStorage = new  AdaptedDatacenterStorage();
         Datacenter dc = createDatacenter(simulation, hostList, new VmAllocationPolicySimple());
         dc.setDatacenterStorage(datacenterStorage);
         datacenterStorage.setStorageList(storageList);

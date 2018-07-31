@@ -1,22 +1,29 @@
 package org.scenario.replication;
 
-import java.util.HashSet;
-import java.util.List;
+import java.util.HashMap;
+import java.util.UUID;
 
+import org.cloudbus.cloudsim.resources.FileAttribute;
 import org.scenario.cloudsimplus.FileMetadata;
 
 
-public class ReplicaCatalog extends HashSet<FileMetadata> implements MetadataCatalog {
+public class ReplicaCatalog extends HashMap<UUID,FileMetadata> implements MetadataCatalog {
 
 	/**
-	 * 
+	 * A singleton implementation to insure there is only one instance of the catalog
 	 */
+	
 	private static final long serialVersionUID = 1L;
+	
+	private static final ReplicaCatalog instance = new ReplicaCatalog();
+	
+	public static ReplicaCatalog getReplicaInstance(){
+		return instance;
+	}
 
-	@Override
-	public List<FileMetadata> getAllReplicas(FileMetadata metadata) {
-		// TODO Auto-generated method stub
-		return null;
+	private ReplicaCatalog(){
+		super();
+		//TODO complete if needed
 	}
 
 	

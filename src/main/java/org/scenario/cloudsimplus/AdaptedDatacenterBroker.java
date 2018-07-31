@@ -44,10 +44,10 @@ public class AdaptedDatacenterBroker extends DatacenterBrokerSimple{
             Datacenter electedDc = Datacenter.NULL;
             /* TODO Here the dc should be elected, in the cloudsimplus it's done using the vm but vm wont be chosen until arrival to dc
              this next line is a dummy dc selection for test*/
-            if(cloudlet.getId() < 16)
+//            if(cloudlet.getId() < 16)
             electedDc = this.getDatacenterList().get(0); // TODO replace this
-            else
-            electedDc = this.getDatacenterList().get(1); // TODO replace this
+//            else
+//            electedDc = this.getDatacenterList().get(1); // TODO replace this
             logger.info(
                     "{}: {}: Sending {} to {} in {}.",
                     getSimulation().clock(), getName(), cloudlet,
