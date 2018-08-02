@@ -7,6 +7,7 @@ import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicySimple;
 import org.cloudbus.cloudsim.brokers.DatacenterBroker;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
+import org.cloudbus.cloudsim.cloudlets.network.CloudletExecutionTask;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.datacenters.Datacenter;
 import org.cloudbus.cloudsim.hosts.Host;
@@ -17,7 +18,7 @@ import org.cloudbus.cloudsim.resources.FileStorage;
 import org.cloudbus.cloudsim.resources.Pe;
 import org.cloudbus.cloudsim.resources.PeSimple;
 import org.cloudbus.cloudsim.resources.SanStorage;
-import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerSpaceShared;
+import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerTimeShared;
 import org.cloudbus.cloudsim.schedulers.vm.VmSchedulerSpaceShared;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelFull;
 import org.cloudbus.cloudsim.vms.Vm;
@@ -53,7 +54,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
                 .setRam(ram)
                 .setBw(bw)
                 .setSize(storage)
-                .setCloudletScheduler(new CloudletSchedulerSpaceShared());
+                .setCloudletScheduler(new CloudletSchedulerTimeShared());
 	}
 
 	@Override
@@ -74,6 +75,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 //	        cloudlet.addRequiredFile("file1.dat");
 	        cloudlet.addRequiredFile("file2.dat");
 //	        cloudlet.addRequiredFile("file3.dat");
+	        cloudlet.addTask(new CloudletExecutionTask(numberOfCpuCores, SimulationConstParameters.CLOUDLET_EXECUTION_TASK_LENGTH));
 	        cloudlet.setVm(vm);
 	        return cloudlet;
 	}
@@ -114,7 +116,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 		List<FileStorage> storageList = new ArrayList<FileStorage>();
         for(int j = 0; j < SimulationConstParameters.HOST_SUPER; j++) {
         	int currentRack = 0;
-        	Host host = createHost(32768,3000,16);
+        	Host host = createHost(32768,4000,16);
             hostList.add(host);
             	storageList.add((createStorage(1000000000, 1000.0, 0.3)));              
         }

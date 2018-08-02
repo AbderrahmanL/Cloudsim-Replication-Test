@@ -1,6 +1,10 @@
 package org.scenario.cloudsimplus;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import org.cloudbus.cloudsim.cloudlets.network.NetworkCloudlet;
+import org.cloudbus.cloudsim.resources.File;
 
 public class AdaptedCloudlet extends NetworkCloudlet{
 	
@@ -88,7 +92,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	
 	
 	public double getFileRetrievalTime() {
-		return fileRetrievalTime;
+		return BigDecimal.valueOf(fileRetrievalTime).setScale(2, RoundingMode.HALF_UP).doubleValue();
 	}
 	
 	
@@ -97,7 +101,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	}
 
 	public double getLeftVmToBrokerTime() {
-		return leftVmToBrokerTime;
+		return BigDecimal.valueOf(leftVmToBrokerTime).setScale(2, RoundingMode.HALF_UP).doubleValue();
 	}
 
 
@@ -107,7 +111,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 
 
 	public double getLeftDcToBrokerTime() {
-		return leftDcToBrokerTime;
+		return BigDecimal.valueOf(leftDcToBrokerTime).setScale(2, RoundingMode.HALF_UP).doubleValue();
 	}
 
 
@@ -117,7 +121,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 
 
 	public double getGotToBrokerTime() {
-		return gotToBrokerTime;
+		return BigDecimal.valueOf(gotToBrokerTime).setScale(2, RoundingMode.HALF_UP).doubleValue();
 	}
 
 
@@ -133,5 +137,25 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	
 	public void setRequestedFileId(int requestedFileId) {
 		this.requestedFileId = requestedFileId;
+	}
+	
+	@Override
+	public double getExecStartTime(){
+		return BigDecimal.valueOf(super.getExecStartTime()).setScale(2, RoundingMode.HALF_UP).doubleValue();
+	}
+	
+	@Override
+	public double getFinishTime(){
+		return BigDecimal.valueOf(super.getFinishTime()).setScale(2, RoundingMode.HALF_UP).doubleValue();
+	}
+	
+	@Override
+	public double getActualCpuTime(){
+		return BigDecimal.valueOf(super.getActualCpuTime()).setScale(2, RoundingMode.HALF_UP).doubleValue();
+	}
+	
+	public File getRequestedFile(){
+		String fileName = this.getRequiredFiles().get(0);
+		return ((AdaptedDatacenterStorage)this.getLastDatacenter().getDatacenterStorage()).getFile(fileName);
 	}
 }

@@ -2,8 +2,8 @@ package org.scenario.config;
 
 public class SimulationConstParameters {
 	
-	public static final int CLOUDLETS_PER_VM = 1;
-	public static final int CLOUDLET_EXECUTION_TASK_LENGTH = 2000;
+	public static final int CLOUDLETS_PER_VM = 8;
+	public static final int CLOUDLET_EXECUTION_TASK_LENGTH = 1;
     public static final int DC_SUPER = 1;
 	public static final int DC_MID = 0;
 	public static final int DC_STANDARD = 0;

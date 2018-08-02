@@ -64,7 +64,7 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
 	protected void createVms(){
 		
 	    for (int i = 0; i < SimulationConstParameters.HOST_SUPER*SimulationConstParameters.DC_SUPER; i++) {
-	        Vm vm = createVm(vmList.size(), 32768,3000,16);
+	        Vm vm = createVm(vmList.size(), 32768,4000,16);
 	        vmList.add(vm);
 	        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
 	            AdaptedCloudlet cloudlet = (AdaptedCloudlet)createCloudlet(cloudletList.size(), vm);
