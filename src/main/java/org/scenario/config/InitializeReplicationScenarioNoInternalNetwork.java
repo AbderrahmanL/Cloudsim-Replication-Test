@@ -90,8 +90,8 @@ public class InitializeReplicationScenarioNoInternalNetwork extends InitializeRe
     }
 
 	@Override
-	protected FileStorage createStorage(int i, double d, int j) {
-		return new SanStorage(1000000000, 10.0, 5);
+	protected FileStorage createStorage(int capacity, double Bandwidth, double networkLatency) {	
+		return new SanStorage(capacity, Bandwidth, networkLatency);
 	}
 	
 	@Override

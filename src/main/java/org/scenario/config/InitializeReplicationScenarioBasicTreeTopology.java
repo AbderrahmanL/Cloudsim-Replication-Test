@@ -5,9 +5,9 @@ import org.cloudbus.cloudsim.cloudlets.network.CloudletSendTask;
 import org.cloudbus.cloudsim.cloudlets.network.NetworkCloudlet;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.hosts.network.NetworkHost;
-import org.cloudbus.cloudsim.network.switches.RootSwitch;
 import org.cloudbus.cloudsim.vms.Vm;
 import org.scenario.cloudsimplus.AdaptedAggregateSwitch;
+import org.scenario.cloudsimplus.AdaptedCloudlet;
 import org.scenario.cloudsimplus.AdaptedDatacenter;
 import org.scenario.cloudsimplus.AdaptedEdgeSwitch;
 import org.scenario.cloudsimplus.AdaptedRootSwitch;
@@ -64,10 +64,10 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
 	protected void createVms(){
 		
 	    for (int i = 0; i < SimulationConstParameters.HOST_SUPER*SimulationConstParameters.DC_SUPER; i++) {
-	        Vm vm = createVm(vmList.size(), 32768,4000,16);
+	        Vm vm = createVm(vmList.size(), 32768,3000,16);
 	        vmList.add(vm);
 	        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
-	            NetworkCloudlet cloudlet = (NetworkCloudlet)createCloudlet(cloudletList.size(), vm);
+	            AdaptedCloudlet cloudlet = (AdaptedCloudlet)createCloudlet(cloudletList.size(), vm);
 	            cloudletList.add(cloudlet);
 	        }
 	    }

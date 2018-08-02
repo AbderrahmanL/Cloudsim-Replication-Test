@@ -46,6 +46,8 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 		// TODO Auto-generated constructor stub
 	}
 	
+	
+	
 	@Override
 	protected void processCloudletSubmit(final SimEvent ev, final boolean ack) {
 		final Cloudlet cl = (Cloudlet) ev.getData();
@@ -80,15 +82,14 @@ public class AdaptedDatacenter extends NetworkDatacenter{
         // time to transfer cloudlet's files
         final double fileTransferTime = getDatacenterStorage().predictFileTransferTime(cl.getRequiredFiles());
         
-        
+        ((AdaptedCloudlet) cl).setFileRetrievalTime(this.getSimulation().clock()+fileTransferTime);        
         
         final CloudletScheduler scheduler = cl.getVm().getCloudletScheduler();
         final double estimatedFinishTime = scheduler.cloudletSubmit(cl, fileTransferTime);
-
         // if this cloudlet is in the exec queue
         if (estimatedFinishTime > 0.0 && !Double.isInfinite(estimatedFinishTime)) {
             send(this,
-                getCloudletProcessingUpdateInterval(estimatedFinishTime),
+                getCloudletProcessingUpdateInterval(estimatedFinishTime) ,
                 CloudSimTags.VM_UPDATE_CLOUDLET_PROCESSING_EVENT);
         }
 
@@ -135,6 +136,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 		catch (IndexOutOfBoundsException e){
 			System.out.print("");
 		}
+		((AdaptedCloudlet) cloudlet).setLeftVmToBrokerTime(this.getSimulation().clock());
 		HostPacket pkt = new HostPacket((AdaptedHost)cloudlet.getVm().getHost(), new VmPacket(cloudlet.getVm(), null, TCP_PACKET_SIZE + cloudlet.getFileSize() + (long)(fileSize * Conversion.MEGABYTE) , null, cloudlet));
 		EdgeSwitch sw = ((AdaptedHost)cloudlet.getVm().getHost()).getEdgeSwitch();
 		getSimulation().sendNow(

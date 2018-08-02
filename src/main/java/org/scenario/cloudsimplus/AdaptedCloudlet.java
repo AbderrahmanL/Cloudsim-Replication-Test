@@ -20,19 +20,25 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	private double vmReceiveTime;
 	
 	/**
-	 * @see #getExecutionStartTime()
-	 */
-	private double executionStartTime;
-	
-	/**
 	 * @see #getFileRetrievalTime()
 	 */
 	private double fileRetrievalTime;
 
 	/**
-	 * @see #getReturnTime()
+	 * @see #getLeftVmToBrokerTime()
 	 */
-	private double returnTime;
+	private double leftVmToBrokerTime;
+	
+	/**
+	 * @see #getLeftDcToBrokerTime()
+	 */
+	private double leftDcToBrokerTime;
+	
+	/**
+	 * @see #getGotToBrokerTime()
+	 */
+	private double gotToBrokerTime;
+	
 	
 	/**
 	 * @see #getRequestedFileId()
@@ -79,7 +85,8 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	public void setVmReceiveTime(double VmReceiveTime) {
 		this.vmReceiveTime = VmReceiveTime;
 	}
-
+	
+	
 	public double getFileRetrievalTime() {
 		return fileRetrievalTime;
 	}
@@ -89,16 +96,36 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 		this.fileRetrievalTime = fileRetrievalTime;
 	}
 
-	public double getReturnTime() {
-		return returnTime;
+	public double getLeftVmToBrokerTime() {
+		return leftVmToBrokerTime;
 	}
 
 
-	public void setReturnTime(double returnTime) {
-		this.returnTime = returnTime;
+	public void setLeftVmToBrokerTime(double leftVmToBrockerTime) {
+		this.leftVmToBrokerTime = leftVmToBrockerTime;
 	}
 
+
+	public double getLeftDcToBrokerTime() {
+		return leftDcToBrokerTime;
+	}
+
+
+	public void setLeftDcToBrokerTime(double leftDcToBrokerTime) {
+		this.leftDcToBrokerTime = leftDcToBrokerTime;
+	}
+
+
+	public double getGotToBrokerTime() {
+		return gotToBrokerTime;
+	}
+
+
+	public void setGotToBrokerTime(double gotToBrokerTime) {
+		this.gotToBrokerTime = gotToBrokerTime;
+	}	
 	
+
 	public int getRequestedFileId() {
 		return requestedFileId;
 	}
@@ -107,18 +134,4 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	public void setRequestedFileId(int requestedFileId) {
 		this.requestedFileId = requestedFileId;
 	}
-
-
-	public double getExecutionStartTime() {
-		return executionStartTime;
-	}
-
-
-	public void setExecutionStartTime(double executionStartTime) {
-		this.executionStartTime = executionStartTime;
-	}
-	
-	
-	
-
 }

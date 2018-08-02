@@ -10,19 +10,54 @@ import org.cloudbus.cloudsim.hosts.network.NetworkHost;
 import org.cloudbus.cloudsim.network.HostPacket;
 import org.cloudbus.cloudsim.network.switches.EdgeSwitch;
 import org.cloudbus.cloudsim.network.switches.Switch;
+import org.cloudbus.cloudsim.util.Conversion;
 import org.cloudbus.cloudsim.vms.Vm;
 
 public class AdaptedEdgeSwitch extends EdgeSwitch {
+	
+	/**
+     * The level (layer) of the switch in the network topology.
+     */
+    public static final int LEVEL = 2;
 
-	public AdaptedEdgeSwitch(CloudSim simulation, NetworkDatacenter dc) {
-		super(simulation, dc);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * Default downlink bandwidth of EdgeSwitch in Megabits/s.
+     * It also represents the uplink bandwidth of connected hosts.
+     */
+    public static final long DOWNLINK_BW = (long)Conversion.GIGABYTE * 10 * 8;
+
+    /**
+     * Default number of ports that defines the number of
+     * {@link Host} that can be connected to the switch.
+     */
+    public static final int PORTS = 4;
+
+    /**
+     * Default switching delay in milliseconds.
+     */
+    public static final double SWITCHING_DELAY = 0.00157;
+
+    /**
+     * Instantiates a EdgeSwitch specifying Datacenter that are connected to its
+     * downlink and uplink ports, and corresponding bandwidths. In this switch,
+     * downlink ports aren't connected to other switch but to hosts.
+     *
+     * @param simulation The CloudSim instance that represents the simulation the Entity is related to
+     * @param dc The Datacenter where the switch is connected to
+     */
+    public AdaptedEdgeSwitch(CloudSim simulation, NetworkDatacenter dc) {
+        super(simulation, dc);
+
+        setUplinkBandwidth(AdaptedAggregateSwitch.DOWNLINK_BW);
+        setDownlinkBandwidth(DOWNLINK_BW);
+        setSwitchingDelay(SWITCHING_DELAY);
+        setPorts(PORTS);
+    }
 
 	 @Override
 	    protected void processPacketUp(SimEvent ev) {
-		 getSimulation().cancelAll(this, new PredicateType(CloudSimTags.NETWORK_EVENT_SEND));
-	        schedule(this, this.getSwitchingDelay(), CloudSimTags.NETWORK_EVENT_SEND);
+		 	getSimulation().cancelAll(this, new PredicateType(CloudSimTags.NETWORK_EVENT_SEND));
+	        schedule(this, getSwitchingDelay(), CloudSimTags.NETWORK_EVENT_SEND);
 
 	        final HostPacket hostPkt = (HostPacket) ev.getData();
 	        

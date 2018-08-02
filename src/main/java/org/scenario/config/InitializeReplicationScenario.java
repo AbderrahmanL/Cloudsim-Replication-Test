@@ -34,7 +34,7 @@ public abstract class InitializeReplicationScenario {
 
 			protected abstract Datacenter createDatacenter(CloudSim simulation, List<Host> hostList, VmAllocationPolicy vmAllocationPolicy);
 			
-			protected abstract FileStorage createStorage(int i, double d, int j) ;
+			protected abstract FileStorage createStorage(int i, double d, double j) ;
 			
 			protected abstract Datacenter createSuperDatacenter(CloudSim simulation) ;
 			
@@ -44,7 +44,6 @@ public abstract class InitializeReplicationScenario {
 			
 			public DatacenterBroker init(){
 				CloudSim simulation = new CloudSim();
-
 			    dcs = createDatacenters(simulation);
 			    
 			    broker = createBroker(simulation);
@@ -67,7 +66,7 @@ public abstract class InitializeReplicationScenario {
 			protected void createVms(){
 				
 			    for (int i = 0; i < SimulationConstParameters.HOST_SUPER*SimulationConstParameters.DC_SUPER; i++) {
-			        Vm vm = createVm(vmList.size(), 32768,4000,16);
+			        Vm vm = createVm(vmList.size(), 32768,1000,16);
 			        vmList.add(vm);
 			        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
 			            Cloudlet cloudlet = createCloudlet(cloudletList.size(), vm);

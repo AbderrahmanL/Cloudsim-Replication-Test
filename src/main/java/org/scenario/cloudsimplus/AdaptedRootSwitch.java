@@ -40,7 +40,7 @@ public class AdaptedRootSwitch extends AbstractSwitch {
      * The downlink bandwidth of RootSwitch in Megabits/s.
      * It also represents the uplink bandwidth of connected aggregation Datacenter.
      */
-    public static final long DOWNLINK_BW = (long) Conversion.GIGABYTE * 40 * 8; // 40000 Megabits (40 Gigabits)
+    public static final long DOWNLINK_BW =  (long)Conversion.GIGABYTE * 10 * 8 ;// 40000 Megabits (40 Gigabits)
 
 
 	public AdaptedRootSwitch(CloudSim simulation, NetworkDatacenter dc) {
@@ -66,14 +66,14 @@ public class AdaptedRootSwitch extends AbstractSwitch {
         	destID = receiverVm.getHost().getDatacenter().getId();    
         }
         	
-        double transferTime = this.getSimulation().getNetworkTopology().getDelay(srcID, destID);
-        double bw =  ((BriteNetworkTopology)this.getSimulation().getNetworkTopology()).getBwMatrix()[srcID][destID] * 1000;
-        double fileSize = Conversion.bytesToMegaBytes((double)netPkt.getSize());
-        transferTime += fileSize / (bw);
+        double transferDelay = this.getSimulation().getNetworkTopology().getDelay(srcID, destID);
         
         if(receiverVm == null){
         	//dc to broker
-        	send(netPkt.getVmPacket().getSource().getBroker() ,transferTime, CloudSimTags.CLOUDLET_RETURN, netPkt.getVmPacket().getReceiverCloudlet());
+        	AdaptedCloudlet cl = (AdaptedCloudlet) netPkt.getVmPacket().getReceiverCloudlet();
+        	cl.setLeftDcToBrokerTime(this.getSimulation().clock());
+        	cl.setGotToBrokerTime(cl.getLeftDcToBrokerTime() + transferDelay);
+        	send(netPkt.getVmPacket().getSource().getBroker() ,transferDelay, CloudSimTags.CLOUDLET_RETURN, netPkt.getVmPacket().getReceiverCloudlet());
     		netPkt.getVmPacket().getSource().getCloudletScheduler().addCloudletToReturnedList(netPkt.getVmPacket().getReceiverCloudlet());
         }
         else {
@@ -89,7 +89,7 @@ public class AdaptedRootSwitch extends AbstractSwitch {
         	}
 	        else {
 	        	// cloudlet to cloudlet diff dc
-	        	send(((AdaptedDatacenter)netPkt.getDestination().getDatacenter()).getSwitchMap().get(0) ,transferTime, CloudSimTags.NETWORK_EVENT_UP, netPkt);        	
+	        	send(((AdaptedDatacenter)netPkt.getDestination().getDatacenter()).getSwitchMap().get(0) ,transferDelay, CloudSimTags.NETWORK_EVENT_UP, netPkt);        	
 	        }
         }
     }

@@ -7,7 +7,6 @@ import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicySimple;
 import org.cloudbus.cloudsim.brokers.DatacenterBroker;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
-import org.cloudbus.cloudsim.cloudlets.network.CloudletExecutionTask;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.datacenters.Datacenter;
 import org.cloudbus.cloudsim.hosts.Host;
@@ -18,7 +17,7 @@ import org.cloudbus.cloudsim.resources.FileStorage;
 import org.cloudbus.cloudsim.resources.Pe;
 import org.cloudbus.cloudsim.resources.PeSimple;
 import org.cloudbus.cloudsim.resources.SanStorage;
-import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerTimeShared;
+import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerSpaceShared;
 import org.cloudbus.cloudsim.schedulers.vm.VmSchedulerSpaceShared;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelFull;
 import org.cloudbus.cloudsim.vms.Vm;
@@ -54,12 +53,12 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
                 .setRam(ram)
                 .setBw(bw)
                 .setSize(storage)
-                .setCloudletScheduler(new CloudletSchedulerTimeShared());
+                .setCloudletScheduler(new CloudletSchedulerSpaceShared());
 	}
 
 	@Override
 	protected Cloudlet createCloudlet(int id, Vm vm) {
-		 final long length = 10000; //in Million Structions (MI)
+		 final long length = SimulationConstParameters.CLOUDLET_EXECUTION_TASK_LENGTH; //in Million Structions (MI)
 	        final long fileSize = 300; //Size (in bytes) before execution
 	        final long outputSize = 300; //Size (in bytes) after execution
 	        final int  numberOfCpuCores = 2; // cores used by cloudlet
@@ -73,9 +72,8 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 			        .setUtilizationModelCpu(new UtilizationModelFull())
 			        .setUtilizationModelBw(new UtilizationModelFull());
 //	        cloudlet.addRequiredFile("file1.dat");
-//	        cloudlet.addRequiredFile("file2.dat");
+	        cloudlet.addRequiredFile("file2.dat");
 //	        cloudlet.addRequiredFile("file3.dat");
-	        cloudlet.addTask(new CloudletExecutionTask(cloudlet.getTasks().size(), SimulationConstParameters.CLOUDLET_EXECUTION_TASK_LENGTH));
 	        cloudlet.setVm(vm);
 	        return cloudlet;
 	}
@@ -102,13 +100,12 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 			List<Host> hostList, VmAllocationPolicy vmAllocationPolicy) {
 		AdaptedDatacenter dc = new AdaptedDatacenter(simulation, hostList, new VmAllocationPolicySimple());
 		createNetwork(dc);
-		dc.setSchedulingInterval(5);
     	return dc;
 	}
 
 	@Override
-	protected FileStorage createStorage(int i, double d, int j) {	
-		return new SanStorage(1000000000, 10.0, 5);
+	protected FileStorage createStorage(int capacity, double Bandwidth, double networkLatency) {	
+		return new SanStorage(capacity, Bandwidth, networkLatency);
 	}
 
 	@Override
@@ -117,17 +114,18 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 		List<FileStorage> storageList = new ArrayList<FileStorage>();
         for(int j = 0; j < SimulationConstParameters.HOST_SUPER; j++) {
         	int currentRack = 0;
-        	Host host = createHost(32768,4000,16);
+        	Host host = createHost(32768,3000,16);
             hostList.add(host);
-            	storageList.add((createStorage(1000000000, 10.0, 5)));              
+            	storageList.add((createStorage(1000000000, 1000.0, 0.3)));              
         }
-	    storageList.get(0).addFile(new AdaptedFile("file1.dat", 1));
+	    storageList.get(0).addFile(new AdaptedFile("file1.dat", 10));
 	    storageList.get(0).addFile(new AdaptedFile("file2.dat", 10));
 	    storageList.get(0).addFile(new AdaptedFile("file3.dat", 150));
 	    storageList.get(0).addFile(new AdaptedFile("file4.dat", 1000));
 	    DatacenterStorage datacenterStorage = new  AdaptedDatacenterStorage();
         Datacenter dc = createDatacenter(simulation, hostList, new VmAllocationPolicySimple());
         dc.setDatacenterStorage(datacenterStorage);
+        dc.setSchedulingInterval(0.7);
         datacenterStorage.setStorageList(storageList);
         return dc;
 	}

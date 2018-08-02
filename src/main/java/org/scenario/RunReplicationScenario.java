@@ -20,10 +20,13 @@ public class RunReplicationScenario {
         DatacenterBroker broker = new InitializeReplicationScenarioBasicTreeTopology().init(); 
         broker.getSimulation().start();
         List<Cloudlet> finished = broker.getCloudletFinishedList();
-//        AdaptedCloudlet cl = ((AdaptedCloudlet)finished.get(0));
+        AdaptedCloudlet cl = ((AdaptedCloudlet)finished.get(1));
         
         new CloudletsTableBuilder(finished).build();
-//        System.out.println( " send time " +cl.getSendTime() + " dc receive time " + cl.getDcReceiveTime() + " vm receive time " + cl.getVmReceiveTime() + " finish time " +  cl.getFinishTime() );
+        System.out.println( " send time " +cl.getSendTime() + " | dc receive time " + cl.getDcReceiveTime()+"/"+cl.getArrivalTime(cl.getLastDatacenter()) + " | vm receive time " + cl.getVmReceiveTime() 
+        		+ " | Exec start time "+ cl.getExecStartTime() + " | File retrieval time " + cl.getFileRetrievalTime() 
+        		+ " | Leaves vm to broker time " + cl.getLeftVmToBrokerTime() + " | Leaves dc to broker time " + cl.getLeftDcToBrokerTime() +
+        		" | got to broker time " + cl.getGotToBrokerTime());
         
         
     }

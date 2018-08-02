@@ -55,8 +55,8 @@ public class AdaptedHost extends NetworkHost{
             }
             else{
             	Cloudlet cl = hostPkt.getVmPacket().getReceiverCloudlet();
-            	((AdaptedCloudlet)cl).setVmReceiveTime(this.getSimulation().clock());
             	((AdaptedDatacenter)this.getDatacenter()).submitCloudletToVm(cl, true);
+            	((AdaptedCloudlet)cl).setVmReceiveTime(this.getSimulation().clock());
             	
             }
             	
