@@ -18,7 +18,7 @@ import org.cloudbus.cloudsim.resources.FileStorage;
 import org.cloudbus.cloudsim.resources.Pe;
 import org.cloudbus.cloudsim.resources.PeSimple;
 import org.cloudbus.cloudsim.resources.SanStorage;
-import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerTimeShared;
+import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerSpaceShared;
 import org.cloudbus.cloudsim.schedulers.vm.VmSchedulerSpaceShared;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelFull;
 import org.cloudbus.cloudsim.vms.Vm;
@@ -54,7 +54,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
                 .setRam(ram)
                 .setBw(bw)
                 .setSize(storage)
-                .setCloudletScheduler(new CloudletSchedulerTimeShared());
+                .setCloudletScheduler(new CloudletSchedulerSpaceShared());
 	}
 
 	@Override
@@ -72,11 +72,11 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 			        .setUtilizationModelRam(new UtilizationModelFull())
 			        .setUtilizationModelCpu(new UtilizationModelFull())
 			        .setUtilizationModelBw(new UtilizationModelFull());
-//	        cloudlet.addRequiredFile("file1.dat");
-	        cloudlet.addRequiredFile("file2.dat");
+	        cloudlet.addRequiredFile("file1.dat");
+//	        cloudlet.addRequiredFile("file2.dat");
 //	        cloudlet.addRequiredFile("file3.dat");
 	        cloudlet.addTask(new CloudletExecutionTask(numberOfCpuCores, SimulationConstParameters.CLOUDLET_EXECUTION_TASK_LENGTH));
-	        cloudlet.setVm(vm);
+//	        cloudlet.setVm(vm);
 	        return cloudlet;
 	}
 
@@ -120,7 +120,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
             hostList.add(host);
             	storageList.add((createStorage(1000000000, 1000.0, 0.3)));              
         }
-	    storageList.get(0).addFile(new AdaptedFile("file1.dat", 10));
+	    storageList.get(0).addFile(new AdaptedFile("file1.dat", SimulationConstParameters.REQUESTED_FILE_SIZE));
 	    storageList.get(0).addFile(new AdaptedFile("file2.dat", 10));
 	    storageList.get(0).addFile(new AdaptedFile("file3.dat", 150));
 	    storageList.get(0).addFile(new AdaptedFile("file4.dat", 1000));

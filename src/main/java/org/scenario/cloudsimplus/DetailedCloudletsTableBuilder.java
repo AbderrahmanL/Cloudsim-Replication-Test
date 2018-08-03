@@ -9,7 +9,7 @@ import org.cloudsimplus.builders.tables.CloudletsTableBuilder;
 public class DetailedCloudletsTableBuilder extends CloudletsTableBuilder{
 
     private static final String TIME_FORMAT = "%d";
-    private static final String SECONDS = "(sec)";
+    private static final String SECONDS = "TimeStamp";
     private static final String CPU_CORES = "CPU cores";
     private static final String MEGABYTE = "MB";
 

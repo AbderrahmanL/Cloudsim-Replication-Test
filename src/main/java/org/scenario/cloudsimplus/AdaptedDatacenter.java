@@ -3,6 +3,10 @@ package org.scenario.cloudsimplus;
 
 import static java.util.stream.Collectors.toList;
 
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.List;
 
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
@@ -33,6 +37,8 @@ import org.slf4j.LoggerFactory;
  */
 public class AdaptedDatacenter extends NetworkDatacenter{
 	private static final Logger logger = LoggerFactory.getLogger(DatacenterSimple.class.getSimpleName());
+	
+	private static int debugCount = 0;
 	
 	/**
 	 * in bytes
@@ -65,7 +71,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
         cl.assignToDatacenter(this);
         // TODO assign to vm, next line is a dummy assignement for test
         Vm vm = this.getVmList().get(0);// TODO replace this
-//        cl.setVm(vm); // its done after initializing also for test
+        cl.setVm(vm); // its done after initializing also for test
         send(this,
                 this.getSchedulingInterval(),
                 CloudSimTags.VM_UPDATE_CLOUDLET_PROCESSING_EVENT);	
@@ -141,6 +147,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 		EdgeSwitch sw = ((AdaptedHost)cloudlet.getVm().getHost()).getEdgeSwitch();
 		getSimulation().sendNow(
                 this, sw, CloudSimTags.NETWORK_EVENT_UP, pkt);
+		cloudlet.getVm().getCloudletScheduler().addCloudletToReturnedList(cloudlet);
 		// these tow lines are invoked in root switch
 //        sendNow(cloudlet.getBroker(), CloudSimTags.CLOUDLET_RETURN, cloudlet);
 //        cloudlet.getVm().getCloudletScheduler().addCloudletToReturnedList(cloudlet);
