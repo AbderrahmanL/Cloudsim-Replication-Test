@@ -1,5 +1,10 @@
 package org.scenario.cloudsimplus;
 
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.CloudSimTags;
 import org.cloudbus.cloudsim.core.events.PredicateType;
@@ -52,6 +57,22 @@ public class AdaptedEdgeSwitch extends EdgeSwitch {
         setDownlinkBandwidth(DOWNLINK_BW);
         setSwitchingDelay(SWITCHING_DELAY);
         setPorts(PORTS);
+    }
+    
+    @Override
+    protected void processPacketDown(SimEvent ev) {
+    	getSimulation().cancelAll(this, new PredicateType(CloudSimTags.NETWORK_EVENT_SEND));
+        schedule(this, getSwitchingDelay(), CloudSimTags.NETWORK_EVENT_SEND);
+
+        final HostPacket netPkt = (HostPacket) ev.getData();
+        final Vm receiverVm = netPkt.getVmPacket().getDestination();
+        // packet is to be received by host
+        final NetworkHost host = getVmHost(receiverVm);
+        netPkt.setDestination(host);
+        addPacketToBeSentToHost(host, netPkt);
+        send(this.getDatacenter(),
+                0,
+                CloudSimTags.VM_UPDATE_CLOUDLET_PROCESSING_EVENT);	
     }
 
 	 @Override

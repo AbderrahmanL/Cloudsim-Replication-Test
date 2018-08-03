@@ -18,6 +18,7 @@ import org.cloudbus.cloudsim.resources.FileStorage;
 import org.cloudbus.cloudsim.resources.Pe;
 import org.cloudbus.cloudsim.resources.PeSimple;
 import org.cloudbus.cloudsim.resources.SanStorage;
+import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerCompletelyFair;
 import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerSpaceShared;
 import org.cloudbus.cloudsim.schedulers.vm.VmSchedulerSpaceShared;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelFull;
@@ -54,7 +55,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
                 .setRam(ram)
                 .setBw(bw)
                 .setSize(storage)
-                .setCloudletScheduler(new CloudletSchedulerSpaceShared());
+                .setCloudletScheduler(new CloudletSchedulerCompletelyFair());
 	}
 
 	@Override
@@ -127,7 +128,6 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 	    DatacenterStorage datacenterStorage = new  AdaptedDatacenterStorage();
         Datacenter dc = createDatacenter(simulation, hostList, new VmAllocationPolicySimple());
         dc.setDatacenterStorage(datacenterStorage);
-        dc.setSchedulingInterval(0.7);
         datacenterStorage.setStorageList(storageList);
         return dc;
 	}

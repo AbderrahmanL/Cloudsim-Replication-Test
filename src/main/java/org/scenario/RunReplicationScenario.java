@@ -23,7 +23,7 @@ public class RunReplicationScenario {
         broker.getSimulation().start();
 //        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out))); // make out go back to default
 //        try {
-//			System.setOut(new PrintStream(new FileOutputStream("500req_2MB_SpaceShared")));
+//			System.setOut(new PrintStream(new FileOutputStream("1000req_1MB_Fair")));
 //		} catch (FileNotFoundException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();

@@ -1,0 +1,8 @@
+try {
+			System.setOut(new PrintStream(new FileOutputStream("Log",true)));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        //Out something
+        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out))); // make out go back to default

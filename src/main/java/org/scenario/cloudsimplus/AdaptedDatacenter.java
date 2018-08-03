@@ -71,16 +71,12 @@ public class AdaptedDatacenter extends NetworkDatacenter{
         cl.assignToDatacenter(this);
         // TODO assign to vm, next line is a dummy assignement for test
         Vm vm = this.getVmList().get(0);// TODO replace this
-        cl.setVm(vm); // its done after initializing also for test
-        send(this,
-                this.getSchedulingInterval(),
-                CloudSimTags.VM_UPDATE_CLOUDLET_PROCESSING_EVENT);	
+        cl.setVm(vm); // its done after initializing also for test	
         	HostPacket pkt = new HostPacket(null, new VmPacket(null, vm, TCP_PACKET_SIZE + cl.getFileSize(), null, cl));
         	for (Switch sw : this.getSwitchMap()){
         		if(sw.getLevel() == 0){
         			sendNow(sw, CloudSimTags.NETWORK_EVENT_UP, pkt);
-        		}
-        		
+        		}       		
         	}
 	}
 	

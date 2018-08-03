@@ -22,7 +22,7 @@ public abstract class InitializeReplicationScenario {
 			protected List<Datacenter> dcs;
 			protected DatacenterBroker broker;
 			protected List<Vm> vmList;
-			protected List<Cloudlet> cloudletList;
+			public static List<Cloudlet> cloudletList;
 			
 			protected abstract DatacenterBroker createBroker(CloudSim simulation) ;
 
