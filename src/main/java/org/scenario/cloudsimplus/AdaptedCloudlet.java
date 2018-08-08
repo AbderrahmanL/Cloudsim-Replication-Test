@@ -82,7 +82,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 
 
 	public double getVmReceiveTime() {
-		return vmReceiveTime;
+		return BigDecimal.valueOf(vmReceiveTime).setScale(3, RoundingMode.HALF_UP).doubleValue();
 	}
 
 
@@ -92,7 +92,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	
 	
 	public double getFileRetrievalTime() {
-		return BigDecimal.valueOf(fileRetrievalTime).setScale(2, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(fileRetrievalTime).setScale(3, RoundingMode.HALF_UP).doubleValue();
 	}
 	
 	
@@ -101,7 +101,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	}
 
 	public double getLeftVmToBrokerTime() {
-		return BigDecimal.valueOf(leftVmToBrokerTime).setScale(2, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(leftVmToBrokerTime).setScale(3, RoundingMode.HALF_UP).doubleValue();
 	}
 
 
@@ -111,7 +111,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 
 
 	public double getLeftDcToBrokerTime() {
-		return BigDecimal.valueOf(leftDcToBrokerTime).setScale(2, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(leftDcToBrokerTime).setScale(3, RoundingMode.HALF_UP).doubleValue();
 	}
 
 
@@ -121,7 +121,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 
 
 	public double getGotToBrokerTime() {
-		return BigDecimal.valueOf(gotToBrokerTime).setScale(2, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(gotToBrokerTime).setScale(3, RoundingMode.HALF_UP).doubleValue();
 	}
 
 
@@ -141,19 +141,22 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	
 	@Override
 	public double getExecStartTime(){
-		return BigDecimal.valueOf(super.getExecStartTime()).setScale(2, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(super.getExecStartTime()).setScale(3, RoundingMode.HALF_UP).doubleValue();
 	}
 	
 	@Override
 	public double getFinishTime(){
-		return BigDecimal.valueOf(super.getFinishTime()).setScale(2, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(super.getFinishTime()).setScale(3, RoundingMode.HALF_UP).doubleValue();
 	}
 	
 	@Override
 	public double getActualCpuTime(){
-		return BigDecimal.valueOf(super.getActualCpuTime()).setScale(2, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(super.getActualCpuTime()).setScale(3, RoundingMode.HALF_UP).doubleValue();
 	}
 	
+	public double getOverallTime() {
+		return BigDecimal.valueOf(this.getGotToBrokerTime()).subtract(BigDecimal.valueOf(this.getSendTime())).setScale(3, RoundingMode.HALF_UP).doubleValue(); 
+	}
 	public File getRequestedFile(){
 		String fileName = this.getRequiredFiles().get(0);
 		return ((AdaptedDatacenterStorage)this.getLastDatacenter().getDatacenterStorage()).getFile(fileName);

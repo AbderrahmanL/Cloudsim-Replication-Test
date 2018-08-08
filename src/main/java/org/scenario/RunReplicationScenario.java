@@ -21,15 +21,15 @@ public class RunReplicationScenario {
         
         DatacenterBroker broker = new InitializeReplicationScenarioBasicTreeTopology().init(); 
         broker.getSimulation().start();
-//        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out))); // make out go back to default
-//        try {
-//			System.setOut(new PrintStream(new FileOutputStream("1000req_1MB_Fair")));
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+////        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out))); // make out go back to default
+////        try {
+////			System.setOut(new PrintStream(new FileOutputStream("1000req_1MB_Fair")));
+////		} catch (FileNotFoundException e) {
+////			// TODO Auto-generated catch block
+////			e.printStackTrace();
+////		}
         List<Cloudlet> finished = broker.getCloudletFinishedList();
-        
+//        
         new DetailedCloudletsTableBuilder(finished).build();
         
         

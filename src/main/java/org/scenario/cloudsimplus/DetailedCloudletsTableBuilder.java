@@ -9,7 +9,7 @@ import org.cloudsimplus.builders.tables.CloudletsTableBuilder;
 public class DetailedCloudletsTableBuilder extends CloudletsTableBuilder{
 
     private static final String TIME_FORMAT = "%d";
-    private static final String SECONDS = "TimeStamp";
+    private static final String SECONDS = "clock(s)";
     private static final String CPU_CORES = "CPU cores";
     private static final String MEGABYTE = "MB";
 
@@ -37,11 +37,11 @@ public class DetailedCloudletsTableBuilder extends CloudletsTableBuilder{
 	        addColumnDataFunction(getTable().addColumn("StartTime", SECONDS), c -> Double.toString(((AdaptedCloudlet)c).getExecStartTime()));
 	        addColumnDataFunction(getTable().addColumn("RetreivedFile", SECONDS), c -> Double.toString(((AdaptedCloudlet)c).getFileRetrievalTime()));
 	        addColumnDataFunction(getTable().addColumn("FinishTime", SECONDS), c -> Double.toString(((AdaptedCloudlet)c).getFinishTime()));
-	        addColumnDataFunction(getTable().addColumn("LeftVm", SECONDS), c -> Double.toString(((AdaptedCloudlet)c).getLeftVmToBrokerTime()));
-	        addColumnDataFunction(getTable().addColumn("LeftDc", SECONDS), c -> Double.toString(((AdaptedCloudlet)c).getLeftDcToBrokerTime()));
+	        addColumnDataFunction(getTable().addColumn("LeftVmToBroker", SECONDS), c -> Double.toString(((AdaptedCloudlet)c).getLeftVmToBrokerTime()));
+	        addColumnDataFunction(getTable().addColumn("LeftDcToBroker", SECONDS), c -> Double.toString(((AdaptedCloudlet)c).getLeftDcToBrokerTime()));
 	        addColumnDataFunction(getTable().addColumn("RequestReturn", SECONDS), c -> Double.toString(((AdaptedCloudlet)c).getGotToBrokerTime()));
 	        addColumnDataFunction(getTable().addColumn("ActualCpuTime", SECONDS), c -> Double.toString(((AdaptedCloudlet)c).getActualCpuTime()));
-	        addColumnDataFunction(getTable().addColumn("OverallTime", SECONDS), c -> Double.toString( ((AdaptedCloudlet)c).getGotToBrokerTime()-((AdaptedCloudlet)c).getSendTime() ));
+	        addColumnDataFunction(getTable().addColumn("OverallTime", SECONDS), c -> Double.toString( ((AdaptedCloudlet)c).getOverallTime() ));
 	    }
 	 
 }

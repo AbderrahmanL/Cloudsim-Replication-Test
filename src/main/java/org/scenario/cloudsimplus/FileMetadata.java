@@ -8,11 +8,13 @@ import org.cloudbus.cloudsim.resources.FileAttribute;
 
 public class FileMetadata extends FileAttribute{
 	
-	private static int latestInode = 0;
+	private static int latestInode = 0; // id of the file
 	
-	private int noOfAccesses = 0; 
+	private static int noOfAccesses = 0; 
 	
 	private UUID containingDevice;
+	
+	private int dcId;
 	
 	public FileMetadata(File file, int fileSize) {
 		super(file, fileSize);
@@ -39,6 +41,14 @@ public class FileMetadata extends FileAttribute{
 
 	public void setContainingDevice(UUID containingDevice) {
 		this.containingDevice = containingDevice;
+	}
+
+	public int getDcId() {
+		return dcId;
+	}
+
+	public void setDcId(int dcId) {
+		this.dcId = dcId;
 	}
 	
 	

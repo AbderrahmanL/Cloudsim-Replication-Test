@@ -9,8 +9,11 @@ import org.cloudbus.cloudsim.brokers.DatacenterBroker;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
 import org.cloudbus.cloudsim.cloudlets.network.CloudletExecutionTask;
 import org.cloudbus.cloudsim.core.CloudSim;
+import org.cloudbus.cloudsim.core.SimEntity;
 import org.cloudbus.cloudsim.datacenters.Datacenter;
 import org.cloudbus.cloudsim.hosts.Host;
+import org.cloudbus.cloudsim.network.topologies.BriteNetworkTopology;
+import org.cloudbus.cloudsim.network.topologies.NetworkTopology;
 import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.ResourceProvisionerSimple;
 import org.cloudbus.cloudsim.resources.DatacenterStorage;
@@ -18,8 +21,7 @@ import org.cloudbus.cloudsim.resources.FileStorage;
 import org.cloudbus.cloudsim.resources.Pe;
 import org.cloudbus.cloudsim.resources.PeSimple;
 import org.cloudbus.cloudsim.resources.SanStorage;
-import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerCompletelyFair;
-import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerSpaceShared;
+import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerTimeShared;
 import org.cloudbus.cloudsim.schedulers.vm.VmSchedulerSpaceShared;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelFull;
 import org.cloudbus.cloudsim.vms.Vm;
@@ -40,6 +42,18 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
      */
     protected abstract void createNetwork(AdaptedDatacenter datacenter);
 	
+    @Override
+    public DatacenterBroker init() {
+	    	DatacenterBroker broker = super.init();
+	    	NetworkTopology networkTopology = BriteNetworkTopology.getInstance("topology.brite");
+		  	broker.getSimulation().setNetworkTopology(networkTopology);
+		  	for (int i=1 ; i<22 ; i++)
+		  	networkTopology.mapNode(i, i);
+		  	for(SimEntity ent : broker.getSimulation().getEntityList())
+		  	System.out.println(ent.getName() + " => " + ent.getId() ); 
+		  	return broker;
+    }
+    
 	@Override
 	protected DatacenterBroker createBroker(CloudSim simulation) {
 		DatacenterBroker broker = new AdaptedDatacenterBroker(simulation);
@@ -55,7 +69,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
                 .setRam(ram)
                 .setBw(bw)
                 .setSize(storage)
-                .setCloudletScheduler(new CloudletSchedulerCompletelyFair());
+                .setCloudletScheduler(new CloudletSchedulerTimeShared());
 	}
 
 	@Override

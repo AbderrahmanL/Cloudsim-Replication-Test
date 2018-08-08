@@ -53,10 +53,6 @@ public abstract class InitializeReplicationScenario {
 			    
 			    createVms();
 			    
-			    NetworkTopology networkTopology = BriteNetworkTopology.getInstance("topology.brite");
-			  	simulation.setNetworkTopology(networkTopology);
-			  	for (int i=1 ; i<22 ; i++)
-			  	networkTopology.mapNode(i, i);
 				return broker;
 				}
 			

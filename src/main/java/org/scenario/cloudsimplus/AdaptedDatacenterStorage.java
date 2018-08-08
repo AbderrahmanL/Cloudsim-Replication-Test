@@ -12,7 +12,7 @@ public class AdaptedDatacenterStorage extends DatacenterStorage {
 	public int addFile(final File file) {
 		int result = super.addFile(file);
 		if (result == DataCloudTags.FILE_ADD_SUCCESSFUL) {
-			ReplicaManager.addEntryToCatalog(file.getAttribute());
+			ReplicaManager.onFileCreate(file.getAttribute());
 		}
 		return result;
 	}
