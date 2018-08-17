@@ -1,4 +1,4 @@
-package org.scenario.replication;
+package org.scenario.autoadaptive;
 
 import java.util.List;
 

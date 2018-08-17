@@ -10,6 +10,9 @@ import org.cloudbus.cloudsim.cloudlets.Cloudlet;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.CloudSimTags;
 import org.cloudbus.cloudsim.datacenters.Datacenter;
+import org.scenario.autoadaptive.CloudDataTags;
+import org.scenario.config.SimulationConstParameters;
+import org.scenario.config.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +22,7 @@ public class AdaptedDatacenterBroker extends DatacenterBrokerSimple{
 	
 	private final Map<Cloudlet, Datacenter> cloudletCreationRequestsMap;
 
+//	private Map<String> queue of waiting broadcasts
 
 	public AdaptedDatacenterBroker(CloudSim simulation) {
 		super(simulation);
@@ -61,5 +65,12 @@ public class AdaptedDatacenterBroker extends DatacenterBrokerSimple{
 		getCloudletWaitingList().removeAll(successfullySubmitted);
 	}
 	
+	public Datacenter initiateDatacenterElection(String resourceName) {
+		for(Datacenter dc : this.getSimulation().getDatacenterList()) {
+			this.scheduleNow(dc, CloudDataTags.ELECTION_BROADCAST, resourceName);
+		}
+		// TODO select dc
+		return null;
+	}
 	
 }

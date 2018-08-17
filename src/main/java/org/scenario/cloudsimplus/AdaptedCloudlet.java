@@ -62,7 +62,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 
 
 	public double getSendTime() {
-		return sendTime;
+		return BigDecimal.valueOf(sendTime).setScale(3, RoundingMode.HALF_UP).doubleValue();
 	}
 
 
@@ -72,7 +72,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 
 	
 	public double getDcReceiveTime() {
-		return dcReceiveTime;
+		return BigDecimal.valueOf(dcReceiveTime).setScale(3, RoundingMode.HALF_UP).doubleValue();
 	}
 
 

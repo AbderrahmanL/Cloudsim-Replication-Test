@@ -1,6 +1,9 @@
 package org.scenario.config;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
@@ -12,6 +15,7 @@ import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.SimEntity;
 import org.cloudbus.cloudsim.datacenters.Datacenter;
 import org.cloudbus.cloudsim.hosts.Host;
+import org.cloudbus.cloudsim.network.switches.Switch;
 import org.cloudbus.cloudsim.network.topologies.BriteNetworkTopology;
 import org.cloudbus.cloudsim.network.topologies.NetworkTopology;
 import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
@@ -21,17 +25,20 @@ import org.cloudbus.cloudsim.resources.FileStorage;
 import org.cloudbus.cloudsim.resources.Pe;
 import org.cloudbus.cloudsim.resources.PeSimple;
 import org.cloudbus.cloudsim.resources.SanStorage;
+import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerCompletelyFair;
+import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerSpaceShared;
 import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerTimeShared;
 import org.cloudbus.cloudsim.schedulers.vm.VmSchedulerSpaceShared;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelFull;
 import org.cloudbus.cloudsim.vms.Vm;
-import org.cloudbus.cloudsim.vms.network.NetworkVm;
+import org.scenario.autoadaptive.LoadBalancerWeightedLeastConnections;
 import org.scenario.cloudsimplus.AdaptedCloudlet;
 import org.scenario.cloudsimplus.AdaptedDatacenter;
 import org.scenario.cloudsimplus.AdaptedDatacenterBroker;
 import org.scenario.cloudsimplus.AdaptedDatacenterStorage;
 import org.scenario.cloudsimplus.AdaptedFile;
 import org.scenario.cloudsimplus.AdaptedHost;
+import org.scenario.cloudsimplus.AdaptedVm;
 
 public abstract class InitializeReplicationScenarioWithInternalNetwork extends InitializeReplicationScenario {
 
@@ -43,21 +50,68 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
     protected abstract void createNetwork(AdaptedDatacenter datacenter);
 	
     @Override
-    public DatacenterBroker init() {
-	    	DatacenterBroker broker = super.init();
+    public List<DatacenterBroker> init() {
+	    	List<DatacenterBroker> brokers = super.init();
+	    	populateBriteFile(brokers);
 	    	NetworkTopology networkTopology = BriteNetworkTopology.getInstance("topology.brite");
-		  	broker.getSimulation().setNetworkTopology(networkTopology);
-		  	for (int i=1 ; i<22 ; i++)
+		  	brokers.get(0).getSimulation().setNetworkTopology(networkTopology);
+		  	for (int i=1 ; i<brokers.get(0).getSimulation().getEntityList().size() ; i++)
 		  	networkTopology.mapNode(i, i);
-		  	for(SimEntity ent : broker.getSimulation().getEntityList())
-		  	System.out.println(ent.getName() + " => " + ent.getId() ); 
-		  	return broker;
+		  	return brokers;
     }
     
-	@Override
-	protected DatacenterBroker createBroker(CloudSim simulation) {
+	private void populateBriteFile(List<DatacenterBroker> brokers) {
+		try {
+			int edgeCounter = 0;
+			FileWriter wr = new FileWriter("topology.brite") ;
+			wr.write("Nodes: \n");
+			for(SimEntity ent : brokers.get(0).getSimulation().getEntityList()) {
+			wr.write(ent.getId() + "	1	1	0	0	-1	RT_NODE\n");
+			}
+			wr.write("\n");
+			wr.write("Edges: \n");
+			Iterator<Datacenter> itr = brokers.get(0).getSimulation().getDatacenterList().iterator();
+			while(itr.hasNext() ) {
+				AdaptedDatacenter dc = (AdaptedDatacenter) itr.next();
+				List<Switch> switches = dc.getSwitchMap();
+				for(Switch sw : switches) {
+					if(sw.getLevel() == 0 ) {
+						wr.write( edgeCounter +"	"+ (sw.getId()) +"	"+ (sw.getId()+ 1) +  "	1.0		0.00005		0.0	-1	-1	E_RT	U\n");
+						edgeCounter++;
+						wr.write( edgeCounter +"	"+ (sw.getId()) +"	"+ (sw.getId()+ 3) +  "	1.0		0.00005		0.0	-1	-1	E_RT	U\n");
+						edgeCounter++;
+						wr.write( edgeCounter +"	"+ (sw.getId()) +"	"+ (sw.getId()+ 5) +  "	1.0		0.00005		0.0	-1	-1	E_RT	U\n");
+						edgeCounter++;
+						wr.write( edgeCounter +"	"+ (sw.getId()) +"	"+ (sw.getId()+ 7) +  "	1.0		0.00005		0.0	-1	-1	E_RT	U\n");
+						edgeCounter++;
+						for(DatacenterBroker br : brokers ) {
+						wr.write( edgeCounter +"	"+ (sw.getId()) +"	"+ (br.getId()) +  "	1.0		0.2		11.0	-1	-1	E_RT	U\n");
+						wr.write( edgeCounter +"	"+ (dc.getId()) +"	"+ (br.getId()) +  "	1.0		0.2		11.0	-1	-1	E_RT	U\n");
+						edgeCounter++;	
+						}
+						
+					}
+					if(sw.getLevel() == 1 ) {
+						wr.write( edgeCounter +"	"+ (sw.getId()) +"	"+ (sw.getId()+ 1) +  "	1.0		0.00005		0.0	-1	-1	E_RT	U\n");
+						edgeCounter++;
+					}
+					
+				}
+					
+			}
+			wr.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	protected List<DatacenterBroker> createBrokers(CloudSim simulation) {
 		DatacenterBroker broker = new AdaptedDatacenterBroker(simulation);
-		return broker;
+		List<DatacenterBroker> brokers = new ArrayList<>();
+		brokers.add(broker);
+		return brokers;
 	}
 
 	@Override
@@ -65,11 +119,11 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 		final long   storage = 10000; // vm image size (MEGABYTE)
         final long   bw = 1000; // vm bandwidth (Megabits/s)
 
-        return new NetworkVm(id, mips, pes)
+        return new AdaptedVm(id, mips, pes)
                 .setRam(ram)
                 .setBw(bw)
                 .setSize(storage)
-                .setCloudletScheduler(new CloudletSchedulerTimeShared());
+                .setCloudletScheduler(new CloudletSchedulerCompletelyFair());
 	}
 
 	@Override
@@ -88,8 +142,6 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 			        .setUtilizationModelCpu(new UtilizationModelFull())
 			        .setUtilizationModelBw(new UtilizationModelFull());
 	        cloudlet.addRequiredFile("file1.dat");
-//	        cloudlet.addRequiredFile("file2.dat");
-//	        cloudlet.addRequiredFile("file3.dat");
 	        cloudlet.addTask(new CloudletExecutionTask(numberOfCpuCores, SimulationConstParameters.CLOUDLET_EXECUTION_TASK_LENGTH));
 //	        cloudlet.setVm(vm);
 	        return cloudlet;
@@ -115,7 +167,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 	@Override
 	protected Datacenter createDatacenter(CloudSim simulation,
 			List<Host> hostList, VmAllocationPolicy vmAllocationPolicy) {
-		AdaptedDatacenter dc = new AdaptedDatacenter(simulation, hostList, new VmAllocationPolicySimple());
+		AdaptedDatacenter dc = new AdaptedDatacenter(simulation, hostList, new VmAllocationPolicySimple(), new LoadBalancerWeightedLeastConnections());
 		createNetwork(dc);
     	return dc;
 	}
@@ -130,19 +182,20 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 		List<Host> hostList = new ArrayList<>(SimulationConstParameters.HOST_SUPER);
 		List<FileStorage> storageList = new ArrayList<FileStorage>();
         for(int j = 0; j < SimulationConstParameters.HOST_SUPER; j++) {
-        	int currentRack = 0;
         	Host host = createHost(32768,4000,16);
             hostList.add(host);
             	storageList.add((createStorage(1000000000, 1000.0, 0.3)));              
         }
-	    storageList.get(0).addFile(new AdaptedFile("file1.dat", SimulationConstParameters.REQUESTED_FILE_SIZE));
-	    storageList.get(0).addFile(new AdaptedFile("file2.dat", 10));
-	    storageList.get(0).addFile(new AdaptedFile("file3.dat", 150));
-	    storageList.get(0).addFile(new AdaptedFile("file4.dat", 1000));
-	    DatacenterStorage datacenterStorage = new  AdaptedDatacenterStorage();
+        DatacenterStorage datacenterStorage = new  AdaptedDatacenterStorage();
         Datacenter dc = createDatacenter(simulation, hostList, new VmAllocationPolicySimple());
         dc.setDatacenterStorage(datacenterStorage);
         datacenterStorage.setStorageList(storageList);
+        datacenterStorage.addFile(new AdaptedFile("file1.dat", 10));
+        datacenterStorage.addFile(new AdaptedFile("file2.dat", 10));
+        datacenterStorage.addFile(new AdaptedFile("file3.dat", 10));
+        datacenterStorage.addFile(new AdaptedFile("file4.dat", 10));
+//        MetadataCatalog catalog = ReplicaCatalog.getCatalogInstance();
+//        System.out.println(((HashMap<Integer, LinkedList<FileAttribute>>)catalog).get(0).get(0).getFileSize());
         return dc;
 	}
 

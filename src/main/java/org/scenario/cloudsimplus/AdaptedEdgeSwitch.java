@@ -1,10 +1,5 @@
 package org.scenario.cloudsimplus;
 
-import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.CloudSimTags;
 import org.cloudbus.cloudsim.core.events.PredicateType;
@@ -29,8 +24,8 @@ public class AdaptedEdgeSwitch extends EdgeSwitch {
      * Default downlink bandwidth of EdgeSwitch in Megabits/s.
      * It also represents the uplink bandwidth of connected hosts.
      */
-    public static final long DOWNLINK_BW = (long)Conversion.GIGABYTE * 10 * 8;
-
+    public static final long DOWNLINK_BW = (long)Conversion.GIGABYTE * 1 * 8;
+    
     /**
      * Default number of ports that defines the number of
      * {@link Host} that can be connected to the switch.

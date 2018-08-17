@@ -32,9 +32,11 @@ import org.scenario.cloudsimplus.AdaptedFile;
 public class InitializeReplicationScenarioNoInternalNetwork extends InitializeReplicationScenario{
 	
 	
-	protected DatacenterBroker createBroker(CloudSim simulation) {
+	protected List<DatacenterBroker> createBrokers(CloudSim simulation) {
 		DatacenterBroker broker = new DatacenterBrokerSimple(simulation);
-		return broker;
+		List<DatacenterBroker> brokers = new ArrayList<>();
+		brokers.add(broker);
+		return brokers;
 	}
 	
 	protected Host createHost(int ram,long mips,int pes) {

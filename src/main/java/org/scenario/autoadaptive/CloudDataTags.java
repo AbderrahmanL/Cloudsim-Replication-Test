@@ -1,4 +1,4 @@
-package org.scenario.replication;
+package org.scenario.autoadaptive;
 
 /**
  * Contains additional tags for DataCloud features, such as file
@@ -8,6 +8,12 @@ package org.scenario.replication;
  * @since CloudSim Toolkit 1.0
  */
 public final class CloudDataTags {
+	
+	/**
+     * Base value used for Delegate Broker tags.
+     */
+    public static final int DB_BASE = 400;
+    
     /**
      * Base value used for Replica Manager tags.
      */
@@ -28,6 +34,11 @@ public final class CloudDataTags {
      */
     public static final int PKT_SIZE = DEFAULT_MTU * 100;  // in bytes
 
+    /**
+     * Denotes a broadcast message to select datacenter for cloudlet.
+     */
+    public static final int ELECTION_BROADCAST = DB_BASE + 1;
+    
     /**
      * Denotes that file addition is successful.
      */

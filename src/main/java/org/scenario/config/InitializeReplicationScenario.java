@@ -20,11 +20,11 @@ import org.cloudbus.cloudsim.vms.Vm;
 public abstract class InitializeReplicationScenario {
 	
 			protected List<Datacenter> dcs;
-			protected DatacenterBroker broker;
+			protected List<DatacenterBroker> brokers;
 			protected List<Vm> vmList;
 			public static List<Cloudlet> cloudletList;
 			
-			protected abstract DatacenterBroker createBroker(CloudSim simulation) ;
+			protected abstract List<DatacenterBroker> createBrokers(CloudSim simulation) ;
 
 			protected abstract Vm createVm(int id, int ram,long mips,int pes);
 			
@@ -42,18 +42,18 @@ public abstract class InitializeReplicationScenario {
 			
 			protected abstract Datacenter createOrdinaryDatacenter(CloudSim simulation) ;
 			
-			public DatacenterBroker init(){
+			public List<DatacenterBroker> init(){
 				CloudSim simulation = new CloudSim();
 			    dcs = createDatacenters(simulation);
-			    
-			    broker = createBroker(simulation);
+			    simulation.getDatacenterList().addAll(dcs);
+			    brokers = createBrokers(simulation);
 		
 			    vmList = new ArrayList<>();
 			    cloudletList = new ArrayList<>();
 			    
 			    createVms();
 			    
-				return broker;
+				return brokers;
 				}
 			
 			/**
@@ -85,7 +85,7 @@ public abstract class InitializeReplicationScenario {
 //			            cloudletList.add(cloudlet);
 			        }
 			    }
-			    broker.submitVmList(vmList);
+			    brokers.get(0).submitVmList(vmList);
 			    
 			}
 			

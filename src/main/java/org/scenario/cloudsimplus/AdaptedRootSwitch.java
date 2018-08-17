@@ -40,7 +40,7 @@ public class AdaptedRootSwitch extends AbstractSwitch {
      * The downlink bandwidth of RootSwitch in Megabits/s.
      * It also represents the uplink bandwidth of connected aggregation Datacenter.
      */
-    public static final long DOWNLINK_BW =  (long)Conversion.GIGABYTE * 10 * 8 ;// 40000 Megabits (40 Gigabits)
+    public static final long DOWNLINK_BW =  (long)Conversion.GIGABYTE * 10 * 8 ;// 10000 Megabits (10 Gigabits)
 
 
 	public AdaptedRootSwitch(CloudSim simulation, NetworkDatacenter dc) {
@@ -74,7 +74,7 @@ public class AdaptedRootSwitch extends AbstractSwitch {
         	cl.setLeftDcToBrokerTime(this.getSimulation().clock());
         	cl.setGotToBrokerTime(cl.getLeftDcToBrokerTime() + transferDelay);
         	send(netPkt.getVmPacket().getSource().getBroker() ,transferDelay, CloudSimTags.CLOUDLET_RETURN, netPkt.getVmPacket().getReceiverCloudlet());
-    		netPkt.getVmPacket().getSource().getCloudletScheduler().addCloudletToReturnedList(netPkt.getVmPacket().getReceiverCloudlet());
+//    		netPkt.getVmPacket().getSource().getCloudletScheduler().addCloudletToReturnedList(netPkt.getVmPacket().getReceiverCloudlet());
         }
         else {
         	// broker submit cloudlet to dc or cloudlet to cloudlet same dc
