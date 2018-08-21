@@ -30,14 +30,28 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
           AdaptedAggregateSwitch[] aggregateSwitches = new AdaptedAggregateSwitch[4];
           AdaptedEdgeSwitch[] edgeSwitches = new AdaptedEdgeSwitch[4];
         datacenter.addSwitch(rootSwitch);
+        
         for (int i = 0; i < datacenter.getHostList().size()/SimulationConstParameters.HOSTS_PER_SWITCH; i++) {
-        	aggregateSwitches[i] = new AdaptedAggregateSwitch((CloudSim) datacenter.getSimulation(), datacenter);
+        	int aggregateIndex = 0;
+        	if(i <2) 
+        		aggregateIndex = 0;
+        	else
+        		aggregateIndex = 1;
+        	if(i == 0 || i == 2) {// only 2 aggregate switches
+        	aggregateSwitches[aggregateIndex] = new AdaptedAggregateSwitch((CloudSim) datacenter.getSimulation(), datacenter);
+        	aggregateSwitches[aggregateIndex].getUplinkSwitches().add(rootSwitch);
+        	rootSwitch.getDownlinkSwitches().add(aggregateSwitches[aggregateIndex]);
+        	}
+        	
             edgeSwitches[i] = new AdaptedEdgeSwitch((CloudSim) datacenter.getSimulation(), datacenter);
-            aggregateSwitches[i].getDownlinkSwitches().add(edgeSwitches[i]);
-            edgeSwitches[i].getUplinkSwitches().add(aggregateSwitches[i]);
-            aggregateSwitches[i].getUplinkSwitches().add(rootSwitch);
-            rootSwitch.getDownlinkSwitches().add(aggregateSwitches[i]);
-            datacenter.addSwitch(aggregateSwitches[i]);
+            
+            
+            aggregateSwitches[aggregateIndex].getDownlinkSwitches().add(edgeSwitches[i]);
+            edgeSwitches[i].getUplinkSwitches().add(aggregateSwitches[aggregateIndex]);
+            
+            if(i == 0 || i == 2)
+            datacenter.addSwitch(aggregateSwitches[aggregateIndex]);
+            
             datacenter.addSwitch(edgeSwitches[i]);
         }
 
@@ -62,40 +76,17 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
     }
 	
 	@Override
-	protected void createVms(){
+	protected void createVmsAndCloudlets(){
 		int cloudletCount = 0;
 	    for (int i = 0; i < SimulationConstParameters.HOST_SUPER*SimulationConstParameters.DC_SUPER; i++) {
 	        Vm vm = createVm(vmList.size(), 32768,4000,16);
 	        vmList.add(vm);
-	        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
-	            AdaptedCloudlet cloudlet = (AdaptedCloudlet)createCloudlet(cloudletList.size(), vm);
-//	            cloudlet.setSubmissionDelay(Utils.generateRandomBounded(0D , SimulationConstParameters.RANDOM_INTERVAL_RIGHT_LIMIT));
-	            cloudletList.add(cloudlet);
-	        }
 	    }
-	    for (int i = 0; i < SimulationConstParameters.HOST_MID*SimulationConstParameters.DC_MID; i++) {
-	        Vm vm = createVm(vmList.size(), 16348,2500,6);
-	        vmList.add(vm);
-	        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
-//	        	NetworkCloudlet cloudlet = (NetworkCloudlet)createCloudlet(cloudletList.size(), broker, vm);
-//	            cloudletList.add(cloudlet);
-	        }
+	    for (int j = 0; j < SimulationConstParameters.NO_CLOUDLETS; j++) {
+	    	AdaptedCloudlet cloudlet = (AdaptedCloudlet)createCloudlet(cloudletList.size(), Vm.NULL);
+	            cloudlet.setSubmissionDelay(Utils.generateRandomBounded(0D , SimulationConstParameters.RANDOM_INTERVAL_RIGHT_LIMIT));
+	    	cloudletList.add(cloudlet);
 	    }
-	    for (int i = 0; i < SimulationConstParameters.HOST_STANDARD*SimulationConstParameters.DC_STANDARD; i++) {
-	        Vm vm = createVm(vmList.size(), 8192,1000,4);
-	        vmList.add(vm);
-	        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
-//	        	NetworkCloudlet cloudlet = (NetworkCloudlet)createCloudlet(cloudletList.size(), broker, vm);
-//	            cloudletList.add(cloudlet);
-	        }
-	    }
-//	    for(int i = 0 ; i < 16 ; i++){
-//	    	addSendTask((NetworkCloudlet)cloudletList.get(16+i), (NetworkCloudlet)cloudletList.get(i));
-//	    	addReceiveTask((NetworkCloudlet)cloudletList.get(i), (NetworkCloudlet)cloudletList.get(16+i));	
-
-//    	addSendTask((NetworkCloudlet)cloudletList.get(15), (NetworkCloudlet)cloudletList.get(17));
-//    	addReceiveTask((NetworkCloudlet)cloudletList.get(17), (NetworkCloudlet)cloudletList.get(15));	
-//	    } 
 	    brokers.get(0).submitVmList(vmList);
 	    brokers.get(0).submitCloudletList(cloudletList);
 	    

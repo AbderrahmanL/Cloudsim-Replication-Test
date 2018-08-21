@@ -1,5 +1,7 @@
 package org.scenario.cloudsimplus;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
@@ -38,6 +40,7 @@ public class DetailedCloudletsTableBuilder extends CloudletsTableBuilder{
 	        addColumnDataFunction(getTable().addColumn("RetreivedFile", SECONDS), c -> Double.toString(((AdaptedCloudlet)c).getFileRetrievalTime()));
 	        addColumnDataFunction(getTable().addColumn("FinishTime", SECONDS), c -> Double.toString(((AdaptedCloudlet)c).getFinishTime()));
 	        addColumnDataFunction(getTable().addColumn("LeftVmToBroker", SECONDS), c -> Double.toString(((AdaptedCloudlet)c).getLeftVmToBrokerTime()));
+	        addColumnDataFunction(getTable().addColumn("DureeRemonteeDeReponse", SECONDS), c -> BigDecimal.valueOf(((AdaptedCloudlet)c).getLeftDcToBrokerTime(1)-((AdaptedCloudlet)c).getLeftVmToBrokerTime(1)).setScale(18, RoundingMode.HALF_UP).toString());
 	        addColumnDataFunction(getTable().addColumn("LeftDcToBroker", SECONDS), c -> Double.toString(((AdaptedCloudlet)c).getLeftDcToBrokerTime()));
 	        addColumnDataFunction(getTable().addColumn("RequestReturn", SECONDS), c -> Double.toString(((AdaptedCloudlet)c).getGotToBrokerTime()));
 	        addColumnDataFunction(getTable().addColumn("ActualCpuTime", SECONDS), c -> Double.toString(((AdaptedCloudlet)c).getActualCpuTime()));

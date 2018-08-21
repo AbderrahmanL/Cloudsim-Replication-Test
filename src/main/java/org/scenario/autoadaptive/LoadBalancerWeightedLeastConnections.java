@@ -32,8 +32,8 @@ public class LoadBalancerWeightedLeastConnections implements LoadBalancer{
 	@Override
 	public Vm electVm() {
 		List<Vm> vmList = this.datacenter.getVmList();
-		Vm candidate = vmList.get(Utils.givenUsingApache_whenGeneratingRandomIntegerBounded_thenCorrect(0, vmList.size()-1));
-//		Vm candidate = Collections.min(vmList, (vm1,vm2) -> ((AdaptedVm) vm1).getOrUpdateRequestCount(0) > ((AdaptedVm) vm2).getOrUpdateRequestCount(0) ? 1 : -1);
+//		Vm candidate = vmList.get(Utils.givenUsingApache_whenGeneratingRandomIntegerBounded_thenCorrect(0, vmList.size()-1));
+		Vm candidate = Collections.min(vmList, (vm1,vm2) -> ((AdaptedVm) vm1).getOrUpdateRequestCount(0) > ((AdaptedVm) vm2).getOrUpdateRequestCount(0) ? 1 : -1);
 			for(Vm vm : vmList) {
 				Utils.writeInAGivenFile("Log", String.valueOf(((AdaptedVm) vm).getOrUpdateRequestCount(0)) + " , " , true);
 			}

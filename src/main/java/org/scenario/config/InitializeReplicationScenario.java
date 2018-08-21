@@ -51,7 +51,7 @@ public abstract class InitializeReplicationScenario {
 			    vmList = new ArrayList<>();
 			    cloudletList = new ArrayList<>();
 			    
-			    createVms();
+			    createVmsAndCloudlets();
 			    
 				return brokers;
 				}
@@ -59,33 +59,33 @@ public abstract class InitializeReplicationScenario {
 			/**
 		     * Creates VMs, one VM for each host and one Cloudlet for each VM.
 		     */
-			protected void createVms(){
+			protected void createVmsAndCloudlets(){
 				
-			    for (int i = 0; i < SimulationConstParameters.HOST_SUPER*SimulationConstParameters.DC_SUPER; i++) {
-			        Vm vm = createVm(vmList.size(), 32768,1000,16);
-			        vmList.add(vm);
-			        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
-			            Cloudlet cloudlet = createCloudlet(cloudletList.size(), vm);
-			            cloudletList.add(cloudlet);
-			        }
-			    }
-			    for (int i = 0; i < SimulationConstParameters.HOST_MID*SimulationConstParameters.DC_MID; i++) {
-			        Vm vm = createVm(vmList.size(), 16348,2500,6);
-			        vmList.add(vm);
-			        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
-//			            Cloudlet cloudlet = createCloudlet(cloudletList.size(), broker, vm);
+//			    for (int i = 0; i < SimulationConstParameters.HOST_SUPER*SimulationConstParameters.DC_SUPER; i++) {
+//			        Vm vm = createVm(vmList.size(), 32768,1000,16);
+//			        vmList.add(vm);
+//			        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
+//			            Cloudlet cloudlet = createCloudlet(cloudletList.size(), vm);
 //			            cloudletList.add(cloudlet);
-			        }
-			    }
-			    for (int i = 0; i < SimulationConstParameters.HOST_STANDARD*SimulationConstParameters.DC_STANDARD; i++) {
-			        Vm vm = createVm(vmList.size(), 8192,1000,4);
-			        vmList.add(vm);
-			        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
-//			            Cloudlet cloudlet = createCloudlet(cloudletList.size(), broker, vm);
-//			            cloudletList.add(cloudlet);
-			        }
-			    }
-			    brokers.get(0).submitVmList(vmList);
+//			        }
+//			    }
+//			    for (int i = 0; i < SimulationConstParameters.HOST_MID*SimulationConstParameters.DC_MID; i++) {
+//			        Vm vm = createVm(vmList.size(), 16348,2500,6);
+//			        vmList.add(vm);
+//			        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
+////			            Cloudlet cloudlet = createCloudlet(cloudletList.size(), broker, vm);
+////			            cloudletList.add(cloudlet);
+//			        }
+//			    }
+//			    for (int i = 0; i < SimulationConstParameters.HOST_STANDARD*SimulationConstParameters.DC_STANDARD; i++) {
+//			        Vm vm = createVm(vmList.size(), 8192,1000,4);
+//			        vmList.add(vm);
+//			        for (int j = 0; j < SimulationConstParameters.CLOUDLETS_PER_VM; j++) {
+////			            Cloudlet cloudlet = createCloudlet(cloudletList.size(), broker, vm);
+////			            cloudletList.add(cloudlet);
+//			        }
+//			    }
+//			    brokers.get(0).submitVmList(vmList);
 			    
 			}
 			

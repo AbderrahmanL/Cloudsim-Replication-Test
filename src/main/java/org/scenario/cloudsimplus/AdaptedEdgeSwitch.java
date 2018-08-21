@@ -24,7 +24,7 @@ public class AdaptedEdgeSwitch extends EdgeSwitch {
      * Default downlink bandwidth of EdgeSwitch in Megabits/s.
      * It also represents the uplink bandwidth of connected hosts.
      */
-    public static final long DOWNLINK_BW = (long)Conversion.GIGABYTE * 1 * 8;
+    public static final long DOWNLINK_BW = 10000;
     
     /**
      * Default number of ports that defines the number of

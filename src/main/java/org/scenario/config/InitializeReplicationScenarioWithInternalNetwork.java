@@ -66,7 +66,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 			FileWriter wr = new FileWriter("topology.brite") ;
 			wr.write("Nodes: \n");
 			for(SimEntity ent : brokers.get(0).getSimulation().getEntityList()) {
-			wr.write(ent.getId() + "	1	1	0	0	-1	RT_NODE\n");
+			wr.write(ent.getId() + "	1	1	0	0	-1	RT_NODE " + ent.getName() + "\n");
 			}
 			wr.write("\n");
 			wr.write("Edges: \n");
@@ -78,11 +78,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 					if(sw.getLevel() == 0 ) {
 						wr.write( edgeCounter +"	"+ (sw.getId()) +"	"+ (sw.getId()+ 1) +  "	1.0		0.00005		0.0	-1	-1	E_RT	U\n");
 						edgeCounter++;
-						wr.write( edgeCounter +"	"+ (sw.getId()) +"	"+ (sw.getId()+ 3) +  "	1.0		0.00005		0.0	-1	-1	E_RT	U\n");
-						edgeCounter++;
-						wr.write( edgeCounter +"	"+ (sw.getId()) +"	"+ (sw.getId()+ 5) +  "	1.0		0.00005		0.0	-1	-1	E_RT	U\n");
-						edgeCounter++;
-						wr.write( edgeCounter +"	"+ (sw.getId()) +"	"+ (sw.getId()+ 7) +  "	1.0		0.00005		0.0	-1	-1	E_RT	U\n");
+						wr.write( edgeCounter +"	"+ (sw.getId()) +"	"+ (sw.getId()+ 4) +  "	1.0		0.00005		0.0	-1	-1	E_RT	U\n");
 						edgeCounter++;
 						for(DatacenterBroker br : brokers ) {
 						wr.write( edgeCounter +"	"+ (sw.getId()) +"	"+ (br.getId()) +  "	1.0		0.2		11.0	-1	-1	E_RT	U\n");
@@ -93,6 +89,8 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 					}
 					if(sw.getLevel() == 1 ) {
 						wr.write( edgeCounter +"	"+ (sw.getId()) +"	"+ (sw.getId()+ 1) +  "	1.0		0.00005		0.0	-1	-1	E_RT	U\n");
+						edgeCounter++;
+						wr.write( edgeCounter +"	"+ (sw.getId()) +"	"+ (sw.getId()+ 2) +  "	1.0		0.00005		0.0	-1	-1	E_RT	U\n");
 						edgeCounter++;
 					}
 					
@@ -190,7 +188,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
         Datacenter dc = createDatacenter(simulation, hostList, new VmAllocationPolicySimple());
         dc.setDatacenterStorage(datacenterStorage);
         datacenterStorage.setStorageList(storageList);
-        datacenterStorage.addFile(new AdaptedFile("file1.dat", 10));
+        datacenterStorage.addFile(new AdaptedFile("file1.dat", 500));
         datacenterStorage.addFile(new AdaptedFile("file2.dat", 10));
         datacenterStorage.addFile(new AdaptedFile("file3.dat", 10));
         datacenterStorage.addFile(new AdaptedFile("file4.dat", 10));

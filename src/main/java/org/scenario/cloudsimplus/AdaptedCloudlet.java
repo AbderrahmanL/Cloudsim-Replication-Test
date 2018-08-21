@@ -103,6 +103,10 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	public double getLeftVmToBrokerTime() {
 		return BigDecimal.valueOf(leftVmToBrokerTime).setScale(3, RoundingMode.HALF_UP).doubleValue();
 	}
+	
+	public double getLeftVmToBrokerTime(int flag) {
+		return BigDecimal.valueOf(leftVmToBrokerTime).setScale(9, RoundingMode.HALF_UP).doubleValue();
+	}
 
 
 	public void setLeftVmToBrokerTime(double leftVmToBrockerTime) {
@@ -112,6 +116,9 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 
 	public double getLeftDcToBrokerTime() {
 		return BigDecimal.valueOf(leftDcToBrokerTime).setScale(3, RoundingMode.HALF_UP).doubleValue();
+	}
+	public double getLeftDcToBrokerTime(int flag) {
+		return BigDecimal.valueOf(leftDcToBrokerTime).setScale(9, RoundingMode.HALF_UP).doubleValue();
 	}
 
 
