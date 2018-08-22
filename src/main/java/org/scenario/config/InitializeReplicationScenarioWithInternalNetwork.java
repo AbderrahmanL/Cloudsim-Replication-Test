@@ -21,6 +21,7 @@ import org.cloudbus.cloudsim.network.topologies.NetworkTopology;
 import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.ResourceProvisionerSimple;
 import org.cloudbus.cloudsim.resources.DatacenterStorage;
+import org.cloudbus.cloudsim.resources.File;
 import org.cloudbus.cloudsim.resources.FileStorage;
 import org.cloudbus.cloudsim.resources.Pe;
 import org.cloudbus.cloudsim.resources.PeSimple;
@@ -77,6 +78,8 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 						wr.write( edgeCounter +"	"+ (sw.getId()) +"	"+ (sw.getId()+ 1) +  "	1.0		0.00005		0.0	-1	-1	E_RT	U\n");
 						edgeCounter++;
 						wr.write( edgeCounter +"	"+ (sw.getId()) +"	"+ (sw.getId()+ 4) +  "	1.0		0.00005		0.0	-1	-1	E_RT	U\n");
+						edgeCounter++;
+						wr.write( edgeCounter +"	"+ (sw.getId()) +"	"+ (sw.getId()+ 7) +  "	1.0		0.00005		0.0	-1	-1	E_RT	U\n");
 						edgeCounter++;
 						for(DatacenterBroker br : brokers ) {
 						wr.write( edgeCounter +"	"+ (sw.getId()) +"	"+ (br.getId()) +  "	1.0		0.2		11.0	-1	-1	E_RT	U\n");
@@ -184,17 +187,18 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
             hostList.add(host);
             	if(j % SimulationConstParameters.HOSTS_PER_SWITCH == 0) {
             		san = createStorage("San" + j,1000000000, 1000.0, 0.3);
-            		((MountedSan)san).addAccessingHost(host);
             		storageList.add(san);  
             	}
-        	((AdaptedHost)host).setStorage(san);   	
+            	((MountedSan)san).addAccessingHost(host);
+            	((AdaptedHost)host).setStorage(san);   	
         }
         DatacenterStorage datacenterStorage = new  AdaptedDatacenterStorage(storageList);
         Datacenter dc = createDatacenter(simulation, hostList, new VmAllocationPolicySimple());
-        datacenterStorage.getStorageList().get(0).addFile(new AdaptedFile("file1.dat", 10));
-        datacenterStorage.getStorageList().get(1).addFile(new AdaptedFile("file2.dat", 50));
-        datacenterStorage.getStorageList().get(2).addFile(new AdaptedFile("file3.dat", 100));
-        datacenterStorage.getStorageList().get(3).addFile(new AdaptedFile("file4.dat", 250));
+        File file = new AdaptedFile("file1.dat", 100);
+        datacenterStorage.getStorageList().get(0).addFile(file);
+        datacenterStorage.getStorageList().get(2).addFile(file.makeReplica());
+//        datacenterStorage.getStorageList().get(2).addFile(new AdaptedFile("file3.dat", 300));
+//        datacenterStorage.getStorageList().get().addFile(new AdaptedFile("file4.dat", 250));
         dc.setDatacenterStorage(datacenterStorage);
 //        MetadataCatalog catalog = ReplicaCatalog.getCatalogInstance();
 //        System.out.println(((HashMap<Integer, LinkedList<FileAttribute>>)catalog).get(0).get(0).getFileSize());

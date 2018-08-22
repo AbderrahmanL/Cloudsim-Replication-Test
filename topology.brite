@@ -8,14 +8,20 @@ Nodes:
 6	1	1	0	0	-1	RT_NODE AdaptedAggregateSwitch6
 7	1	1	0	0	-1	RT_NODE AdaptedEdgeSwitch7
 8	1	1	0	0	-1	RT_NODE AdaptedEdgeSwitch8
-9	1	1	0	0	-1	RT_NODE AdaptedDatacenterBroker9
+9	1	1	0	0	-1	RT_NODE AdaptedAggregateSwitch9
+10	1	1	0	0	-1	RT_NODE AdaptedEdgeSwitch10
+11	1	1	0	0	-1	RT_NODE AdaptedEdgeSwitch11
+12	1	1	0	0	-1	RT_NODE AdaptedDatacenterBroker12
 
 Edges: 
 0	2	3	1.0		0.00005		0.0	-1	-1	E_RT	U
 1	2	6	1.0		0.00005		0.0	-1	-1	E_RT	U
-2	2	9	1.0		0.2		11.0	-1	-1	E_RT	U
-2	1	9	1.0		0.2		11.0	-1	-1	E_RT	U
-3	3	4	1.0		0.00005		0.0	-1	-1	E_RT	U
-4	3	5	1.0		0.00005		0.0	-1	-1	E_RT	U
-5	6	7	1.0		0.00005		0.0	-1	-1	E_RT	U
-6	6	8	1.0		0.00005		0.0	-1	-1	E_RT	U
+2	2	9	1.0		0.00005		0.0	-1	-1	E_RT	U
+3	2	12	1.0		0.2		11.0	-1	-1	E_RT	U
+3	1	12	1.0		0.2		11.0	-1	-1	E_RT	U
+4	3	4	1.0		0.00005		0.0	-1	-1	E_RT	U
+5	3	5	1.0		0.00005		0.0	-1	-1	E_RT	U
+6	6	7	1.0		0.00005		0.0	-1	-1	E_RT	U
+7	6	8	1.0		0.00005		0.0	-1	-1	E_RT	U
+8	9	10	1.0		0.00005		0.0	-1	-1	E_RT	U
+9	9	11	1.0		0.00005		0.0	-1	-1	E_RT	U

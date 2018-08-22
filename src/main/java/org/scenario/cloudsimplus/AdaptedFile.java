@@ -19,7 +19,15 @@ public class AdaptedFile extends File{
         this.setAttribute(new FileMetadata(this, fileSize));
     }
 	
+	@Override
+	public File makeReplica() {
+		final AdaptedFile file = new AdaptedFile(this.getName(), this.getSize());
 
+        this.getAttribute().copyValue(file.getAttribute());
+        file.getAttribute().setMasterCopy(false);   // set this file as a replica
+
+        return file;
+    }
 	
 
 }

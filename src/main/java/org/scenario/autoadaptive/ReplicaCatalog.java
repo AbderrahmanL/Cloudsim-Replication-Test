@@ -46,6 +46,8 @@ public class ReplicaCatalog extends HashMap<Integer,LinkedList<FileAttribute>> i
 	@Override
 	public List<Host> getNodesThatHasFile(int requestedFileId) {
 		List<Host> listToReturn = new ArrayList<Host>();
+		if(!this.containsKey(requestedFileId))
+			return listToReturn;
 		for (FileAttribute fileMetaData : this.get(requestedFileId)) {
 			listToReturn.addAll(((MountedSan)((FileMetadata)fileMetaData).getContainingDevice()).getAccessingHosts());
 		}

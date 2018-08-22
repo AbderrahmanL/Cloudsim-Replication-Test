@@ -75,6 +75,8 @@ public class AdaptedDatacenter extends NetworkDatacenter{
         cl.assignToDatacenter(this);
         // TODO assign to vm, next line is a dummy assignement for test
         List<Host> nodesThatHasTheFile = ReplicaCatalog.getCatalogInstance().getNodesThatHasFile(((AdaptedCloudlet)cl).getRequestedFileId());
+        if(nodesThatHasTheFile.isEmpty())
+        	return;
         List<Vm> vmsThatHasAccessToFile = new ArrayList<>();
         for(Host host : nodesThatHasTheFile) {
         	vmsThatHasAccessToFile.addAll(host.getVmList());
@@ -156,7 +158,6 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 		}
 		((AdaptedCloudlet) cloudlet).setLeftVmToBrokerTime(this.getSimulation().clock());
 		((AdaptedVm) cloudlet.getVm()).getOrUpdateRequestCount(-1);
-		System.out.println( (long) (fileSize * Conversion.MEGABYTE));
 		HostPacket pkt = new HostPacket((AdaptedHost)cloudlet.getVm().getHost(), new VmPacket(cloudlet.getVm(), null, DataCloudTags.DEFAULT_MTU + cloudlet.getFileSize() + (long) (fileSize * Conversion.MEGABYTE) , null, cloudlet));
 		EdgeSwitch sw = ((AdaptedHost)cloudlet.getVm().getHost()).getEdgeSwitch();
 		// TODO share bw across concurrent cloudlets 

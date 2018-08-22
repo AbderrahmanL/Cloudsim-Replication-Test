@@ -8,11 +8,11 @@ public class SimulationConstParameters {
     public static final int DC_SUPER = 1;
 	public static final int DC_MID = 0;
 	public static final int DC_STANDARD = 0;
-	public static final int HOST_SUPER = 16;
+	public static final int HOST_SUPER = 18;
 	public static final int HOST_MID = 0;
 	public static final int HOST_STANDARD = 0;
 	public static final int STORAGE_NODES_SUPER = 1;
-	public static final int HOSTS_PER_SWITCH = 4;
+	public static final int HOSTS_PER_SWITCH = 3;
 	public static final int REQUESTED_FILE_SIZE = 1; // MBytes
 	//0.4947260419999999
 	//0.49240741999997795

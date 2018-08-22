@@ -27,17 +27,19 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
 	@Override
 	protected void createNetwork(AdaptedDatacenter datacenter) {
 		AdaptedRootSwitch rootSwitch = new AdaptedRootSwitch((CloudSim) datacenter.getSimulation(), datacenter);
-          AdaptedAggregateSwitch[] aggregateSwitches = new AdaptedAggregateSwitch[4];
-          AdaptedEdgeSwitch[] edgeSwitches = new AdaptedEdgeSwitch[4];
+          AdaptedAggregateSwitch[] aggregateSwitches = new AdaptedAggregateSwitch[3];
+          AdaptedEdgeSwitch[] edgeSwitches = new AdaptedEdgeSwitch[6];
         datacenter.addSwitch(rootSwitch);
         
         for (int i = 0; i < datacenter.getHostList().size()/SimulationConstParameters.HOSTS_PER_SWITCH; i++) {
         	int aggregateIndex = 0;
         	if(i <2) 
         		aggregateIndex = 0;
-        	else
+        	else if (i < 4 && i >= 2)
         		aggregateIndex = 1;
-        	if(i == 0 || i == 2) {// only 2 aggregate switches
+        	else
+        		aggregateIndex = 2;
+        	if(i == 0 || i == 2 || i == 4) {// only 3 aggregate switches
         	aggregateSwitches[aggregateIndex] = new AdaptedAggregateSwitch((CloudSim) datacenter.getSimulation(), datacenter);
         	aggregateSwitches[aggregateIndex].getUplinkSwitches().add(rootSwitch);
         	rootSwitch.getDownlinkSwitches().add(aggregateSwitches[aggregateIndex]);
@@ -49,7 +51,7 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
             aggregateSwitches[aggregateIndex].getDownlinkSwitches().add(edgeSwitches[i]);
             edgeSwitches[i].getUplinkSwitches().add(aggregateSwitches[aggregateIndex]);
             
-            if(i == 0 || i == 2)
+            if(i == 0 || i == 2 || i == 4)
             datacenter.addSwitch(aggregateSwitches[aggregateIndex]);
             
             datacenter.addSwitch(edgeSwitches[i]);

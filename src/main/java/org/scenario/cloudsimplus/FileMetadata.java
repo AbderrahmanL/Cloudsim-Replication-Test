@@ -17,8 +17,11 @@ public class FileMetadata extends FileAttribute{
 	
 	private int dcId;
 	
+	private String name;
+	
 	public FileMetadata(File file, int fileSize) {
 		super(file, fileSize);
+		this.name = file.getName();
 		setCreationTime(new Date().getTime());
 		setRegistrationId(latestInode++);
 	}
@@ -56,7 +59,9 @@ public class FileMetadata extends FileAttribute{
 	public void setDcId(int dcId) {
 		this.dcId = dcId;
 	}
-	
-	
+
+	public String getName() {
+		return name;
+	}
 
 }
