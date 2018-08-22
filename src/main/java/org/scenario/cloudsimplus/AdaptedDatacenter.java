@@ -69,8 +69,13 @@ public class AdaptedDatacenter extends NetworkDatacenter{
         ((AdaptedCloudlet)cl).setDcReceiveTime(this.getSimulation().clock());
         cl.assignToDatacenter(this);
         // TODO assign to vm, next line is a dummy assignement for test
-        Vm vm = this.balancer.electVm();
-
+        Vm vm = this.getVmList().get(0);
+        if(debugCount % 2 == 0)
+        	vm = this.getVmList().get(0);
+        else
+        	vm = this.getVmList().get(15);
+        debugCount++;
+        
     	((AdaptedVm) vm).getOrUpdateRequestCount(1);
         cl.setVm(vm); // its done after initializing also for test	
         	HostPacket pkt = new HostPacket(null, new VmPacket(null, vm, CloudDataTags.DEFAULT_MTU + cl.getFileSize(), null, cl));

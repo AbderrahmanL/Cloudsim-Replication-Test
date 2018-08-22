@@ -139,7 +139,9 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 			        .setUtilizationModelRam(new UtilizationModelFull())
 			        .setUtilizationModelCpu(new UtilizationModelFull())
 			        .setUtilizationModelBw(new UtilizationModelFull());
-	        cloudlet.addRequiredFile("file1.dat");
+	        int random = Utils.generateRandomBounded(1, 6);
+	        cloudlet.addRequiredFile("file" + random + ".dat");
+	        cloudlet.setRequestedFileId(((AdaptedDatacenterStorage)vm.getHost().getDatacenter().getDatacenterStorage()).getFile("file" + random + ".dat").getAttribute().getRegistrationID());
 	        cloudlet.addTask(new CloudletExecutionTask(numberOfCpuCores, SimulationConstParameters.CLOUDLET_EXECUTION_TASK_LENGTH));
 //	        cloudlet.setVm(vm);
 	        return cloudlet;
@@ -188,10 +190,11 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
         Datacenter dc = createDatacenter(simulation, hostList, new VmAllocationPolicySimple());
         dc.setDatacenterStorage(datacenterStorage);
         datacenterStorage.setStorageList(storageList);
-        datacenterStorage.addFile(new AdaptedFile("file1.dat", 500));
-        datacenterStorage.addFile(new AdaptedFile("file2.dat", 10));
-        datacenterStorage.addFile(new AdaptedFile("file3.dat", 10));
-        datacenterStorage.addFile(new AdaptedFile("file4.dat", 10));
+        datacenterStorage.addFile(new AdaptedFile("file1.dat", 10));
+        datacenterStorage.addFile(new AdaptedFile("file2.dat", 50));
+        datacenterStorage.addFile(new AdaptedFile("file3.dat", 100));
+        datacenterStorage.addFile(new AdaptedFile("file4.dat", 250));
+        datacenterStorage.addFile(new AdaptedFile("file5.dat", 500));
 //        MetadataCatalog catalog = ReplicaCatalog.getCatalogInstance();
 //        System.out.println(((HashMap<Integer, LinkedList<FileAttribute>>)catalog).get(0).get(0).getFileSize());
         return dc;

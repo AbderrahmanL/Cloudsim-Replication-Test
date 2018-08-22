@@ -26,6 +26,11 @@ public class FileMetadata extends FileAttribute{
 	public boolean setRegistrationId(int latestInode) {
 		return super.setRegistrationId(latestInode);
 	}
+	
+	@Override
+	public int getRegistrationID() {
+		return super.getRegistrationID();
+	}
 
 	public int getNoOfAccesses() {
 		return noOfAccesses;

@@ -113,6 +113,9 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 		this.leftVmToBrokerTime = leftVmToBrockerTime;
 	}
 
+	public double getUplinkTime() {
+		return BigDecimal.valueOf(this.getLeftDcToBrokerTime(1)-this.getLeftVmToBrokerTime(1)).setScale(18, RoundingMode.HALF_UP).doubleValue();
+	}
 
 	public double getLeftDcToBrokerTime() {
 		return BigDecimal.valueOf(leftDcToBrokerTime).setScale(3, RoundingMode.HALF_UP).doubleValue();
