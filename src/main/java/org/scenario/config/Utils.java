@@ -4,7 +4,9 @@ import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Random;
+import java.util.UUID;
 
 import org.apache.commons.math3.random.RandomDataGenerator;
 
@@ -37,4 +39,14 @@ public class Utils {
 		System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
 	}
 	
+	public static UUID getUUIDFromString(String string) {
+		
+		byte[] b = 	{(byte)1};
+		try {
+			b = string.getBytes("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return UUID.nameUUIDFromBytes(b);
+	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
 import org.cloudbus.cloudsim.hosts.network.NetworkHost;
 import org.cloudbus.cloudsim.network.HostPacket;
+import org.cloudbus.cloudsim.resources.FileStorage;
 import org.cloudbus.cloudsim.resources.Pe;
 import org.cloudbus.cloudsim.schedulers.cloudlet.network.CloudletTaskScheduler;
 import org.cloudbus.cloudsim.schedulers.vm.VmScheduler;
@@ -14,6 +15,8 @@ import org.slf4j.LoggerFactory;
 
 public class AdaptedHost extends NetworkHost{
 	private static final Logger logger = LoggerFactory.getLogger(AdaptedHost.class.getSimpleName());
+	
+	private FileStorage storage;
 
 	public AdaptedHost(long ram, long bw, long storage, List<Pe> peList) {
 		super(ram, bw, storage, peList);
@@ -63,6 +66,16 @@ public class AdaptedHost extends NetworkHost{
         }
 
 		getHostPktsReceived().clear();
+	}
+
+	@Override
+	public FileStorage getStorage() {
+		return this.storage;
+	}
+	
+	public void setStorage(FileStorage san) {
+		this.storage = san;
+		
 	}
 
 }

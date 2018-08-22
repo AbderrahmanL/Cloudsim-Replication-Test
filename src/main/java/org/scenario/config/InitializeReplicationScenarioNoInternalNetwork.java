@@ -92,7 +92,7 @@ public class InitializeReplicationScenarioNoInternalNetwork extends InitializeRe
     }
 
 	@Override
-	protected FileStorage createStorage(int capacity, double Bandwidth, double networkLatency) {	
+	protected FileStorage createStorage(String name, int capacity, double Bandwidth, double networkLatency) {	
 		return new SanStorage(capacity, Bandwidth, networkLatency);
 	}
 	
@@ -104,7 +104,7 @@ public class InitializeReplicationScenarioNoInternalNetwork extends InitializeRe
             hostList3.add(host);
         }
         List<FileStorage> storageList = new ArrayList<FileStorage>();
-	    storageList.add(createStorage(1000000000, 10.0, 5));
+	    storageList.add(createStorage("name",1000000000, 10.0, 5));
 	    storageList.get(0).addFile(new AdaptedFile("file1.dat", 20));
 	    storageList.get(0).addFile(new AdaptedFile("file2.dat", 100));
 	    storageList.get(0).addFile(new AdaptedFile("file3.dat", 700));

@@ -1,5 +1,8 @@
 package org.scenario.autoadaptive;
 
+import java.util.List;
+
+import org.cloudbus.cloudsim.hosts.Host;
 import org.cloudbus.cloudsim.resources.FileAttribute;
 
 /**
@@ -15,5 +18,7 @@ public interface MetadataCatalog {
 	public boolean hasEntry(int registrationId) ;
 	
 	public void addReplica(FileAttribute attr);
+
+	public List<Host> getNodesThatHasFile(int requestedFileId);
 
 }

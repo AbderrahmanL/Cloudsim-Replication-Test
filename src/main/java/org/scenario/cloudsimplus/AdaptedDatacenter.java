@@ -3,6 +3,7 @@ package org.scenario.cloudsimplus;
 
 import static java.util.stream.Collectors.toList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
@@ -25,6 +26,7 @@ import org.cloudbus.cloudsim.util.DataCloudTags;
 import org.cloudbus.cloudsim.vms.Vm;
 import org.scenario.autoadaptive.CloudDataTags;
 import org.scenario.autoadaptive.LoadBalancer;
+import org.scenario.autoadaptive.ReplicaCatalog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,18 +69,26 @@ public class AdaptedDatacenter extends NetworkDatacenter{
             return;
         }
         ((AdaptedCloudlet)cl).setDcReceiveTime(this.getSimulation().clock());
+
+        ((AdaptedCloudlet)cl).setRequestedFileId( (((AdaptedDatacenterStorage) this.getDatacenterStorage()).getFile(((AdaptedCloudlet)cl).getRequiredFiles().get(0))).getAttribute().getRegistrationID());
+        
         cl.assignToDatacenter(this);
         // TODO assign to vm, next line is a dummy assignement for test
-        Vm vm = this.getVmList().get(0);
-        if(debugCount % 2 == 0)
-        	vm = this.getVmList().get(0);
-        else
-        	vm = this.getVmList().get(15);
-        debugCount++;
+        List<Host> nodesThatHasTheFile = ReplicaCatalog.getCatalogInstance().getNodesThatHasFile(((AdaptedCloudlet)cl).getRequestedFileId());
+        List<Vm> vmsThatHasAccessToFile = new ArrayList<>();
+        for(Host host : nodesThatHasTheFile) {
+        	vmsThatHasAccessToFile.addAll(host.getVmList());
+        }
+        Vm electedVm = balancer.electVm(vmsThatHasAccessToFile);
+//        if(debugCount % 2 == 0)
+//        	vm = this.getVmList().get(0);
+//        else
+//        	vm = this.getVmList().get(15);
+//        debugCount++;
         
-    	((AdaptedVm) vm).getOrUpdateRequestCount(1);
-        cl.setVm(vm); // its done after initializing also for test	
-        	HostPacket pkt = new HostPacket(null, new VmPacket(null, vm, CloudDataTags.DEFAULT_MTU + cl.getFileSize(), null, cl));
+    	((AdaptedVm) electedVm).getOrUpdateRequestCount(1);
+        cl.setVm(electedVm); // its done after initializing also for test	
+        	HostPacket pkt = new HostPacket(null, new VmPacket(null, electedVm, CloudDataTags.DEFAULT_MTU + cl.getFileSize(), null, cl));
         	for (Switch sw : this.getSwitchMap()){
         		if(sw.getLevel() == 0){
         			sendNow(sw, CloudSimTags.NETWORK_EVENT_UP, pkt);

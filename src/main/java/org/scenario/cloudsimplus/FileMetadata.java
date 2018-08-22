@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.cloudbus.cloudsim.resources.File;
 import org.cloudbus.cloudsim.resources.FileAttribute;
+import org.cloudbus.cloudsim.resources.FileStorage;
 
 public class FileMetadata extends FileAttribute{
 	
@@ -12,7 +13,7 @@ public class FileMetadata extends FileAttribute{
 	
 	private static int noOfAccesses = 0; 
 	
-	private UUID containingDevice;
+	private FileStorage containingDevice;
 	
 	private int dcId;
 	
@@ -40,11 +41,11 @@ public class FileMetadata extends FileAttribute{
 		this.noOfAccesses++;
 	}
 
-	public UUID getContainingDevice() {
+	public FileStorage getContainingDevice() {
 		return containingDevice;
 	}
 
-	public void setContainingDevice(UUID containingDevice) {
+	public void setContainingDevice(FileStorage containingDevice) {
 		this.containingDevice = containingDevice;
 	}
 

@@ -34,7 +34,7 @@ public abstract class InitializeReplicationScenario {
 
 			protected abstract Datacenter createDatacenter(CloudSim simulation, List<Host> hostList, VmAllocationPolicy vmAllocationPolicy);
 			
-			protected abstract FileStorage createStorage(int i, double d, double j) ;
+			protected abstract FileStorage createStorage(String name, int capacity, double Bandwidth, double networkLatency) ;
 			
 			protected abstract Datacenter createSuperDatacenter(CloudSim simulation) ;
 			

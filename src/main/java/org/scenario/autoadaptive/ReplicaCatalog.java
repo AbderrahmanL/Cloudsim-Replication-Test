@@ -1,9 +1,14 @@
 package org.scenario.autoadaptive;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
+import org.cloudbus.cloudsim.hosts.Host;
 import org.cloudbus.cloudsim.resources.FileAttribute;
+import org.scenario.cloudsimplus.FileMetadata;
+import org.scenario.cloudsimplus.MountedSan;
 
 
 public class ReplicaCatalog extends HashMap<Integer,LinkedList<FileAttribute>> implements MetadataCatalog {
@@ -22,7 +27,6 @@ public class ReplicaCatalog extends HashMap<Integer,LinkedList<FileAttribute>> i
 
 	private ReplicaCatalog(){
 		super();
-		//TODO complete if needed
 	}
 	
 	public boolean hasEntry(int registrationId) {
@@ -37,6 +41,15 @@ public class ReplicaCatalog extends HashMap<Integer,LinkedList<FileAttribute>> i
 
 	public void addReplica(FileAttribute attr) {
 		this.get(attr.getRegistrationID()).add(attr);
+	}
+
+	@Override
+	public List<Host> getNodesThatHasFile(int requestedFileId) {
+		List<Host> listToReturn = new ArrayList<Host>();
+		for (FileAttribute fileMetaData : this.get(requestedFileId)) {
+			listToReturn.addAll(((MountedSan)((FileMetadata)fileMetaData).getContainingDevice()).getAccessingHosts());
+		}
+		return listToReturn;
 	}
 
 }

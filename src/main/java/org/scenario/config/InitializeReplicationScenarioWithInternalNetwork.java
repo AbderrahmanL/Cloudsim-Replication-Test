@@ -24,10 +24,7 @@ import org.cloudbus.cloudsim.resources.DatacenterStorage;
 import org.cloudbus.cloudsim.resources.FileStorage;
 import org.cloudbus.cloudsim.resources.Pe;
 import org.cloudbus.cloudsim.resources.PeSimple;
-import org.cloudbus.cloudsim.resources.SanStorage;
 import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerCompletelyFair;
-import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerSpaceShared;
-import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerTimeShared;
 import org.cloudbus.cloudsim.schedulers.vm.VmSchedulerSpaceShared;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelFull;
 import org.cloudbus.cloudsim.vms.Vm;
@@ -39,6 +36,7 @@ import org.scenario.cloudsimplus.AdaptedDatacenterStorage;
 import org.scenario.cloudsimplus.AdaptedFile;
 import org.scenario.cloudsimplus.AdaptedHost;
 import org.scenario.cloudsimplus.AdaptedVm;
+import org.scenario.cloudsimplus.MountedSan;
 
 public abstract class InitializeReplicationScenarioWithInternalNetwork extends InitializeReplicationScenario {
 
@@ -139,9 +137,8 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 			        .setUtilizationModelRam(new UtilizationModelFull())
 			        .setUtilizationModelCpu(new UtilizationModelFull())
 			        .setUtilizationModelBw(new UtilizationModelFull());
-	        int random = Utils.generateRandomBounded(1, 6);
+	        int random = Utils.generateRandomBounded(1, 5);
 	        cloudlet.addRequiredFile("file" + random + ".dat");
-	        cloudlet.setRequestedFileId(((AdaptedDatacenterStorage)vm.getHost().getDatacenter().getDatacenterStorage()).getFile("file" + random + ".dat").getAttribute().getRegistrationID());
 	        cloudlet.addTask(new CloudletExecutionTask(numberOfCpuCores, SimulationConstParameters.CLOUDLET_EXECUTION_TASK_LENGTH));
 //	        cloudlet.setVm(vm);
 	        return cloudlet;
@@ -173,28 +170,32 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 	}
 
 	@Override
-	protected FileStorage createStorage(int capacity, double Bandwidth, double networkLatency) {	
-		return new SanStorage(capacity, Bandwidth, networkLatency);
+	protected FileStorage createStorage(String name, int capacity, double Bandwidth, double networkLatency) {	
+		return new MountedSan(name,capacity, Bandwidth, networkLatency);
 	}
 
 	@Override
 	protected Datacenter createSuperDatacenter(CloudSim simulation) {
 		List<Host> hostList = new ArrayList<>(SimulationConstParameters.HOST_SUPER);
 		List<FileStorage> storageList = new ArrayList<FileStorage>();
+		FileStorage san = new MountedSan("temporary", 1, 1, 1);
         for(int j = 0; j < SimulationConstParameters.HOST_SUPER; j++) {
         	Host host = createHost(32768,4000,16);
             hostList.add(host);
-            	storageList.add((createStorage(1000000000, 1000.0, 0.3)));              
+            	if(j % SimulationConstParameters.HOSTS_PER_SWITCH == 0) {
+            		san = createStorage("San" + j,1000000000, 1000.0, 0.3);
+            		((MountedSan)san).addAccessingHost(host);
+            		storageList.add(san);  
+            	}
+        	((AdaptedHost)host).setStorage(san);   	
         }
-        DatacenterStorage datacenterStorage = new  AdaptedDatacenterStorage();
+        DatacenterStorage datacenterStorage = new  AdaptedDatacenterStorage(storageList);
         Datacenter dc = createDatacenter(simulation, hostList, new VmAllocationPolicySimple());
+        datacenterStorage.getStorageList().get(0).addFile(new AdaptedFile("file1.dat", 10));
+        datacenterStorage.getStorageList().get(1).addFile(new AdaptedFile("file2.dat", 50));
+        datacenterStorage.getStorageList().get(2).addFile(new AdaptedFile("file3.dat", 100));
+        datacenterStorage.getStorageList().get(3).addFile(new AdaptedFile("file4.dat", 250));
         dc.setDatacenterStorage(datacenterStorage);
-        datacenterStorage.setStorageList(storageList);
-        datacenterStorage.addFile(new AdaptedFile("file1.dat", 10));
-        datacenterStorage.addFile(new AdaptedFile("file2.dat", 50));
-        datacenterStorage.addFile(new AdaptedFile("file3.dat", 100));
-        datacenterStorage.addFile(new AdaptedFile("file4.dat", 250));
-        datacenterStorage.addFile(new AdaptedFile("file5.dat", 500));
 //        MetadataCatalog catalog = ReplicaCatalog.getCatalogInstance();
 //        System.out.println(((HashMap<Integer, LinkedList<FileAttribute>>)catalog).get(0).get(0).getFileSize());
         return dc;
