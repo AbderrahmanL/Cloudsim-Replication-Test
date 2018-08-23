@@ -72,6 +72,7 @@ public class RunReplicationScenario {
         	    format3.setBorder(Border.ALL, BorderLineStyle.THIN, Colour.BLACK);
         	    format3.setBackground(Colour.LIGHT_GREEN);
         		for(Cloudlet cl : finished) {
+        			WritableCell cell0 = new Number(0, currentRow, cl.getId()); cell0.setCellFormat(format1); sheet.addCell(cell0);
         			WritableCell cell00 = new Number(1, currentRow, ((AdaptedCloudlet) cl).getSendTime()); cell00.setCellFormat(format1); sheet.addCell(cell00);
         			
         			WritableCell cell01 = new Number(3, currentRow, ((AdaptedCloudlet) cl).getDcReceiveTime()); cell01.setCellFormat(format); sheet.addCell(cell01);

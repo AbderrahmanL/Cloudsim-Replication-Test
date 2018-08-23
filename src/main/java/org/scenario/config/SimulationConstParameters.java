@@ -2,8 +2,8 @@ package org.scenario.config;
 
 public class SimulationConstParameters {
 	
-	public static final int NO_CLOUDLETS = 600;
-	public static final double RANDOM_INTERVAL_RIGHT_LIMIT = 10D;
+	public static final int NO_CLOUDLETS = 1200;
+	public static final double RANDOM_INTERVAL_RIGHT_LIMIT = 0D;
 	public static final int CLOUDLET_EXECUTION_TASK_LENGTH = 200;
     public static final int DC_SUPER = 1;
 	public static final int DC_MID = 0;

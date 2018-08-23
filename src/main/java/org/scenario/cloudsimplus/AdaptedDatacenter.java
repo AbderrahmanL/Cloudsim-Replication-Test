@@ -69,8 +69,12 @@ public class AdaptedDatacenter extends NetworkDatacenter{
             return;
         }
         ((AdaptedCloudlet)cl).setDcReceiveTime(this.getSimulation().clock());
-
-        ((AdaptedCloudlet)cl).setRequestedFileId( (((AdaptedDatacenterStorage) this.getDatacenterStorage()).getFile(((AdaptedCloudlet)cl).getRequiredFiles().get(0))).getAttribute().getRegistrationID());
+        try {
+        	
+        	((AdaptedCloudlet)cl).setRequestedFileId( (((AdaptedDatacenterStorage) this.getDatacenterStorage()).getFile(((AdaptedCloudlet)cl).getRequiredFiles().get(0))).getAttribute().getRegistrationID());
+        }catch (IndexOutOfBoundsException e) {
+        	System.out.print("");
+        }
         
         cl.assignToDatacenter(this);
         // TODO assign to vm, next line is a dummy assignement for test
