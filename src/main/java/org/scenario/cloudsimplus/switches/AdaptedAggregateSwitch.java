@@ -13,7 +13,13 @@ import org.cloudbus.cloudsim.network.switches.Switch;
 import org.cloudbus.cloudsim.util.Conversion;
 import org.cloudbus.cloudsim.vms.Vm;
 
-public class AdaptedAggregateSwitch extends AbstractSwitch {
+/**
+ * This class represents an Aggregate AbstractSwitch in a Datacenter network. It
+ * interacts with other Datacenter in order to exchange packets.
+ *
+ *@author Lahiaouni Abderrahman
+ */
+public class AdaptedAggregateSwitch extends AdaptedAbstractSwitch {
 	
 	/**
      * The level (layer) of the switch in the network topology.
@@ -21,9 +27,9 @@ public class AdaptedAggregateSwitch extends AbstractSwitch {
     public static final int LEVEL = 1;
 
     /**
-     * Default delay of {@link AggregateSwitch} in milliseconds.
+     * Default delay of {@link AggregateSwitch} in the order of microseconds.
      */
-    public static final double SWITCHING_DELAY = 0.00245 ;
+    public static final double SWITCHING_DELAY = 0.00000245 ;
 	
     /**
      * Default downlink bandwidth of {@link AggregateSwitch} in Megabits/s.
@@ -49,7 +55,7 @@ public class AdaptedAggregateSwitch extends AbstractSwitch {
 	    @Override
 	    protected void processPacketDown(SimEvent ev) {
 	        super.processPacketDown(ev);
-	
+
 	        final HostPacket netPkt = (HostPacket) ev.getData();
 	        final Vm receiverVm = netPkt.getVmPacket().getDestination();
 	
@@ -61,7 +67,8 @@ public class AdaptedAggregateSwitch extends AbstractSwitch {
 
 	 @Override
 	    protected void processPacketUp(SimEvent ev) {
-		 	super.processPacketUp(ev);
+	        super.processPacketUp(ev);
+
 	        final HostPacket netPkt = (HostPacket) ev.getData();
 	        final Vm receiverVm = netPkt.getVmPacket().getDestination();
 	        // packet is coming from edge level router so need to be sent to

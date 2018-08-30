@@ -18,7 +18,7 @@ import org.scenario.cloudsimplus.AdaptedDatacenter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AdaptedRootSwitch extends AbstractSwitch {
+public class AdaptedRootSwitch extends AdaptedAbstractSwitch {
 	
 	private static final Logger logger = LoggerFactory.getLogger(RootSwitch.class.getSimpleName());
 
@@ -34,9 +34,9 @@ public class AdaptedRootSwitch extends AbstractSwitch {
     public static final int PORTS = 1;
 
     /**
-     * Default switching delay in milliseconds.
+     * Default switching delay in the order of microseconds.
      */
-    public double SWITCHING_DELAY = 0.00285;
+    public double SWITCHING_DELAY = 0.00000157;
 
     /**
      * The downlink bandwidth of RootSwitch in Megabits/s.
@@ -54,7 +54,6 @@ public class AdaptedRootSwitch extends AbstractSwitch {
 	
 	@Override
     protected void processPacketUp(SimEvent ev) {
-        super.processPacketUp(ev);
         
         final HostPacket netPkt = (HostPacket) ev.getData();
 
@@ -94,6 +93,7 @@ public class AdaptedRootSwitch extends AbstractSwitch {
 	        	send(((AdaptedDatacenter)netPkt.getVmPacket().getDestination().getHost().getDatacenter()).getSwitchMap().get(0) ,transferDelay, CloudSimTags.NETWORK_EVENT_UP, netPkt);        	
 	        }
         }
+        super.processPacketUp(ev);
     }
 	
 	private Switch findAggregateSwitchConnectedToGivenEdgeSwitch(Switch edgeSwitch) {

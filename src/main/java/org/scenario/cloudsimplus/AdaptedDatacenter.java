@@ -155,7 +155,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 		long fileSize = ReplicaCatalog.getCatalogInstance().getFileMetadataWithId(((AdaptedCloudlet) cloudlet).getRequestedFileId()).getFileSize();			
 		double bwAvailableForThisPacket =(((NetworkHost) cloudlet.getVm().getHost()).getEdgeSwitch().getDownlinkBandwidth()) / size;
 		HostPacket pkt = new HostPacket((AdaptedHost)cloudlet.getVm().getHost(), new VmPacket(cloudlet.getVm(), null, DataCloudTags.DEFAULT_MTU + cloudlet.getFileSize() + (long) (fileSize * Conversion.MEGABYTE) , null, cloudlet));
-		EdgeSwitch sw = ((AdaptedHost)cloudlet.getVm().getHost()).getEdgeSwitch();
+		Switch sw = ((AdaptedHost)cloudlet.getVm().getHost()).getEdgeSwitch();
 		double delay = Conversion.bytesToMegaBits(pkt.getSize()) / bwAvailableForThisPacket;
 		
 		((AdaptedCloudlet) cloudlet).setLeftVmToBrokerTime(this.getSimulation().clock());

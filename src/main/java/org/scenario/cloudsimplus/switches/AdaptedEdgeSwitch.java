@@ -8,12 +8,13 @@ import org.cloudbus.cloudsim.datacenters.network.NetworkDatacenter;
 import org.cloudbus.cloudsim.hosts.Host;
 import org.cloudbus.cloudsim.hosts.network.NetworkHost;
 import org.cloudbus.cloudsim.network.HostPacket;
+import org.cloudbus.cloudsim.network.switches.AbstractSwitch;
 import org.cloudbus.cloudsim.network.switches.EdgeSwitch;
 import org.cloudbus.cloudsim.network.switches.Switch;
 import org.cloudbus.cloudsim.util.Conversion;
 import org.cloudbus.cloudsim.vms.Vm;
 
-public class AdaptedEdgeSwitch extends EdgeSwitch {
+public class AdaptedEdgeSwitch extends AdaptedAbstractSwitch {
 	
 	/**
      * The level (layer) of the switch in the network topology.
@@ -33,9 +34,9 @@ public class AdaptedEdgeSwitch extends EdgeSwitch {
     public static final int PORTS = 4;
 
     /**
-     * Default switching delay in milliseconds.
+     * Default switching delay in the order of microseconds.
      */
-    public static final double SWITCHING_DELAY = 0.00157;
+    public static final double SWITCHING_DELAY = 0.00000285;
 
     /**
      * Instantiates a EdgeSwitch specifying Datacenter that are connected to its
@@ -56,8 +57,6 @@ public class AdaptedEdgeSwitch extends EdgeSwitch {
     
     @Override
     protected void processPacketDown(SimEvent ev) {
-    	getSimulation().cancelAll(this, new PredicateType(CloudSimTags.NETWORK_EVENT_SEND));
-        schedule(this, getSwitchingDelay(), CloudSimTags.NETWORK_EVENT_SEND);
 
         final HostPacket netPkt = (HostPacket) ev.getData();
         final Vm receiverVm = netPkt.getVmPacket().getDestination();
@@ -65,6 +64,7 @@ public class AdaptedEdgeSwitch extends EdgeSwitch {
         final NetworkHost host = getVmHost(receiverVm);
         netPkt.setDestination(host);
         addPacketToBeSentToHost(host, netPkt);
+        super.processPacketDown(ev);
         send(this.getDatacenter(),
                 0,
                 CloudSimTags.VM_UPDATE_CLOUDLET_PROCESSING_EVENT);	
@@ -72,9 +72,8 @@ public class AdaptedEdgeSwitch extends EdgeSwitch {
 
 	 @Override
 	    protected void processPacketUp(SimEvent ev) {
-		 	getSimulation().cancelAll(this, new PredicateType(CloudSimTags.NETWORK_EVENT_SEND));
-	        schedule(this, getSwitchingDelay(), CloudSimTags.NETWORK_EVENT_SEND);
 
+		 super.processPacketUp(ev);
 	        final HostPacket hostPkt = (HostPacket) ev.getData();
 	        
 	        final Vm receiverVm = hostPkt.getVmPacket().getDestination();
@@ -101,4 +100,10 @@ public class AdaptedEdgeSwitch extends EdgeSwitch {
 	        final Switch aggregateSwitch = getUplinkSwitches().get(0);
 	        addPacketToBeSentToUplinkSwitch(aggregateSwitch, hostPkt);
 	    }
+
+	@Override
+	public int getLevel() {
+		// TODO Auto-generated method stub
+		return 2;
+	}
 }
