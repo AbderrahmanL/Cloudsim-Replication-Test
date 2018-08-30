@@ -5,6 +5,8 @@ import java.math.RoundingMode;
 
 import org.cloudbus.cloudsim.cloudlets.network.NetworkCloudlet;
 import org.cloudbus.cloudsim.resources.File;
+import org.cloudbus.cloudsim.resources.FileAttribute;
+import org.scenario.autoadaptive.ReplicaCatalog;
 
 public class AdaptedCloudlet extends NetworkCloudlet{
 	
@@ -47,7 +49,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	/**
 	 * @see #getRequestedFileId()
 	 */
-	private int requestedFileId;
+	private int requestedFileId = -1;
 	
 
 	/**
@@ -114,7 +116,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	}
 
 	public double getUplinkTime() {
-		return BigDecimal.valueOf(this.getLeftDcToBrokerTime(1)-this.getLeftVmToBrokerTime(1)).setScale(18, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(this.getLeftDcToBrokerTime(1)-this.getLeftVmToBrokerTime(1)).setScale(16, RoundingMode.HALF_UP).doubleValue();
 	}
 
 	public double getLeftDcToBrokerTime() {
@@ -165,10 +167,15 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	}
 	
 	public double getOverallTime() {
-		return BigDecimal.valueOf(this.getGotToBrokerTime()).subtract(BigDecimal.valueOf(this.getSendTime())).setScale(3, RoundingMode.HALF_UP).doubleValue(); 
+		return BigDecimal.valueOf(this.getLeftDcToBrokerTime()).subtract(BigDecimal.valueOf(this.getDcReceiveTime())).setScale(3, RoundingMode.HALF_UP).doubleValue(); 
 	}
-	public File getRequestedFile(){
-		String fileName = this.getRequiredFiles().get(0);
-		return ((AdaptedDatacenterStorage)this.getLastDatacenter().getDatacenterStorage()).getFile(fileName);
+	
+	/**
+	 * Only used for dusplay not in simulation since it would be silly
+	 * that a cloudlet can get a file metadata magically using a method
+	 * @return
+	 */
+	public FileAttribute getRequestedFile(){
+		return ReplicaCatalog.getCatalogInstance().getFileMetadataWithId(this.getRequestedFileId());
 	}
 }

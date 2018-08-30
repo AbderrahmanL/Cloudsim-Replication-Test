@@ -1,19 +1,20 @@
 package org.scenario;
 
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 
 import org.cloudbus.cloudsim.brokers.DatacenterBroker;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
+import org.scenario.Utils.DetailedCloudletsTableBuilder;
+import org.scenario.Utils.Utils;
+import org.scenario.autoadaptive.ReplicaCatalog;
 import org.scenario.cloudsimplus.AdaptedCloudlet;
-import org.scenario.cloudsimplus.DetailedCloudletsTableBuilder;
 import org.scenario.config.InitializeReplicationScenarioBasicTreeTopology;
-import org.scenario.config.SimulationConstParameters;
-import org.scenario.config.Utils;
 
 import jxl.Workbook;
 import jxl.format.Border;
@@ -40,14 +41,15 @@ public class RunReplicationScenario {
         List<DatacenterBroker> brokers = new InitializeReplicationScenarioBasicTreeTopology().init(); 
         Utils.writeInAGivenFile("Log",  "" , false);
         brokers.get(0).getSimulation().start();
-////        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out))); // make out go back to default
-////        try {
-////			System.setOut(new PrintStream(new FileOutputStream("1000req_1MB_Fair")));
-////		} catch (FileNotFoundException e) {
-////			// TODO Auto-generated catch block
-////			e.printStackTrace();
-////		}
+//        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out))); // make out go back to default
+//        try {
+//			System.setOut(new PrintStream(new FileOutputStream("1000req_1MB_Fair")));
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
         List<Cloudlet> finished = brokers.get(0).getCloudletFinishedList();
+//        finished.sort((c1,c2) -> (c1.getVm().getId() < c2.getVm().getId()) ? 1 : -1);
 //        
         DetailedCloudletsTableBuilder results = new DetailedCloudletsTableBuilder(finished);
         		results.build();
@@ -97,24 +99,41 @@ public class RunReplicationScenario {
 
         	    copy.write();
         	    copy.close();
-        
+        	    
+        double workloadTime = ((AdaptedCloudlet)finished.get(finished.size()-1)).getLeftDcToBrokerTime() - ((AdaptedCloudlet)finished.stream().findFirst().get()).getDcReceiveTime() ;   
+        long totalData = 0 ;
         double overallAvg = 0;
         double variance = 0;
         double avgRemontee = 0;
+        
+        for(Cloudlet cl : finished)
+        	totalData += ReplicaCatalog.getCatalogInstance().getFileMetadataWithId(((AdaptedCloudlet) cl).getRequestedFileId()).getFileSize() ;
+        
         for(Cloudlet cl : finished)
         	overallAvg += ((AdaptedCloudlet) cl).getOverallTime();
         overallAvg /= finished.size();
-        System.out.println(overallAvg);
         
         for(Cloudlet cl : finished)
         	variance += Math.pow((((AdaptedCloudlet) cl).getOverallTime() - overallAvg), 2);
         variance /= finished.size();
-        System.out.println(variance);
         
         for(Cloudlet cl : finished)
         	avgRemontee += ((AdaptedCloudlet)cl).getLeftDcToBrokerTime(1)-((AdaptedCloudlet)cl).getLeftVmToBrokerTime(1);
         avgRemontee /= finished.size();
-        System.out.println(avgRemontee);
+        System.out.println( (float)workloadTime);
+        System.out.println((float)(overallAvg));
+        System.out.println((float)(finished.size() / workloadTime)); //debit
+        System.out.println( (float)(totalData /workloadTime)); // BW
+        System.out.println((float)(avgRemontee));
+        String theString = 	"" + (float)workloadTime + "\n" +
+    						"" + (float)overallAvg + "\n" +
+    						"" + (float)(finished.size() / workloadTime) + "\n" +
+    						"" + (float)(totalData /workloadTime) + "\n" +
+    						"" + (float)(avgRemontee) + "\n" ;
+        StringSelection selection = new StringSelection(theString);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(selection, selection);
+        System.out.println( (float)(variance));
     }
     
 }

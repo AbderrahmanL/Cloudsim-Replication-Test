@@ -27,6 +27,8 @@ import org.cloudbus.cloudsim.vms.Vm;
 import org.scenario.autoadaptive.CloudDataTags;
 import org.scenario.autoadaptive.LoadBalancer;
 import org.scenario.autoadaptive.ReplicaCatalog;
+import org.scenario.cloudsimplus.resources.FileMetadata;
+import org.scenario.config.SimulationParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,28 +71,20 @@ public class AdaptedDatacenter extends NetworkDatacenter{
             return;
         }
         ((AdaptedCloudlet)cl).setDcReceiveTime(this.getSimulation().clock());
-        try {
-        	
-        	((AdaptedCloudlet)cl).setRequestedFileId( (((AdaptedDatacenterStorage) this.getDatacenterStorage()).getFile(((AdaptedCloudlet)cl).getRequiredFiles().get(0))).getAttribute().getRegistrationID());
-        }catch (IndexOutOfBoundsException e) {
-        	System.out.print("");
-        }
         
         cl.assignToDatacenter(this);
-        // TODO assign to vm, next line is a dummy assignement for test
         List<Host> nodesThatHasTheFile = ReplicaCatalog.getCatalogInstance().getNodesThatHasFile(((AdaptedCloudlet)cl).getRequestedFileId());
-        if(nodesThatHasTheFile.isEmpty())
+        if(((AdaptedCloudlet)cl).getRequestedFileId() == -1 |  nodesThatHasTheFile.isEmpty())
         	return;
         List<Vm> vmsThatHasAccessToFile = new ArrayList<>();
         for(Host host : nodesThatHasTheFile) {
         	vmsThatHasAccessToFile.addAll(host.getVmList());
         }
-        Vm electedVm = balancer.electVm(vmsThatHasAccessToFile);
-//        if(debugCount % 2 == 0)
-//        	vm = this.getVmList().get(0);
-//        else
-//        	vm = this.getVmList().get(15);
-//        debugCount++;
+        Vm electedVm = Vm.NULL;
+        if(SimulationParameters.SINGLE_WORKER == 0)
+        electedVm = vmsThatHasAccessToFile.get(0);
+        else
+        electedVm = balancer.electVm(vmsThatHasAccessToFile);
         
     	((AdaptedVm) electedVm).getOrUpdateRequestCount(1);
         cl.setVm(electedVm); // its done after initializing also for test	
@@ -102,15 +96,18 @@ public class AdaptedDatacenter extends NetworkDatacenter{
         	}
 	}
 	
+	
 	public void submitCloudletToVm(final Cloudlet cl, final boolean ack) {
         // time to transfer cloudlet's files
-        final double fileTransferTime = getDatacenterStorage().predictFileTransferTime(cl.getRequiredFiles());
-        
-        ((AdaptedCloudlet) cl).setFileRetrievalTime(this.getSimulation().clock() + fileTransferTime);        
-        
-        final CloudletScheduler scheduler = cl.getVm().getCloudletScheduler();
-        final double estimatedFinishTime = scheduler.cloudletSubmit(cl, fileTransferTime);
-        // if this cloudlet is in the exec queue
+		
+		List<String> fileNames = new ArrayList<>(); 
+		fileNames.add(((FileMetadata)ReplicaCatalog.getCatalogInstance().getFileMetadataWithId(((AdaptedCloudlet) cl).getRequestedFileId())).getName());
+		
+        final double fileTransferTime = getDatacenterStorage().predictFileTransferTime(fileNames);
+        cl.setLength((long)(cl.getVm().getMips() * fileTransferTime));
+        ((AdaptedCloudlet) cl).setFileRetrievalTime( fileTransferTime);      
+        double estimatedFinishTime = cl.getVm().getCloudletScheduler().cloudletSubmit(cl,0);
+        // if this cloudlet is in the exec queue 
         if (estimatedFinishTime > 0.0 && !Double.isInfinite(estimatedFinishTime)) {
             send(this,
                 getCloudletProcessingUpdateInterval(estimatedFinishTime) ,
@@ -148,26 +145,24 @@ public class AdaptedDatacenter extends NetworkDatacenter{
                 .map(CloudletExecution::getCloudlet)
                 .filter(c -> !vm.getCloudletScheduler().isCloudletReturned(c))
                 .collect(toList());
-        
-        nonReturnedCloudlets.forEach(this::returnFinishedCloudletToBroker);
+        int listSize = nonReturnedCloudlets.size();
+        for(Cloudlet cl : nonReturnedCloudlets) {
+        	returnFinishedCloudletToBroker(cl, listSize);
+        }
     }
 	
-	private void returnFinishedCloudletToBroker(final Cloudlet cloudlet) {
-		long fileSize = 0;
-		try{
-			fileSize = ((AdaptedDatacenterStorage)this.getDatacenterStorage()).getFile(cloudlet.getRequiredFiles().get(0)).getSize();			
-		}
-		catch (IndexOutOfBoundsException e){
-			System.out.print("");
-		}
-		((AdaptedCloudlet) cloudlet).setLeftVmToBrokerTime(this.getSimulation().clock());
-		((AdaptedVm) cloudlet.getVm()).getOrUpdateRequestCount(-1);
+	private void returnFinishedCloudletToBroker(final Cloudlet cloudlet , int size) {
+		long fileSize = ReplicaCatalog.getCatalogInstance().getFileMetadataWithId(((AdaptedCloudlet) cloudlet).getRequestedFileId()).getFileSize();			
+		double bwAvailableForThisPacket =(((NetworkHost) cloudlet.getVm().getHost()).getEdgeSwitch().getDownlinkBandwidth()) / size;
 		HostPacket pkt = new HostPacket((AdaptedHost)cloudlet.getVm().getHost(), new VmPacket(cloudlet.getVm(), null, DataCloudTags.DEFAULT_MTU + cloudlet.getFileSize() + (long) (fileSize * Conversion.MEGABYTE) , null, cloudlet));
 		EdgeSwitch sw = ((AdaptedHost)cloudlet.getVm().getHost()).getEdgeSwitch();
+		double delay = Conversion.bytesToMegaBits(pkt.getSize()) / bwAvailableForThisPacket;
+		
+		((AdaptedCloudlet) cloudlet).setLeftVmToBrokerTime(this.getSimulation().clock());
+		((AdaptedVm) cloudlet.getVm()).getOrUpdateRequestCount(-1);
 		// TODO share bw across concurrent cloudlets 
-		double delay = pkt.getSize()/(((NetworkHost) cloudlet.getVm().getHost()).getEdgeSwitch().getDownlinkBandwidth());
 		getSimulation().send(
-                this, sw, 0 ,CloudSimTags.NETWORK_EVENT_UP, pkt);
+                this, sw, delay ,CloudSimTags.NETWORK_EVENT_UP, pkt);
 		cloudlet.getVm().getCloudletScheduler().addCloudletToReturnedList(cloudlet);
 		// these tow lines are invoked in root switch
 //        sendNow(cloudlet.getBroker(), CloudSimTags.CLOUDLET_RETURN, cloudlet);

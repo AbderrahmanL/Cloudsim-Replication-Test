@@ -1,4 +1,4 @@
-package org.scenario.cloudsimplus;
+package org.scenario.cloudsimplus.switches;
 
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.CloudSimTags;
@@ -23,13 +23,13 @@ public class AdaptedAggregateSwitch extends AbstractSwitch {
     /**
      * Default delay of {@link AggregateSwitch} in milliseconds.
      */
-    public static final double SWITCHING_DELAY = 0.00245;
+    public static final double SWITCHING_DELAY = 0.00245 ;
 	
     /**
      * Default downlink bandwidth of {@link AggregateSwitch} in Megabits/s.
      * It also represents the uplink bandwidth of connected edge Datacenter.
      */
-    public static final long DOWNLINK_BW =  10000 ;
+    public static long DOWNLINK_BW =  20000 ;
     
     /**
      * Default number of aggregation switch ports that defines the number of
@@ -62,10 +62,8 @@ public class AdaptedAggregateSwitch extends AbstractSwitch {
 	 @Override
 	    protected void processPacketUp(SimEvent ev) {
 		 	super.processPacketUp(ev);
-
 	        final HostPacket netPkt = (HostPacket) ev.getData();
 	        final Vm receiverVm = netPkt.getVmPacket().getDestination();
-
 	        // packet is coming from edge level router so need to be sent to
 	        // either root or another edge level swich
 	        // find the id for edge level switch

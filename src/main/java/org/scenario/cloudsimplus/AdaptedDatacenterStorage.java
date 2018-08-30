@@ -8,6 +8,7 @@ import org.cloudbus.cloudsim.resources.File;
 import org.cloudbus.cloudsim.resources.FileStorage;
 import org.cloudbus.cloudsim.util.DataCloudTags;
 import org.scenario.autoadaptive.ReplicaManager;
+import org.scenario.cloudsimplus.resources.FileMetadata;
 
 public class AdaptedDatacenterStorage extends DatacenterStorage {
 	

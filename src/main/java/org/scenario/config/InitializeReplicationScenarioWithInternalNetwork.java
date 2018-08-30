@@ -21,11 +21,11 @@ import org.cloudbus.cloudsim.network.topologies.NetworkTopology;
 import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.ResourceProvisionerSimple;
 import org.cloudbus.cloudsim.resources.DatacenterStorage;
-import org.cloudbus.cloudsim.resources.File;
 import org.cloudbus.cloudsim.resources.FileStorage;
 import org.cloudbus.cloudsim.resources.Pe;
 import org.cloudbus.cloudsim.resources.PeSimple;
-import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerTimeShared;
+import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerCompletelyFair;
+import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerSpaceShared;
 import org.cloudbus.cloudsim.schedulers.vm.VmSchedulerSpaceShared;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelFull;
 import org.cloudbus.cloudsim.vms.Vm;
@@ -34,10 +34,10 @@ import org.scenario.cloudsimplus.AdaptedCloudlet;
 import org.scenario.cloudsimplus.AdaptedDatacenter;
 import org.scenario.cloudsimplus.AdaptedDatacenterBroker;
 import org.scenario.cloudsimplus.AdaptedDatacenterStorage;
-import org.scenario.cloudsimplus.AdaptedFile;
 import org.scenario.cloudsimplus.AdaptedHost;
 import org.scenario.cloudsimplus.AdaptedVm;
-import org.scenario.cloudsimplus.MountedSan;
+import org.scenario.cloudsimplus.resources.AdaptedFile;
+import org.scenario.cloudsimplus.resources.MountedSan;
 
 public abstract class InitializeReplicationScenarioWithInternalNetwork extends InitializeReplicationScenario {
 
@@ -124,12 +124,12 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
                 .setRam(ram)
                 .setBw(bw)
                 .setSize(storage)
-                .setCloudletScheduler(new CloudletSchedulerTimeShared());
+                .setCloudletScheduler(new CloudletSchedulerCompletelyFair());
 	}
 
 	@Override
 	protected Cloudlet createCloudlet(int id, Vm vm) {
-		 final long length = SimulationConstParameters.CLOUDLET_EXECUTION_TASK_LENGTH; //in Million Structions (MI)
+		 final long length = SimulationParameters.CLOUDLET_EXECUTION_TASK_LENGTH; //in Million Structions (MI)
 	        final long fileSize = 300; //Size (in bytes) before execution
 	        final long outputSize = 300; //Size (in bytes) after execution
 	        final int  numberOfCpuCores = 2; // cores used by cloudlet
@@ -142,21 +142,20 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 			        .setUtilizationModelRam(new UtilizationModelFull())
 			        .setUtilizationModelCpu(new UtilizationModelFull())
 			        .setUtilizationModelBw(new UtilizationModelFull());
-	        if(debugCount < 500) {
-	        	cloudlet.addRequiredFile("file1.dat");
+	        if(debugCount < SimulationParameters.NO_CLOUDLETS ) {
+	        	cloudlet.setRequestedFileId(0);
 	        }
-	        if(debugCount < 650 && debugCount >= 500) {
-	        	cloudlet.addRequiredFile("file2.dat");
-	        }
-	        if(debugCount < 800 && debugCount >= 650) {
-	        	cloudlet.addRequiredFile("file3.dat");
-	        }
-	        if(debugCount >= 800) {
-	        	cloudlet.addRequiredFile("file4.dat");
-	        	debugCount++;
-	        }
+//	        if(debugCount < SimulationConstParameters.NO_CLOUDLETS * 2  && debugCount >= SimulationConstParameters.NO_CLOUDLETS ) {
+//	        	cloudlet.setRequestedFileId(1);
+//	        }
+//	        if(debugCount < SimulationConstParameters.NO_CLOUDLETS *3  && debugCount >= SimulationConstParameters.NO_CLOUDLETS ) {
+//	        	cloudlet.setRequestedFileId(2);
+//	        }
+//	        if(debugCount >= 230) {
+//	        	cloudlet.addRequiredFile("file4.dat");
+//	        }
 	        debugCount++;
-	        cloudlet.addTask(new CloudletExecutionTask(numberOfCpuCores, SimulationConstParameters.CLOUDLET_EXECUTION_TASK_LENGTH));
+	        cloudlet.addTask(new CloudletExecutionTask(numberOfCpuCores, SimulationParameters.CLOUDLET_EXECUTION_TASK_LENGTH));
 //	        cloudlet.setVm(vm);
 	        return cloudlet;
 	}
@@ -193,14 +192,14 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 
 	@Override
 	protected Datacenter createSuperDatacenter(CloudSim simulation) {
-		List<Host> hostList = new ArrayList<>(SimulationConstParameters.HOST_SUPER);
+		List<Host> hostList = new ArrayList<>(SimulationParameters.HOST_SUPER);
 		List<FileStorage> storageList = new ArrayList<FileStorage>();
 		FileStorage san = new MountedSan("temporary", 1, 1, 1);
-        for(int j = 0; j < SimulationConstParameters.HOST_SUPER; j++) {
+        for(int j = 0; j < SimulationParameters.HOST_SUPER; j++) {
         	Host host = createHost(32768,4000,16);
             hostList.add(host);
-            	if(j % SimulationConstParameters.HOSTS_PER_SWITCH == 0) {
-            		san = createStorage("San" + j,1000000000, 1000.0, 0.3);
+            	if(j % SimulationParameters.HOSTS_PER_SWITCH == 0) {
+            		san = createStorage("San" + j,1000000000, 15000.0, 0.003);
             		storageList.add(san);  
             	}
             	((MountedSan)san).addAccessingHost(host);
@@ -208,11 +207,18 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
         }
         DatacenterStorage datacenterStorage = new  AdaptedDatacenterStorage(storageList);
         Datacenter dc = createDatacenter(simulation, hostList, new VmAllocationPolicySimple());
-        File file = new AdaptedFile("file1.dat", 100);
-        datacenterStorage.getStorageList().get(1).addFile(new AdaptedFile("file1.dat", 200));
-        datacenterStorage.getStorageList().get(3).addFile(new AdaptedFile("file2.dat", 200));
-        datacenterStorage.getStorageList().get(5).addFile(new AdaptedFile("file3.dat", 200));
-        datacenterStorage.getStorageList().get(4).addFile(new AdaptedFile("file4.dat", 200));
+//        if(dc.getId() == 1) {
+        	datacenterStorage.getStorageList().get(1).addFile(new AdaptedFile("file1.dat", 200));
+//        datacenterStorage.getStorageList().get(2).addFile(new AdaptedFile("file2.dat", 100));
+//        datacenterStorage.getStorageList().get(4).addFile(new AdaptedFile("file3.dat", 200));
+//        datacenterStorage.getStorageList().get(2).addFile(new AdaptedFile("file4.dat", 10));        	
+//        }
+        if(dc.getId() == 12) {
+        	datacenterStorage.getStorageList().get(1).addFile(new AdaptedFile("file1.dat", 200));
+        datacenterStorage.getStorageList().get(2).addFile(new AdaptedFile("file2.dat", 200));
+//        datacenterStorage.getStorageList().get(4).addFile(new AdaptedFile("file3.dat", 200));
+//        datacenterStorage.getStorageList().get(2).addFile(new AdaptedFile("file4.dat", 10));        	
+        }
         dc.setDatacenterStorage(datacenterStorage);
 //        MetadataCatalog catalog = ReplicaCatalog.getCatalogInstance();
 //        System.out.println(((HashMap<Integer, LinkedList<FileAttribute>>)catalog).get(0).get(0).getFileSize());
@@ -233,3 +239,4 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 	
 
 }
+	

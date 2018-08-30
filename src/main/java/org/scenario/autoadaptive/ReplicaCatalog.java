@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.cloudbus.cloudsim.hosts.Host;
 import org.cloudbus.cloudsim.resources.FileAttribute;
-import org.scenario.cloudsimplus.FileMetadata;
-import org.scenario.cloudsimplus.MountedSan;
+import org.scenario.cloudsimplus.resources.FileMetadata;
+import org.scenario.cloudsimplus.resources.MountedSan;
 
 
 public class ReplicaCatalog extends HashMap<Integer,LinkedList<FileAttribute>> implements MetadataCatalog {
@@ -42,7 +42,11 @@ public class ReplicaCatalog extends HashMap<Integer,LinkedList<FileAttribute>> i
 	public void addReplica(FileAttribute attr) {
 		this.get(attr.getRegistrationID()).add(attr);
 	}
-
+	
+	public FileAttribute getFileMetadataWithId(int id) {
+		return this.get(id).get(0);
+	}
+	
 	@Override
 	public List<Host> getNodesThatHasFile(int requestedFileId) {
 		List<Host> listToReturn = new ArrayList<Host>();

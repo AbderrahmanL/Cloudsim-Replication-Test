@@ -26,7 +26,7 @@ import org.cloudbus.cloudsim.schedulers.vm.VmSchedulerSpaceShared;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelDynamic;
 import org.cloudbus.cloudsim.vms.Vm;
 import org.cloudbus.cloudsim.vms.VmSimple;
-import org.scenario.cloudsimplus.AdaptedFile;
+import org.scenario.cloudsimplus.resources.AdaptedFile;
 
 
 public class InitializeReplicationScenarioNoInternalNetwork extends InitializeReplicationScenario{
@@ -98,8 +98,8 @@ public class InitializeReplicationScenarioNoInternalNetwork extends InitializeRe
 	
 	@Override
 	protected Datacenter createSuperDatacenter(CloudSim simulation) {
-		List<Host> hostList3 = new ArrayList<>(SimulationConstParameters.HOST_SUPER);
-        for(int j = 0; j < SimulationConstParameters.HOST_SUPER; j++) {
+		List<Host> hostList3 = new ArrayList<>(SimulationParameters.HOST_SUPER);
+        for(int j = 0; j < SimulationParameters.HOST_SUPER; j++) {
             Host host = createHost(32768,4000,8);
             hostList3.add(host);
         }
@@ -117,8 +117,8 @@ public class InitializeReplicationScenarioNoInternalNetwork extends InitializeRe
 
 	@Override
 	protected Datacenter createMainDatacenter(CloudSim simulation) {
-		List<Host> hostList2 = new ArrayList<>(SimulationConstParameters.HOST_MID);
-        for(int j = 0; j < SimulationConstParameters.HOST_MID; j++) {
+		List<Host> hostList2 = new ArrayList<>(SimulationParameters.HOST_MID);
+        for(int j = 0; j < SimulationParameters.HOST_MID; j++) {
             Host host = createHost(16348,2500,6);
             hostList2.add(host);
         }
@@ -133,8 +133,8 @@ public class InitializeReplicationScenarioNoInternalNetwork extends InitializeRe
 
 	@Override
 	protected Datacenter createOrdinaryDatacenter(CloudSim simulation) {
-		List<Host> hostList = new ArrayList<>(SimulationConstParameters.HOST_STANDARD);
-        for(int j = 0; j < SimulationConstParameters.HOST_STANDARD; j++) {
+		List<Host> hostList = new ArrayList<>(SimulationParameters.HOST_STANDARD);
+        for(int j = 0; j < SimulationParameters.HOST_STANDARD; j++) {
             Host host = createHost(8192,1000,4);
             hostList.add(host);
         }

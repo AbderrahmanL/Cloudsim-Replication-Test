@@ -91,19 +91,19 @@ public abstract class InitializeReplicationScenario {
 			
 			protected List<Datacenter> createDatacenters(CloudSim simulation){
 					
-					List<Datacenter> datacenters = new ArrayList<Datacenter>(1);
+					List<Datacenter> datacenters = new ArrayList<Datacenter>();
 					    
-				        for(int i=0 ; i<SimulationConstParameters.DC_SUPER; i++){
+				        for(int i=0 ; i<SimulationParameters.DC_SUPER; i++){
 				        	Datacenter dc = createSuperDatacenter(simulation);
 					        datacenters.add(dc);
 				        } 
 				        
-				        for(int i=0 ; i<SimulationConstParameters.DC_MID; i++){
+				        for(int i=0 ; i<SimulationParameters.DC_MID; i++){
 				        	Datacenter dc = createMainDatacenter(simulation);
 						    datacenters.add(dc);
 				        }
 				        
-				        for(int i=0 ; i<SimulationConstParameters.DC_STANDARD; i++){
+				        for(int i=0 ; i<SimulationParameters.DC_STANDARD; i++){
 				        	Datacenter dc = createOrdinaryDatacenter(simulation);
 						    datacenters.add(dc);
 				        }

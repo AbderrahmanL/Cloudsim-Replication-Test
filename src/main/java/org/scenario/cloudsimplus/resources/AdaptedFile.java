@@ -1,4 +1,4 @@
-package org.scenario.cloudsimplus;
+package org.scenario.cloudsimplus.resources;
 
 import org.cloudbus.cloudsim.resources.File;
 

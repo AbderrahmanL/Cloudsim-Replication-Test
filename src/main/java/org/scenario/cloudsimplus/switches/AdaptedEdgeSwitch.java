@@ -1,4 +1,4 @@
-package org.scenario.cloudsimplus;
+package org.scenario.cloudsimplus.switches;
 
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.CloudSimTags;

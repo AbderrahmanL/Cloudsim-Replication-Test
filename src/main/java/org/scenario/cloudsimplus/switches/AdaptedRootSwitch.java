@@ -1,4 +1,4 @@
-package org.scenario.cloudsimplus;
+package org.scenario.cloudsimplus.switches;
 
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.CloudSimTags;
@@ -13,6 +13,8 @@ import org.cloudbus.cloudsim.network.topologies.BriteNetworkTopology;
 import org.cloudbus.cloudsim.util.Conversion;
 import org.cloudbus.cloudsim.vms.Vm;
 import org.cloudbus.cloudsim.vms.VmSimple;
+import org.scenario.cloudsimplus.AdaptedCloudlet;
+import org.scenario.cloudsimplus.AdaptedDatacenter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +36,7 @@ public class AdaptedRootSwitch extends AbstractSwitch {
     /**
      * Default switching delay in milliseconds.
      */
-    public static final double SWITCHING_DELAY = 0.00285;
+    public double SWITCHING_DELAY = 0.00285;
 
     /**
      * The downlink bandwidth of RootSwitch in Megabits/s.
@@ -89,7 +91,7 @@ public class AdaptedRootSwitch extends AbstractSwitch {
         	}
 	        else {
 	        	// cloudlet to cloudlet diff dc
-	        	send(((AdaptedDatacenter)netPkt.getDestination().getDatacenter()).getSwitchMap().get(0) ,transferDelay, CloudSimTags.NETWORK_EVENT_UP, netPkt);        	
+	        	send(((AdaptedDatacenter)netPkt.getVmPacket().getDestination().getHost().getDatacenter()).getSwitchMap().get(0) ,transferDelay, CloudSimTags.NETWORK_EVENT_UP, netPkt);        	
 	        }
         }
     }

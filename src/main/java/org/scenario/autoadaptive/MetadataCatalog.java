@@ -18,6 +18,8 @@ public interface MetadataCatalog {
 	public boolean hasEntry(int registrationId) ;
 	
 	public void addReplica(FileAttribute attr);
+	
+	public FileAttribute getFileMetadataWithId(int id) ;
 
 	public List<Host> getNodesThatHasFile(int requestedFileId);
 

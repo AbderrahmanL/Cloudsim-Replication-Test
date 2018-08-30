@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.cloudbus.cloudsim.datacenters.Datacenter;
 import org.cloudbus.cloudsim.vms.Vm;
+import org.scenario.Utils.Utils;
 import org.scenario.cloudsimplus.AdaptedVm;
-import org.scenario.config.Utils;
 
 public class LoadBalancerWeightedLeastConnections implements LoadBalancer{
 

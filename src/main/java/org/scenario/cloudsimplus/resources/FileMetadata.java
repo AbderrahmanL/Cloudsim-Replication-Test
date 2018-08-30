@@ -1,4 +1,4 @@
-package org.scenario.cloudsimplus;
+package org.scenario.cloudsimplus.resources;
 
 import java.util.Date;
 import java.util.UUID;
@@ -23,7 +23,8 @@ public class FileMetadata extends FileAttribute{
 		super(file, fileSize);
 		this.name = file.getName();
 		setCreationTime(new Date().getTime());
-		setRegistrationId(latestInode++);
+		setRegistrationId(latestInode);
+		latestInode++;
 	}
 	
 	@Override

@@ -10,9 +10,9 @@ import org.cloudbus.cloudsim.cloudlets.Cloudlet;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.CloudSimTags;
 import org.cloudbus.cloudsim.datacenters.Datacenter;
+import org.scenario.Utils.Utils;
 import org.scenario.autoadaptive.CloudDataTags;
-import org.scenario.config.SimulationConstParameters;
-import org.scenario.config.Utils;
+import org.scenario.config.SimulationParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,9 +48,9 @@ public class AdaptedDatacenterBroker extends DatacenterBrokerSimple{
             Datacenter electedDc = Datacenter.NULL;
             /* TODO Here the dc should be elected, in the cloudsimplus it's done using the vm but vm wont be chosen until arrival to dc
              this next line is a dummy dc selection for test*/
-//            if(cloudlet.getId() < 16)
+////            if(cloudlet.getId() < SimulationConstParameters.NO_CLOUDLETS/2)
             electedDc = this.getDatacenterList().get(0); // TODO replace this
-//            else
+////            else
 //            electedDc = this.getDatacenterList().get(1); // TODO replace this
             logger.info(
                     "{}: {}: Sending {} to {} in {}.",
