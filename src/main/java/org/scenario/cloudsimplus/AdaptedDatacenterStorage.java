@@ -7,13 +7,16 @@ import org.cloudbus.cloudsim.resources.DatacenterStorage;
 import org.cloudbus.cloudsim.resources.File;
 import org.cloudbus.cloudsim.resources.FileStorage;
 import org.cloudbus.cloudsim.util.DataCloudTags;
-import org.scenario.autoadaptive.ReplicaManager;
+import org.scenario.autoadaptive.MetadataManager;
 import org.scenario.cloudsimplus.resources.FileMetadata;
 
 public class AdaptedDatacenterStorage extends DatacenterStorage {
 	
+	private MetadataManager metadataManager;
+	
 	public AdaptedDatacenterStorage(final List<FileStorage> storageList){
     super(storageList);
+    setMetadataManager(new MetadataManager());
     }
 	
 	@Override
@@ -33,7 +36,7 @@ public class AdaptedDatacenterStorage extends DatacenterStorage {
 	            if (storage.isAmountAvailable((long) file.getSize())) {
 	                storage.addFile(file);
 	                ((FileMetadata)file.getAttribute()).setContainingDevice(storage);
-	                ReplicaManager.onFileCreate(file.getAttribute());
+	                MetadataManager.onFileCreate(file.getAttribute());
 	                return DataCloudTags.FILE_ADD_SUCCESSFUL;
 	            }
 	        }
@@ -48,6 +51,14 @@ public class AdaptedDatacenterStorage extends DatacenterStorage {
 			}
 		}
 		return file;
+	}
+
+	public MetadataManager getMetadataManager() {
+		return metadataManager;
+	}
+
+	public void setMetadataManager(MetadataManager metadataManager) {
+		this.metadataManager = metadataManager;
 	}
 
 }

@@ -6,8 +6,9 @@ import org.cloudbus.cloudsim.cloudlets.Cloudlet;
 import org.cloudbus.cloudsim.core.Identifiable;
 import org.cloudbus.cloudsim.util.Conversion;
 import org.cloudsimplus.builders.tables.CloudletsTableBuilder;
-import org.scenario.autoadaptive.ReplicaCatalog;
+import org.scenario.autoadaptive.MetadataCatalog;
 import org.scenario.cloudsimplus.AdaptedCloudlet;
+import org.scenario.cloudsimplus.AdaptedDatacenterStorage;
 
 public class DetailedCloudletsTableBuilder extends CloudletsTableBuilder{
 
@@ -29,7 +30,7 @@ public class DetailedCloudletsTableBuilder extends CloudletsTableBuilder{
 	        addColumnDataFunction(getTable().addColumn("DC", ID), c -> c.getVm().getHost().getDatacenter().getId());
 	        addColumnDataFunction(getTable().addColumn("Host", ID), c -> c.getVm().getHost().getId());
 	        addColumnDataFunction(getTable().addColumn("VM", ID), c -> c.getVm().getId());
-	        addColumnDataFunction(getTable().addColumn("FileSize", MEGABYTE), c -> ReplicaCatalog.getCatalogInstance().getFileMetadataWithId(((AdaptedCloudlet)c).getRequestedFileId()).getFileSize());
+	        addColumnDataFunction(getTable().addColumn("FileSize", MEGABYTE), c -> ((AdaptedDatacenterStorage)c.getLastDatacenter().getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet)c).getRequestedFileId()).getFileSize());
 	        addColumnDataFunction(getTable().addColumn("SendTime", TIME_CLOCK), c -> Double.toString(((AdaptedCloudlet)c).getSendTime()));
 	        addColumnDataFunction(getTable().addColumn("ReceivedByDC", TIME_CLOCK), c -> Double.toString(((AdaptedCloudlet)c).getDcReceiveTime()));
 	        addColumnDataFunction(getTable().addColumn("ReceivedByVM", TIME_CLOCK), c -> Double.toString(((AdaptedCloudlet)c).getVmReceiveTime()));

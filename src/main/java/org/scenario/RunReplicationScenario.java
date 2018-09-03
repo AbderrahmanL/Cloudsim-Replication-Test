@@ -1,20 +1,16 @@
 package org.scenario;
 
 
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import org.cloudbus.cloudsim.brokers.DatacenterBroker;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
-import org.cloudbus.cloudsim.util.Conversion;
 import org.scenario.Utils.DetailedCloudletsTableBuilder;
 import org.scenario.Utils.Utils;
-import org.scenario.autoadaptive.ReplicaCatalog;
 import org.scenario.cloudsimplus.AdaptedCloudlet;
+import org.scenario.cloudsimplus.AdaptedDatacenterStorage;
 import org.scenario.config.InitializeReplicationScenarioBasicTreeTopology;
 
 import jxl.Workbook;
@@ -108,7 +104,7 @@ public class RunReplicationScenario {
         double avgRemontee = 0;
         
         for(Cloudlet cl : finished)
-        	totalData += ReplicaCatalog.getCatalogInstance().getFileMetadataWithId(((AdaptedCloudlet) cl).getRequestedFileId()).getFileSize() ;
+        	totalData +=((AdaptedDatacenterStorage)cl.getLastDatacenter().getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet) cl).getRequestedFileId()).getFileSize() ;
         
         for(Cloudlet cl : finished)
         	overallAvg += ((AdaptedCloudlet) cl).getOverallTime();

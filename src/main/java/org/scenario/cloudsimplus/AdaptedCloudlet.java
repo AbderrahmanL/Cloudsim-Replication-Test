@@ -6,7 +6,7 @@ import java.math.RoundingMode;
 import org.cloudbus.cloudsim.cloudlets.network.NetworkCloudlet;
 import org.cloudbus.cloudsim.resources.File;
 import org.cloudbus.cloudsim.resources.FileAttribute;
-import org.scenario.autoadaptive.ReplicaCatalog;
+import org.scenario.autoadaptive.MetadataCatalog;
 
 public class AdaptedCloudlet extends NetworkCloudlet{
 	
@@ -176,6 +176,6 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	 * @return
 	 */
 	public FileAttribute getRequestedFile(){
-		return ReplicaCatalog.getCatalogInstance().getFileMetadataWithId(this.getRequestedFileId());
+		return ((AdaptedDatacenterStorage)this.getLastDatacenter().getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(this.getRequestedFileId());
 	}
 }

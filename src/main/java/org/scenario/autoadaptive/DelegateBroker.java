@@ -1,15 +1,16 @@
 package org.scenario.autoadaptive;
 
-import java.util.List;
-
-import org.cloudbus.cloudsim.hosts.Host;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DelegateBroker {
 	
-	public static Host findBestNode(List<Host> dcs){
-		
-		
-		return null;
-	}
+	private static Map<Integer,MetadataManager> dcToReplicaManagerMap = new HashMap<>();
+
+	public Map<Integer,MetadataManager> getDcToReplicaManagerMap() {
+		return dcToReplicaManagerMap;
+
+	}  
+	
 
 }

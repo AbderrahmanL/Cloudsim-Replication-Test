@@ -5,16 +5,12 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
-import org.cloudbus.cloudsim.cloudlets.Cloudlet.Status;
 import org.cloudbus.cloudsim.cloudlets.CloudletExecution;
 import org.cloudbus.cloudsim.cloudlets.network.CloudletExecutionTask;
 import org.cloudbus.cloudsim.cloudlets.network.NetworkCloudlet;
-import org.cloudbus.cloudsim.core.CloudSimEntity;
 import org.cloudbus.cloudsim.core.CloudSimTags;
 import org.cloudbus.cloudsim.core.Simulation;
 import org.cloudbus.cloudsim.core.events.SimEvent;
@@ -25,12 +21,11 @@ import org.cloudbus.cloudsim.hosts.network.NetworkHost;
 import org.cloudbus.cloudsim.network.HostPacket;
 import org.cloudbus.cloudsim.network.VmPacket;
 import org.cloudbus.cloudsim.network.switches.Switch;
-import org.cloudbus.cloudsim.resources.FileAttribute;
 import org.cloudbus.cloudsim.util.Conversion;
 import org.cloudbus.cloudsim.vms.Vm;
 import org.scenario.autoadaptive.CloudDataTags;
 import org.scenario.autoadaptive.LoadBalancer;
-import org.scenario.autoadaptive.ReplicaCatalog;
+import org.scenario.autoadaptive.MetadataCatalog;
 import org.scenario.cloudsimplus.resources.FileMetadata;
 import org.scenario.config.SimulationParameters;
 import org.slf4j.Logger;
@@ -45,7 +40,7 @@ import org.slf4j.LoggerFactory;
  */
 public class AdaptedDatacenter extends NetworkDatacenter{
 	
-	ExecutorService dataSenders = Executors.newCachedThreadPool();
+//	ExecutorService dataSenders = Executors.newCachedThreadPool();
 	
 	private static final Logger logger = LoggerFactory.getLogger(DatacenterSimple.class.getSimpleName());
 	
@@ -79,7 +74,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
         ((AdaptedCloudlet)cl).setDcReceiveTime(this.getSimulation().clock());
         
         cl.assignToDatacenter(this);
-        List<Host> nodesThatHasTheFile = ReplicaCatalog.getCatalogInstance().getNodesThatHasFile(((AdaptedCloudlet)cl).getRequestedFileId());
+        List<Host> nodesThatHasTheFile = ((AdaptedDatacenterStorage) getDatacenterStorage()).getMetadataManager().getNodesThatHasFile(((AdaptedCloudlet)cl).getRequestedFileId());
         if(((AdaptedCloudlet)cl).getRequestedFileId() == -1 |  nodesThatHasTheFile.isEmpty())
         	return;
         List<Vm> vmsThatHasAccessToFile = new ArrayList<>();
@@ -107,7 +102,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
         // time to transfer cloudlet's files
 		
 		List<String> fileNames = new ArrayList<>(); 
-		fileNames.add(((FileMetadata)ReplicaCatalog.getCatalogInstance().getFileMetadataWithId(((AdaptedCloudlet) cl).getRequestedFileId())).getName());
+		fileNames.add(((FileMetadata)((AdaptedDatacenterStorage) getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet) cl).getRequestedFileId())).getName());
 		
         final double fileTransferTime = getDatacenterStorage().predictFileTransferTime(fileNames);
         ((AdaptedCloudlet)cl).setFileRetrievalTime(fileTransferTime);
@@ -159,7 +154,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
     }
 	
 	private void returnFinishedCloudletToBroker(final Cloudlet cloudlet , int size) {
-		long fileSize = ReplicaCatalog.getCatalogInstance().getFileMetadataWithId(((AdaptedCloudlet) cloudlet).getRequestedFileId()).getFileSize();			
+		long fileSize = ((AdaptedDatacenterStorage) getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet) cloudlet).getRequestedFileId()).getFileSize();			
 		double bwAvailableForThisPacket =(((NetworkHost) cloudlet.getVm().getHost()).getEdgeSwitch().getDownlinkBandwidth()) / size;
 		HostPacket pkt = null;
 		Switch sw = ((AdaptedHost)cloudlet.getVm().getHost()).getEdgeSwitch();

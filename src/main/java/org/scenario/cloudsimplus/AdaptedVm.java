@@ -42,7 +42,7 @@ public class AdaptedVm extends NetworkVm{
 		if(length <= 0)
 			return avgCloudletLenghtInVm;
 		avgCloudletLenghtInVm = (int) Math.round((float)(avgCloudletLenghtInVm + length) / 2.0);
-//		((AdaptedDatacenter) this.getHost().getDatacenter()).getBalancer().updateAvgCloudletLenght();
+		((AdaptedDatacenter) this.getHost().getDatacenter()).getBalancer().updateAvgCloudletLenght();
 		return avgCloudletLenghtInVm;
 	}
 	

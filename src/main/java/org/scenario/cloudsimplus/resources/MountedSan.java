@@ -6,7 +6,7 @@ import java.util.List;
 import org.cloudbus.cloudsim.hosts.Host;
 import org.cloudbus.cloudsim.resources.File;
 import org.cloudbus.cloudsim.resources.SanStorage;
-import org.scenario.autoadaptive.ReplicaManager;
+import org.scenario.autoadaptive.MetadataManager;
 
 public class MountedSan extends SanStorage{
 	
@@ -29,7 +29,7 @@ public class MountedSan extends SanStorage{
 	@Override
 	public double addFile(File file) {
 		((FileMetadata)file.getAttribute()).setContainingDevice(this);
-        ReplicaManager.onFileCreate(file.getAttribute());
+        MetadataManager.onFileCreate(file.getAttribute());
 		return super.addFile(file);
 		
 	}
