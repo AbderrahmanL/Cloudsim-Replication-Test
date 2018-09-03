@@ -37,8 +37,7 @@ public class LoadBalancerWeightedLeastConnections implements LoadBalancer{
 				Utils.writeInAGivenFile("Log", String.valueOf(((AdaptedVm) vm).getOrUpdateRequestCount(0)) + " , " , true);
 			}
 			Utils.writeInAGivenFile("Log", " => " + String.valueOf(((AdaptedVm) candidate).getOrUpdateRequestCount(0)) + "\n" , true);
-		// TODO here the number of connections to a vm
-		// and to a dc should be ++
+		// TODO connections to a dc should be ++
 		// Also update avgCloudletLenght 
 		return candidate;
 	}
@@ -49,7 +48,7 @@ public class LoadBalancerWeightedLeastConnections implements LoadBalancer{
 		for(Vm vm : this.datacenter.getVmList()) {
 			avgCloudletLenghtInDc += ((AdaptedVm) vm).getOrUpdateAvgCloudletLenght(0);
 		}
-		avgCloudletLenghtInDc = Math.round((float)avgCloudletLenghtInDc / (float)vmList.size());
+		avgCloudletLenghtInDc = Math.round((float)avgCloudletLenghtInDc / ((float)vmList.size() + 1));
 		return avgCloudletLenghtInDc;
 		
 	}
