@@ -9,7 +9,6 @@ import jxl.write.WriteException;
 
 public class App {
 
-	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 //		if(0 == 10){ //just making my life easier 
 //			try {

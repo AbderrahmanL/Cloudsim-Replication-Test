@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.cloudbus.cloudsim.brokers.DatacenterBroker;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
+import org.cloudbus.cloudsim.util.Conversion;
 import org.scenario.Utils.DetailedCloudletsTableBuilder;
 import org.scenario.Utils.Utils;
 import org.scenario.autoadaptive.ReplicaCatalog;
@@ -125,15 +126,6 @@ public class RunReplicationScenario {
         System.out.println((float)(finished.size() / workloadTime)); //debit
         System.out.println( (float)(totalData /workloadTime)); // BW
         System.out.println((float)(avgRemontee));
-        String theString = 	"" + (float)workloadTime + "\n" +
-    						"" + (float)overallAvg + "\n" +
-    						"" + (float)(finished.size() / workloadTime) + "\n" +
-    						"" + (float)(totalData /workloadTime) + "\n" +
-    						"" + (float)(avgRemontee) + "\n" ;
-        StringSelection selection = new StringSelection(theString);
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(selection, selection);
-        System.out.println( (float)(variance));
     }
     
 }

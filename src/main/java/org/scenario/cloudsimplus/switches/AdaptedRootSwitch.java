@@ -71,11 +71,14 @@ public class AdaptedRootSwitch extends AdaptedAbstractSwitch {
         
         if(receiverVm == null){
         	//dc to broker
-        	AdaptedCloudlet cl = (AdaptedCloudlet) netPkt.getVmPacket().getReceiverCloudlet();
-        	cl.setLeftDcToBrokerTime(this.getSimulation().clock());
-        	cl.setGotToBrokerTime(cl.getLeftDcToBrokerTime() + transferDelay);
-        	send(netPkt.getVmPacket().getSource().getBroker() ,transferDelay, CloudSimTags.CLOUDLET_RETURN, netPkt.getVmPacket().getReceiverCloudlet());
-//    		netPkt.getVmPacket().getSource().getCloudletScheduler().addCloudletToReturnedList(netPkt.getVmPacket().getReceiverCloudlet());
+        	try {
+        		AdaptedCloudlet cl = (AdaptedCloudlet) netPkt.getVmPacket().getReceiverCloudlet();
+        		cl.setLeftDcToBrokerTime(this.getSimulation().clock());
+        		cl.setGotToBrokerTime(cl.getLeftDcToBrokerTime() + transferDelay);        		
+        		send(netPkt.getVmPacket().getSource().getBroker() ,transferDelay, CloudSimTags.CLOUDLET_RETURN, netPkt.getVmPacket().getReceiverCloudlet());
+        	}catch(NullPointerException ex) { 
+        		return;
+        	}
         }
         else {
         	// broker submit cloudlet to dc or cloudlet to cloudlet same dc

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
 import org.cloudbus.cloudsim.core.Identifiable;
+import org.cloudbus.cloudsim.util.Conversion;
 import org.cloudsimplus.builders.tables.CloudletsTableBuilder;
 import org.scenario.autoadaptive.ReplicaCatalog;
 import org.scenario.cloudsimplus.AdaptedCloudlet;

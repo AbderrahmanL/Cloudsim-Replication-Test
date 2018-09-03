@@ -50,8 +50,6 @@ public abstract class AdaptedAbstractSwitch extends AbstractSwitch{
 	     */
 	    protected void processPacketUp(final SimEvent ev) {
 	    	double queueingDelay = getQueueingDelay();
-	    	if(queueingDelay > 0)
-	    		System.out.println();
 	        getSimulation().cancelAll(this, new PredicateType(CloudSimTags.NETWORK_EVENT_SEND));
 	        schedule(this, getSwitchingDelay() + queueingDelay, CloudSimTags.NETWORK_EVENT_SEND);
 	    }
