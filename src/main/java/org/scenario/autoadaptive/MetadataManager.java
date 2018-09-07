@@ -29,7 +29,7 @@ public class MetadataManager {
 	public static void onFileCreate(FileAttribute attr) {
 	
 		MetadataInterface catalog = instance;
-		if(! catalog.hasEntry(attr)){
+		if(! catalog.hasEntry(attr.getRegistrationID())){
 			catalog.registerNewFile(attr);		
 		}
 		else {

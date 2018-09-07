@@ -4,6 +4,7 @@ package org.scenario;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.cloudbus.cloudsim.brokers.DatacenterBroker;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
@@ -45,9 +46,20 @@ public class RunReplicationScenario {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-        List<Cloudlet> finished = brokers.get(0).getCloudletFinishedList();
-//        finished.sort((c1,c2) -> (c1.getVm().getId() < c2.getVm().getId()) ? 1 : -1);
-//        
+        List<AdaptedCloudlet> finished = brokers.get(0).getCloudletFinishedList();
+//        AdaptedCloudlet finishedMax = finished.stream().filter(c -> 
+//        (((AdaptedDatacenterStorage)c.getLastDatacenter().getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet)c).getRequestedFileId()).getFileSize() == 300))
+//        		.max((c1,c2) -> c1.getGotToBrokerTime() > c2.getGotToBrokerTime() ? 1 : -1).get();
+//        AdaptedCloudlet finishedMax1 = finished.stream().filter(c -> 
+//        (((AdaptedDatacenterStorage)c.getLastDatacenter().getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet)c).getRequestedFileId()).getFileSize() == 100))
+//        		.max((c1,c2) -> c1.getGotToBrokerTime() > c2.getGotToBrokerTime() ? 1 : -1).get();
+//        AdaptedCloudlet finishedMax2 = finished.stream().filter(c -> 
+//        (((AdaptedDatacenterStorage)c.getLastDatacenter().getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet)c).getRequestedFileId()).getFileSize() == 200))
+//        		.max((c1,c2) -> c1.getGotToBrokerTime() > c2.getGotToBrokerTime() ? 1 : -1).get();
+//        AdaptedCloudlet finishedMax3 = finished.stream().filter(c -> 
+//        (((AdaptedDatacenterStorage)c.getLastDatacenter().getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet)c).getRequestedFileId()).getFileSize() == 150))
+//        		.max((c1,c2) -> c1.getGotToBrokerTime() > c2.getGotToBrokerTime() ? 1 : -1).get();
+        
         DetailedCloudletsTableBuilder results = new DetailedCloudletsTableBuilder(finished);
         		results.build();
         		
@@ -97,31 +109,49 @@ public class RunReplicationScenario {
         	    copy.write();
         	    copy.close();
         	    
-        double workloadTime = ((AdaptedCloudlet)finished.get(finished.size()-1)).getLeftDcToBrokerTime() - ((AdaptedCloudlet)finished.stream().findFirst().get()).getDcReceiveTime() ;   
+//        	    printResults(finishedMax);
+//        	    printResults(finishedMax1);
+//        	    printResults(finishedMax2);
+//        	    printResults(finishedMax3);
+        	    printResults(finished);
+        	    
+        	    
+    }
+    
+    void printResults(AdaptedCloudlet cl) {
+    	System.out.println(cl.getGotToBrokerTime());
+    	System.out.println(cl.getOverallTime());
+    	System.out.println(cl.getUplinkTime());
+    	System.out.println();
+    }
+    
+    void printResults(List<AdaptedCloudlet> finishedFiltered) {
+    	double workloadTime = (finishedFiltered.get(finishedFiltered.size()-1)).getLeftDcToBrokerTime() - (finishedFiltered.stream().findFirst().get()).getDcReceiveTime() ;   
         long totalData = 0 ;
         double overallAvg = 0;
         double variance = 0;
         double avgRemontee = 0;
         
-        for(Cloudlet cl : finished)
-        	totalData +=((AdaptedDatacenterStorage)cl.getLastDatacenter().getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet) cl).getRequestedFileId()).getFileSize() ;
+        for(AdaptedCloudlet cl : finishedFiltered)
+        	totalData +=((AdaptedDatacenterStorage)cl.getLastDatacenter().getDatacenterStorage()).getMetadataManager().getFileMetadataWithId( cl.getRequestedFileId()).getFileSize() ;
         
-        for(Cloudlet cl : finished)
-        	overallAvg += ((AdaptedCloudlet) cl).getOverallTime();
-        overallAvg /= finished.size();
+        for(AdaptedCloudlet cl : finishedFiltered)
+        	overallAvg +=  cl.getOverallTime();
+        overallAvg /= finishedFiltered.size();
         
-        for(Cloudlet cl : finished)
-        	variance += Math.pow((((AdaptedCloudlet) cl).getOverallTime() - overallAvg), 2);
-        variance /= finished.size();
+        for(AdaptedCloudlet cl : finishedFiltered)
+        	variance += Math.pow((cl.getOverallTime() - overallAvg), 2);
+        variance /= finishedFiltered.size();
         
-        for(Cloudlet cl : finished)
-        	avgRemontee += ((AdaptedCloudlet)cl).getLeftDcToBrokerTime(1)-((AdaptedCloudlet)cl).getLeftVmToBrokerTime(1);
-        avgRemontee /= finished.size();
+        for(AdaptedCloudlet cl : finishedFiltered)
+        	avgRemontee += cl.getUplinkTime();
+        avgRemontee /= finishedFiltered.size();
         System.out.println( (float)workloadTime);
         System.out.println((float)(overallAvg));
-        System.out.println((float)(finished.size() / workloadTime)); //debit
+        System.out.println((float)(finishedFiltered.size() / workloadTime)); //debit
         System.out.println( (float)(totalData /workloadTime)); // BW
         System.out.println((float)(avgRemontee));
+//        System.out.println(variance);
+        System.out.println();
     }
-    
 }

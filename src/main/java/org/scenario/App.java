@@ -25,5 +25,6 @@ public class App {
         catch (BiffException e) {
         	e.printStackTrace();
         }
+        System.out.println();
 	}
 }

@@ -36,9 +36,14 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	private double leftVmToBrokerTime;
 	
 	/**
+	 * @see #getUplinkTime()
+	 */
+	private double uplinkTime = 0D;
+	
+	/**
 	 * @see #getLeftDcToBrokerTime()
 	 */
-	private double leftDcToBrokerTime;
+	private double leftDcToBrokerTime = 0D ;
 	
 	/**
 	 * @see #getGotToBrokerTime()
@@ -64,7 +69,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 
 
 	public double getSendTime() {
-		return BigDecimal.valueOf(sendTime).setScale(3, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(sendTime).setScale(16, RoundingMode.HALF_UP).doubleValue();
 	}
 
 
@@ -74,7 +79,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 
 	
 	public double getDcReceiveTime() {
-		return BigDecimal.valueOf(dcReceiveTime).setScale(3, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(dcReceiveTime).setScale(16, RoundingMode.HALF_UP).doubleValue();
 	}
 
 
@@ -84,7 +89,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 
 
 	public double getVmReceiveTime() {
-		return BigDecimal.valueOf(vmReceiveTime).setScale(3, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(vmReceiveTime).setScale(16, RoundingMode.HALF_UP).doubleValue();
 	}
 
 
@@ -94,7 +99,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	
 	
 	public double getFileRetrievalTime() {
-		return BigDecimal.valueOf(fileRetrievalTime).setScale(3, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(fileRetrievalTime).setScale(16, RoundingMode.HALF_UP).doubleValue();
 	}
 	
 	
@@ -103,7 +108,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	}
 
 	public double getLeftVmToBrokerTime() {
-		return BigDecimal.valueOf(leftVmToBrokerTime).setScale(3, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(leftVmToBrokerTime).setScale(16, RoundingMode.HALF_UP).doubleValue();
 	}
 	
 	public double getLeftVmToBrokerTime(int flag) {
@@ -116,11 +121,15 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	}
 
 	public double getUplinkTime() {
-		return BigDecimal.valueOf(this.getLeftDcToBrokerTime(1)-this.getLeftVmToBrokerTime(1)).setScale(16, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(leftDcToBrokerTime-getExecStartTime()).setScale(16, RoundingMode.HALF_UP).doubleValue();
+	}
+	
+	public void setUplinkTime(double uplinkTime) {
+		this.uplinkTime = uplinkTime;
 	}
 
 	public double getLeftDcToBrokerTime() {
-		return BigDecimal.valueOf(leftDcToBrokerTime).setScale(3, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(leftDcToBrokerTime).setScale(16, RoundingMode.HALF_UP).doubleValue();
 	}
 	public double getLeftDcToBrokerTime(int flag) {
 		return BigDecimal.valueOf(leftDcToBrokerTime).setScale(9, RoundingMode.HALF_UP).doubleValue();
@@ -133,7 +142,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 
 
 	public double getGotToBrokerTime() {
-		return BigDecimal.valueOf(gotToBrokerTime).setScale(3, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(gotToBrokerTime).setScale(16, RoundingMode.HALF_UP).doubleValue();
 	}
 
 
@@ -153,21 +162,21 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	
 	@Override
 	public double getExecStartTime(){
-		return BigDecimal.valueOf(super.getExecStartTime()).setScale(3, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(super.getExecStartTime()).setScale(16, RoundingMode.HALF_UP).doubleValue();
 	}
 	
 	@Override
 	public double getFinishTime(){
-		return BigDecimal.valueOf(super.getFinishTime()).setScale(3, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(super.getFinishTime()).setScale(16, RoundingMode.HALF_UP).doubleValue();
 	}
 	
 	@Override
 	public double getActualCpuTime(){
-		return BigDecimal.valueOf(super.getActualCpuTime()).setScale(3, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(super.getActualCpuTime()).setScale(16, RoundingMode.HALF_UP).doubleValue();
 	}
 	
 	public double getOverallTime() {
-		return BigDecimal.valueOf(this.getLeftDcToBrokerTime()).subtract(BigDecimal.valueOf(this.getDcReceiveTime())).setScale(3, RoundingMode.HALF_UP).doubleValue(); 
+		return BigDecimal.valueOf(this.getLeftDcToBrokerTime()).subtract(BigDecimal.valueOf(this.getDcReceiveTime())).setScale(16, RoundingMode.HALF_UP).doubleValue(); 
 	}
 	
 	/**

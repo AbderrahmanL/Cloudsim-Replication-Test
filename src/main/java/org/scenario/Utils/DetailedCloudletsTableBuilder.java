@@ -43,6 +43,7 @@ public class DetailedCloudletsTableBuilder extends CloudletsTableBuilder{
 	        addColumnDataFunction(getTable().addColumn("RequestReturn", TIME_CLOCK), c -> Double.toString(((AdaptedCloudlet)c).getGotToBrokerTime()));
 	        addColumnDataFunction(getTable().addColumn("ActualCpuTime", TIME_CLOCK), c -> Double.toString(((AdaptedCloudlet)c).getActualCpuTime()));
 	        addColumnDataFunction(getTable().addColumn("OverallTime", TIME_CLOCK), c -> Double.toString( ((AdaptedCloudlet)c).getOverallTime() ));
+	        addColumnDataFunction(getTable().addColumn("OveraaallTime", TIME_CLOCK), c -> Double.toString( ((AdaptedCloudlet)c).getGotToBrokerTime() - ((AdaptedCloudlet)c).getSendTime()));
 	    }
 	 
 }

@@ -42,7 +42,7 @@ public class AdaptedRootSwitch extends AdaptedAbstractSwitch {
      * The downlink bandwidth of RootSwitch in Megabits/s.
      * It also represents the uplink bandwidth of connected aggregation Datacenter.
      */
-    public static final long DOWNLINK_BW =  40000 ;// 10000 Megabits (10 Gigabits)
+    public static final long DOWNLINK_BW =  10000 ;// 10000 Megabits (10 Gigabits)
 
 
 	public AdaptedRootSwitch(CloudSim simulation, NetworkDatacenter dc) {

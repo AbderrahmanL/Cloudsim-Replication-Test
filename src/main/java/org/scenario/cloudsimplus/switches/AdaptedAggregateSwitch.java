@@ -35,7 +35,7 @@ public class AdaptedAggregateSwitch extends AdaptedAbstractSwitch {
      * Default downlink bandwidth of {@link AggregateSwitch} in Megabits/s.
      * It also represents the uplink bandwidth of connected edge Datacenter.
      */
-    public static long DOWNLINK_BW =  20000 ;
+    public static long DOWNLINK_BW =  10000 ;
     
     /**
      * Default number of aggregation switch ports that defines the number of

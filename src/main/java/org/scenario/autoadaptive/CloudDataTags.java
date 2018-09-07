@@ -5,7 +5,6 @@ package org.scenario.autoadaptive;
  * information retrieval, file transfers, and storage info.
  *
  * @author Abderrahman Lahiaouni
- * @since CloudSim Toolkit 1.0
  */
 public final class CloudDataTags {
 	
@@ -28,11 +27,16 @@ public final class CloudDataTags {
      * Default Maximum Transmission Unit (MTU) of a link in bytes.
      */
     public static final int DEFAULT_MTU = 1500;
+    
+    /**
+     * Default ICMP packet size in bytes.
+     */
+    public static final int ICMP = 1500;
 
     /**
      * The default packet size (in byte) for sending events to other entity.
      */
-    public static final int PKT_SIZE = DEFAULT_MTU * 100;  // in bytes
+    public static final int PKT_SIZE = DEFAULT_MTU * 1000;  // in bytes
 
     /**
      * Denotes a broadcast message to select datacenter for cloudlet.

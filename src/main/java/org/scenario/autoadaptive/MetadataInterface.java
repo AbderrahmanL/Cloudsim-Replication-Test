@@ -13,7 +13,7 @@ public interface MetadataInterface {
 
 	public void registerNewFile(FileAttribute attr) ;
 	
-	public boolean hasEntry(FileAttribute attr) ;
+	public boolean hasEntry(int identifier) ;
 	
 	public void registerReplica(FileAttribute attr);
 	

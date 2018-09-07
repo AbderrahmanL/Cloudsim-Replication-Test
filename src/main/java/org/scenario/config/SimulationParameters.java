@@ -2,7 +2,8 @@ package org.scenario.config;
 
 public class SimulationParameters {
 	
-	public static final int NO_CLOUDLETS = 100;
+	public static final int SCALE_FACTOR = 100;
+	public static final int NO_CLOUDLETS = 1000;
 	public static final int SAN_INDEX = 1;
 	public static final int SINGLE_WORKER = 0;
 	public static final double RANDOM_INTERVAL_RIGHT_LIMIT = 5D;

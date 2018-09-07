@@ -24,8 +24,8 @@ public class MetadataCatalog extends HashMap<Integer,LinkedList<FileAttribute>> 
 		super();
 	}
 	
-	public boolean hasEntry(FileAttribute attr) {
-		return this.containsKey(attr.getRegistrationID());
+	public boolean hasEntry(int registrationId) {
+		return this.containsKey(registrationId);
 	}
 	
 	public void registerNewFile(FileAttribute attr) {
@@ -49,5 +49,6 @@ public class MetadataCatalog extends HashMap<Integer,LinkedList<FileAttribute>> 
 		// TODO Auto-generated method stub
 		
 	}
+
 
 }

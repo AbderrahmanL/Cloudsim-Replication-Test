@@ -7,10 +7,8 @@ public class DelegateBroker {
 	
 	private static Map<Integer,MetadataManager> dcToReplicaManagerMap = new HashMap<>();
 
-	public Map<Integer,MetadataManager> getDcToReplicaManagerMap() {
+	public static Map<Integer,MetadataManager> getDcToReplicaManagerMap() {
 		return dcToReplicaManagerMap;
-
-	}  
-	
+	}  	
 
 }
