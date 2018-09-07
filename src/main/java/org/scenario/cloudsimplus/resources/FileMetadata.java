@@ -9,9 +9,13 @@ import org.cloudbus.cloudsim.resources.FileStorage;
 
 public class FileMetadata extends FileAttribute{
 	
-	private static int latestInode = 0; // id of the file
+	private static int registrationId = 0; // id of the file
 	
-	private static int noOfAccesses = 0; 
+	private static int uniqueIdCounter = 0;
+	
+	private int uniqueId;
+	
+	private int noOfAccesses = 0; 
 	
 	private FileStorage containingDevice;
 	
@@ -23,13 +27,14 @@ public class FileMetadata extends FileAttribute{
 		super(file, fileSize);
 		this.name = file.getName();
 		setCreationTime(new Date().getTime());
-		setRegistrationId(latestInode);
-		latestInode++;
+		setRegistrationId(registrationId);
+		setUniqueId(incrementUniqueId());
+		registrationId++;
 	}
 	
 	@Override
-	public boolean setRegistrationId(int latestInode) {
-		return super.setRegistrationId(latestInode);
+	public boolean setRegistrationId(int registrationId) {
+		return super.setRegistrationId(registrationId);
 	}
 	
 	@Override
@@ -63,6 +68,17 @@ public class FileMetadata extends FileAttribute{
 
 	public String getName() {
 		return name;
+	}
+
+	public int getUniqueId() {
+		return uniqueId;
+	}
+
+	public void setUniqueId(int uniqueId) {
+		this.uniqueId = uniqueId ;
+	}
+	public static int incrementUniqueId() {
+		return FileMetadata.uniqueIdCounter ++;
 	}
 
 }

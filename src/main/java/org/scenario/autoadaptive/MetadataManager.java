@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.cloudbus.cloudsim.hosts.Host;
 import org.cloudbus.cloudsim.resources.FileAttribute;
+import org.cloudbus.cloudsim.resources.FileStorage;
 import org.scenario.cloudsimplus.resources.FileMetadata;
 import org.scenario.cloudsimplus.resources.MountedSan;
 
@@ -38,7 +39,7 @@ public class MetadataManager {
 	}
 
 	@SuppressWarnings("unchecked")
-	public FileAttribute getFileMetadataWithId(int id) {
+	public FileAttribute getFileMetadataWithId(int id, FileStorage containingSan ,boolean plusOneAccess) {
 		return ((HashMap<Integer, LinkedList<FileAttribute>>) instance).get(id).get(0);
 	}
 	

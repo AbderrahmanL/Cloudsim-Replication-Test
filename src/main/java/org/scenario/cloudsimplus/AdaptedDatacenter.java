@@ -105,7 +105,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
         // time to transfer cloudlet's files
 		
 		List<String> fileNames = new ArrayList<>(); 
-		fileNames.add(((FileMetadata)((AdaptedDatacenterStorage) getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet) cl).getRequestedFileId())).getName());
+		fileNames.add(((FileMetadata)((AdaptedDatacenterStorage) getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet) cl).getRequestedFileId(),null,false)).getName());
 		
         final double fileTransferTime = getDatacenterStorage().predictFileTransferTime(fileNames);
         ((AdaptedCloudlet)cl).setFileRetrievalTime(fileTransferTime);
@@ -177,7 +177,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 	 
 	
 	private void startSending(Cloudlet cloudlet) {
-		FileAttribute fileAttr = ((AdaptedDatacenterStorage) getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet) cloudlet).getRequestedFileId());
+		FileAttribute fileAttr = ((AdaptedDatacenterStorage) getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet) cloudlet).getRequestedFileId(),((AdaptedHost)cloudlet.getVm().getHost()).getStorage(),true);
 		long fileSize = fileAttr.getFileSize();
 //		double bwAvailableForThisPacket =(((NetworkHost) cloudlet.getVm().getHost()).getEdgeSwitch().getDownlinkBandwidth())/ cloudlet.getVm().getCloudletScheduler().getCloudletExecList().size();
 		double bwAvailableForThisPacket =(((NetworkHost) cloudlet.getVm().getHost()).getEdgeSwitch().getDownlinkBandwidth()) / cloudlet.getVm().getCloudletScheduler().getCloudletExecList()

@@ -1,16 +1,12 @@
 package org.scenario.cloudsimplus.switches;
 
 import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.core.CloudSimTags;
-import org.cloudbus.cloudsim.core.events.PredicateType;
 import org.cloudbus.cloudsim.core.events.SimEvent;
 import org.cloudbus.cloudsim.datacenters.network.NetworkDatacenter;
 import org.cloudbus.cloudsim.network.HostPacket;
-import org.cloudbus.cloudsim.network.switches.AbstractSwitch;
 import org.cloudbus.cloudsim.network.switches.AggregateSwitch;
 import org.cloudbus.cloudsim.network.switches.EdgeSwitch;
 import org.cloudbus.cloudsim.network.switches.Switch;
-import org.cloudbus.cloudsim.util.Conversion;
 import org.cloudbus.cloudsim.vms.Vm;
 
 /**

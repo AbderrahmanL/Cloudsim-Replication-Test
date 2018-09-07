@@ -9,6 +9,10 @@ public class DelegateBroker {
 
 	public static Map<Integer,MetadataManager> getDcToReplicaManagerMap() {
 		return dcToReplicaManagerMap;
-	}  	
+	}  
+	
+	public static void mapDatacenterWithMetadataManager(int dcId, MetadataManager manager) {
+		dcToReplicaManagerMap.put(dcId, manager);
+	}
 
 }

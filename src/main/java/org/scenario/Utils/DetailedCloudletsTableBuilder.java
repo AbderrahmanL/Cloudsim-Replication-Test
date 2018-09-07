@@ -30,7 +30,7 @@ public class DetailedCloudletsTableBuilder extends CloudletsTableBuilder{
 	        addColumnDataFunction(getTable().addColumn("DC", ID), c -> c.getVm().getHost().getDatacenter().getId());
 	        addColumnDataFunction(getTable().addColumn("Host", ID), c -> c.getVm().getHost().getId());
 	        addColumnDataFunction(getTable().addColumn("VM", ID), c -> c.getVm().getId());
-	        addColumnDataFunction(getTable().addColumn("FileSize", MEGABYTE), c -> ((AdaptedDatacenterStorage)c.getLastDatacenter().getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet)c).getRequestedFileId()).getFileSize());
+	        addColumnDataFunction(getTable().addColumn("FileSize", MEGABYTE), c -> ((AdaptedDatacenterStorage)c.getLastDatacenter().getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet)c).getRequestedFileId(),null,false).getFileSize());
 	        addColumnDataFunction(getTable().addColumn("SendTime", TIME_CLOCK), c -> Double.toString(((AdaptedCloudlet)c).getSendTime()));
 	        addColumnDataFunction(getTable().addColumn("ReceivedByDC", TIME_CLOCK), c -> Double.toString(((AdaptedCloudlet)c).getDcReceiveTime()));
 	        addColumnDataFunction(getTable().addColumn("ReceivedByVM", TIME_CLOCK), c -> Double.toString(((AdaptedCloudlet)c).getVmReceiveTime()));

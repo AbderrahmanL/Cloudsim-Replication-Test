@@ -133,7 +133,7 @@ public class RunReplicationScenario {
         double avgRemontee = 0;
         
         for(AdaptedCloudlet cl : finishedFiltered)
-        	totalData +=((AdaptedDatacenterStorage)cl.getLastDatacenter().getDatacenterStorage()).getMetadataManager().getFileMetadataWithId( cl.getRequestedFileId()).getFileSize() ;
+        	totalData +=((AdaptedDatacenterStorage)cl.getLastDatacenter().getDatacenterStorage()).getMetadataManager().getFileMetadataWithId( cl.getRequestedFileId(),null,false).getFileSize() ;
         
         for(AdaptedCloudlet cl : finishedFiltered)
         	overallAvg +=  cl.getOverallTime();

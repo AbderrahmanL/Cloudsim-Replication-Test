@@ -185,6 +185,6 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	 * @return
 	 */
 	public FileAttribute getRequestedFile(){
-		return ((AdaptedDatacenterStorage)this.getLastDatacenter().getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(this.getRequestedFileId());
+		return ((AdaptedDatacenterStorage)this.getLastDatacenter().getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(this.getRequestedFileId(),null,false);
 	}
 }
