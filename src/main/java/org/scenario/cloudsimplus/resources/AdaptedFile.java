@@ -24,7 +24,6 @@ public class AdaptedFile extends File{
 		final AdaptedFile file = new AdaptedFile(this.getName(), this.getSize());
 
         this.getAttribute().copyValue(file.getAttribute());
-        ((FileMetadata) file.getAttribute()).setUniqueId(FileMetadata.incrementUniqueId());
         file.getAttribute().setMasterCopy(false);   // set this file as a replica
 
         return file;

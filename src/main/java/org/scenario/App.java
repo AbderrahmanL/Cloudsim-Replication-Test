@@ -2,6 +2,8 @@ package org.scenario;
 
 import java.io.IOException;
 
+import org.scenario.Utils.Utils;
+
 import jxl.read.biff.BiffException;
 import jxl.write.WriteException;
 
@@ -25,6 +27,6 @@ public class App {
         catch (BiffException e) {
         	e.printStackTrace();
         }
-        System.out.println();
+//        System.out.println(Utils.getuniformIntegerDist(0, 5).sample());
 	}
 }

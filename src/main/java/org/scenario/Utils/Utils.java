@@ -23,6 +23,10 @@ public class Utils {
 		return new UniformRealDistribution(left, right);
 	}
 	
+	public static UniformIntegerDistribution getuniformIntegerDist(int left, int right ) {
+		return new UniformIntegerDistribution(left, right);
+	}
+	
 	
 	public static void writeInAGivenFile(String path , String text, boolean append) {
     try {

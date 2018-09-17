@@ -43,7 +43,8 @@ public abstract class AdaptedAbstractSwitch extends AbstractSwitch{
 		 */
 		    protected double networkDelayForPacketTransmission(final HostPacket netPkt, final double bwCapacity, final List<HostPacket> netPktList, int upOrDownOrHosts) {
 		    	int temp = numberOfPacketsBeingProcessed;
-		    	System.out.println(numberOfPacketsBeingProcessed);
+		    	// TODO Test this number Packets of more
+		    	//System.out.println(numberOfPacketsBeingProcessed);
 		    	numberOfPacketsBeingProcessed--;
 		        return  temp * 0.00001  + Conversion.bytesToMegaBits(netPkt.getVmPacket().getSize()) / getAvailableBwForEachPacket(bwCapacity, netPktList ,upOrDownOrHosts);
 		    }

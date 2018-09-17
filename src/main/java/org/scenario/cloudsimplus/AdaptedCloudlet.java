@@ -69,7 +69,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 
 
 	public double getSendTime() {
-		return BigDecimal.valueOf(sendTime).setScale(16, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(sendTime).setScale(6, RoundingMode.HALF_UP).doubleValue();
 	}
 
 
@@ -79,7 +79,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 
 	
 	public double getDcReceiveTime() {
-		return BigDecimal.valueOf(dcReceiveTime).setScale(16, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(dcReceiveTime).setScale(6, RoundingMode.HALF_UP).doubleValue();
 	}
 
 
@@ -89,7 +89,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 
 
 	public double getVmReceiveTime() {
-		return BigDecimal.valueOf(vmReceiveTime).setScale(16, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(vmReceiveTime).setScale(6, RoundingMode.HALF_UP).doubleValue();
 	}
 
 
@@ -99,7 +99,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	
 	
 	public double getFileRetrievalTime() {
-		return BigDecimal.valueOf(fileRetrievalTime).setScale(16, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(fileRetrievalTime).setScale(6, RoundingMode.HALF_UP).doubleValue();
 	}
 	
 	
@@ -108,7 +108,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	}
 
 	public double getLeftVmToBrokerTime() {
-		return BigDecimal.valueOf(leftVmToBrokerTime).setScale(16, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(leftVmToBrokerTime).setScale(6, RoundingMode.HALF_UP).doubleValue();
 	}
 	
 	public double getLeftVmToBrokerTime(int flag) {
@@ -121,7 +121,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	}
 
 	public double getUplinkTime() {
-		return BigDecimal.valueOf(leftDcToBrokerTime-getExecStartTime()).setScale(16, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(leftDcToBrokerTime-getExecStartTime()).setScale(6, RoundingMode.HALF_UP).doubleValue();
 	}
 	
 	public void setUplinkTime(double uplinkTime) {
@@ -129,7 +129,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	}
 
 	public double getLeftDcToBrokerTime() {
-		return BigDecimal.valueOf(leftDcToBrokerTime).setScale(16, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(leftDcToBrokerTime).setScale(6, RoundingMode.HALF_UP).doubleValue();
 	}
 	public double getLeftDcToBrokerTime(int flag) {
 		return BigDecimal.valueOf(leftDcToBrokerTime).setScale(9, RoundingMode.HALF_UP).doubleValue();
@@ -142,7 +142,7 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 
 
 	public double getGotToBrokerTime() {
-		return BigDecimal.valueOf(gotToBrokerTime).setScale(16, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(gotToBrokerTime).setScale(6, RoundingMode.HALF_UP).doubleValue();
 	}
 
 
@@ -162,21 +162,21 @@ public class AdaptedCloudlet extends NetworkCloudlet{
 	
 	@Override
 	public double getExecStartTime(){
-		return BigDecimal.valueOf(super.getExecStartTime()).setScale(16, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(super.getExecStartTime()).setScale(6, RoundingMode.HALF_UP).doubleValue();
 	}
 	
 	@Override
 	public double getFinishTime(){
-		return BigDecimal.valueOf(super.getFinishTime()).setScale(16, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(super.getFinishTime()).setScale(6, RoundingMode.HALF_UP).doubleValue();
 	}
 	
 	@Override
 	public double getActualCpuTime(){
-		return BigDecimal.valueOf(super.getActualCpuTime()).setScale(16, RoundingMode.HALF_UP).doubleValue();
+		return BigDecimal.valueOf(super.getActualCpuTime()).setScale(6, RoundingMode.HALF_UP).doubleValue();
 	}
 	
 	public double getOverallTime() {
-		return BigDecimal.valueOf(this.getLeftDcToBrokerTime()).subtract(BigDecimal.valueOf(this.getDcReceiveTime())).setScale(16, RoundingMode.HALF_UP).doubleValue(); 
+		return BigDecimal.valueOf(this.getLeftDcToBrokerTime()).subtract(BigDecimal.valueOf(this.getDcReceiveTime())).setScale(6, RoundingMode.HALF_UP).doubleValue(); 
 	}
 	
 	/**

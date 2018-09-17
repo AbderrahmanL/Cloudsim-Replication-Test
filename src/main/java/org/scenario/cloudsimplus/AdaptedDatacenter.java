@@ -89,7 +89,6 @@ public class AdaptedDatacenter extends NetworkDatacenter{
         electedVm = vmsThatHasAccessToFile.get(0);
         else
         electedVm = balancer.electVm(vmsThatHasAccessToFile);
-        
     	((AdaptedVm) electedVm).getOrUpdateRequestCount(1);
         cl.setVm(electedVm); // its done after initializing also for test	
         	HostPacket pkt = new HostPacket(null, new VmPacket(null, electedVm, CloudDataTags.PKT_SIZE , null, cl));
@@ -103,7 +102,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 	
 	public void submitCloudletToVm(final Cloudlet cl, final boolean ack) {
         // time to transfer cloudlet's files
-		
+
 		List<String> fileNames = new ArrayList<>(); 
 		fileNames.add(((FileMetadata)((AdaptedDatacenterStorage) getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet) cl).getRequestedFileId(),null,false)).getName());
 		
@@ -119,7 +118,6 @@ public class AdaptedDatacenter extends NetworkDatacenter{
         }
 
         sendAcknowledgement(ack, cl);
-        CompletableFuture.supplyAsync(() -> cl ).thenAcceptAsync(cloudlet -> startSending(cloudlet));
     }
 
 	private void sendCloudletReturn(Cloudlet cl) {
@@ -156,13 +154,15 @@ public class AdaptedDatacenter extends NetworkDatacenter{
         }
     }
 	
-	private void returnFinishedCloudletToBroker(final Cloudlet cloudlet , int size) {		
+	private void returnFinishedCloudletToBroker(final Cloudlet cloudlet , int size) {	
+		FileAttribute fileAttr = ((AdaptedDatacenterStorage) getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet) cloudlet).getRequestedFileId(),((AdaptedHost)cloudlet.getVm().getHost()).getStorage(),true);
+		long fileSize = fileAttr.getFileSize();
 		double bwAvailableForThisPacket =(((NetworkHost) cloudlet.getVm().getHost()).getEdgeSwitch().getDownlinkBandwidth()) / size ;
 		HostPacket pkt = null;
 		Switch sw = ((AdaptedHost)cloudlet.getVm().getHost()).getEdgeSwitch();
 		((AdaptedCloudlet) cloudlet).setLeftVmToBrokerTime(this.getSimulation().clock());
-//		pkt = new HostPacket((AdaptedHost)cloudlet.getVm().getHost(), new VmPacket(cloudlet.getVm(), null, (long) (fileSize * Conversion.MEGABYTE), null, cloudlet));	
-		pkt = new HostPacket((AdaptedHost)cloudlet.getVm().getHost(), new VmPacket(cloudlet.getVm(), null, CloudDataTags.PKT_SIZE, null, cloudlet));
+		pkt = new HostPacket((AdaptedHost)cloudlet.getVm().getHost(), new VmPacket(cloudlet.getVm(), null, (long) (fileSize * Conversion.MEGABYTE), null, cloudlet));	
+//		pkt = new HostPacket((AdaptedHost)cloudlet.getVm().getHost(), new VmPacket(cloudlet.getVm(), null, CloudDataTags.PKT_SIZE, null, cloudlet));
 		double delay = Conversion.bytesToMegaBits( pkt.getSize()) / bwAvailableForThisPacket;
 		((AdaptedVm) cloudlet.getVm()).getOrUpdateRequestCount(-1);
 		// TODO share bw across concurrent cloudlets 
@@ -176,27 +176,23 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 	}
 	 
 	
-	private void startSending(Cloudlet cloudlet) {
-		FileAttribute fileAttr = ((AdaptedDatacenterStorage) getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet) cloudlet).getRequestedFileId(),((AdaptedHost)cloudlet.getVm().getHost()).getStorage(),true);
-		long fileSize = fileAttr.getFileSize();
-//		double bwAvailableForThisPacket =(((NetworkHost) cloudlet.getVm().getHost()).getEdgeSwitch().getDownlinkBandwidth())/ cloudlet.getVm().getCloudletScheduler().getCloudletExecList().size();
-		double bwAvailableForThisPacket =(((NetworkHost) cloudlet.getVm().getHost()).getEdgeSwitch().getDownlinkBandwidth()) / cloudlet.getVm().getCloudletScheduler().getCloudletExecList()
-				.stream()
-				.filter(c -> c.getCloudlet().getStatus() == Status.INEXEC)
-				.collect(Collectors.toList())
-				.size();
-		Switch sw = ((AdaptedHost)cloudlet.getVm().getHost()).getEdgeSwitch();
-		double delay = Conversion.bytesToMegaBits( fileSize * Conversion.MEGABYTE / CloudDataTags.PKT_SIZE ) / bwAvailableForThisPacket;
-		int noOfPackets =  (int) (fileSize * Conversion.MEGABYTE / CloudDataTags.PKT_SIZE);
-		for(int i = 0 ; i <   noOfPackets ; i++) {
-			while(cloudlet.getStatus() != Status.INEXEC) {
-				continue;
-			}
-
-			List<String> fileNames = new ArrayList<>(); 
-			fileNames.add(((FileMetadata)fileAttr).getName());
-			HostPacket pkt = new HostPacket((AdaptedHost)cloudlet.getVm().getHost(), new VmPacket(cloudlet.getVm(), null, CloudDataTags.PKT_SIZE , null, null));
-			((CloudSimEntity)cloudlet.getLastDatacenter()).schedule( sw, delay + ((AdaptedCloudlet) cloudlet).getFileRetrievalTime() * i / noOfPackets  ,CloudSimTags.NETWORK_EVENT_UP, pkt);
-		}
-	}
+//	private void startSending(Cloudlet cloudlet) {
+//
+//		FileAttribute fileAttr = ((AdaptedDatacenterStorage) getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet) cloudlet).getRequestedFileId(),((AdaptedHost)cloudlet.getVm().getHost()).getStorage(),true);
+//		long fileSize = fileAttr.getFileSize();
+//		double bwAvailableForThisPacket =(((NetworkHost) cloudlet.getVm().getHost()).getEdgeSwitch().getDownlinkBandwidth()) / cloudlet.getVm().getCloudletScheduler().getCloudletExecList()
+//				.stream()
+//				.filter(c -> c.getCloudlet().getStatus() == Status.INEXEC)
+//				.collect(Collectors.toList())
+//				.size();
+//		Switch sw = ((AdaptedHost)cloudlet.getVm().getHost()).getEdgeSwitch();
+//		double delay = Conversion.bytesToMegaBits( fileSize * Conversion.MEGABYTE / CloudDataTags.PKT_SIZE ) / bwAvailableForThisPacket;
+//		int noOfPackets =  (int) (fileSize * Conversion.MEGABYTE / CloudDataTags.PKT_SIZE);
+//
+//		for(int i = 0 ; i <   noOfPackets ; i++) {
+//
+//			HostPacket pkt = new HostPacket((AdaptedHost)cloudlet.getVm().getHost(), new VmPacket(cloudlet.getVm(), null, CloudDataTags.PKT_SIZE , null, null));
+//			((CloudSimEntity)cloudlet.getLastDatacenter()).schedule( sw, delay + ((AdaptedCloudlet) cloudlet).getFileRetrievalTime() * i / noOfPackets  ,CloudSimTags.NETWORK_EVENT_UP, pkt);
+//		}
+//	}
 }

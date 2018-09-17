@@ -14,7 +14,7 @@ public class MountedSan extends SanStorage{
 	private List<Host> hostsAccessingThisSan;
 	
 	public MountedSan(String name , long capacity, double bandwidth, double networkLatency) throws IllegalArgumentException {
-		super(capacity, bandwidth, networkLatency);
+		super(name, capacity, bandwidth, networkLatency);
 		this.hostsAccessingThisSan = new ArrayList<>();
 	}
 

@@ -38,12 +38,44 @@ public class MetadataManager {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	/**
+	 * Gets the metadata for a given file
+	 * We make the assumption that we will never make replicas on the same device
+	 * @param id
+	 * @param containingSan
+	 * @param plusOneAccess getting metadata means file has been accessed but 
+	 * when the access is for system internal use number of accesses should not change
+	 * @return
+	 */
 	public FileAttribute getFileMetadataWithId(int id, FileStorage containingSan ,boolean plusOneAccess) {
-		return ((HashMap<Integer, LinkedList<FileAttribute>>) instance).get(id).get(0);
+		FileAttribute metadata = null;
+		if(containingSan != null) {
+			metadata = ((HashMap<Integer, LinkedList<FileAttribute>>) instance).get(id).stream().filter(m -> ((FileMetadata) m).getContainingDevice().getName().equals(((MountedSan)containingSan).getName())).findFirst().get();
+		}
+		else {
+			metadata = ((HashMap<Integer, LinkedList<FileAttribute>>) instance).get(id).get(0);			
+		}
+		if(plusOneAccess) {
+			((FileMetadata) metadata).incrementNoOfAccesses();			
+		}
+		return metadata;
 	}
 	
-	@SuppressWarnings("unchecked")
+	/**
+	 * Get total access to master copy and all replicas of that file
+	 * @param id Registration id of the file, the one that is shared among
+	 *  master copy and all replicas of that file
+	 * @return total Access to the file on all sites
+ 	 */
+	public int getTotalAccessCountForGivenFile(int id) {
+		int temp = 0;
+		for( FileAttribute attr : ((HashMap<Integer, LinkedList<FileAttribute>>) instance).get(id)) {
+			temp += ((FileMetadata) attr).getNoOfAccesses();
+		}
+		return temp;
+		
+	}
+	
 	public List<Host> getNodesThatHasFile(int requestedFileId) {
 		List<Host> listToReturn = new ArrayList<Host>();
 		if(!((HashMap<Integer, LinkedList<FileAttribute>>) instance).containsKey(requestedFileId))

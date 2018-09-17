@@ -4,14 +4,16 @@ package org.scenario;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.cloudbus.cloudsim.brokers.DatacenterBroker;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
+import org.cloudbus.cloudsim.resources.FileAttribute;
 import org.scenario.Utils.DetailedCloudletsTableBuilder;
 import org.scenario.Utils.Utils;
+import org.scenario.autoadaptive.MetadataCatalog;
 import org.scenario.cloudsimplus.AdaptedCloudlet;
 import org.scenario.cloudsimplus.AdaptedDatacenterStorage;
+import org.scenario.cloudsimplus.resources.FileMetadata;
 import org.scenario.config.InitializeReplicationScenarioBasicTreeTopology;
 
 import jxl.Workbook;
@@ -146,11 +148,20 @@ public class RunReplicationScenario {
         for(AdaptedCloudlet cl : finishedFiltered)
         	avgRemontee += cl.getUplinkTime();
         avgRemontee /= finishedFiltered.size();
-        System.out.println( (float)workloadTime);
-        System.out.println((float)(overallAvg));
-        System.out.println((float)(finishedFiltered.size() / workloadTime)); //debit
-        System.out.println( (float)(totalData /workloadTime)); // BW
-        System.out.println((float)(avgRemontee));
+        for(int i = 0 ; i<((MetadataCatalog)((AdaptedDatacenterStorage)finishedFiltered.get(0).getLastDatacenter().getDatacenterStorage())
+        		.getMetadataManager().getCatalogInstance()).size() ; i++) {
+        	System.out.print("file "+ (int)(i+1) + " & replicas :");
+        	for(FileAttribute metadata : ((MetadataCatalog)((AdaptedDatacenterStorage)finishedFiltered.get(0).getLastDatacenter().getDatacenterStorage())
+        			.getMetadataManager().getCatalogInstance()).get(i)) {
+        		System.out.print(((FileMetadata)metadata).getNoOfAccesses()+ " id:" + ((FileMetadata)metadata).getUniqueId()+ " ");
+        	}
+        	System.out.println();
+        }
+        System.out.println(workloadTime);
+        System.out.println((overallAvg));
+        System.out.println((finishedFiltered.size() / workloadTime)); //debit
+        System.out.println( (totalData /workloadTime)); // BW
+        System.out.println((avgRemontee));
 //        System.out.println(variance);
         System.out.println();
     }
