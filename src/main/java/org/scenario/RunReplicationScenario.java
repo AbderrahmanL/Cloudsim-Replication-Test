@@ -7,13 +7,16 @@ import java.util.List;
 
 import org.cloudbus.cloudsim.brokers.DatacenterBroker;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
+import org.cloudbus.cloudsim.network.switches.Switch;
 import org.cloudbus.cloudsim.resources.FileAttribute;
 import org.scenario.Utils.DetailedCloudletsTableBuilder;
 import org.scenario.Utils.Utils;
 import org.scenario.autoadaptive.MetadataCatalog;
 import org.scenario.cloudsimplus.AdaptedCloudlet;
+import org.scenario.cloudsimplus.AdaptedDatacenter;
 import org.scenario.cloudsimplus.AdaptedDatacenterStorage;
 import org.scenario.cloudsimplus.resources.FileMetadata;
+import org.scenario.cloudsimplus.switches.AdaptedAbstractSwitch;
 import org.scenario.config.InitializeReplicationScenarioBasicTreeTopology;
 
 import jxl.Workbook;
@@ -164,5 +167,12 @@ public class RunReplicationScenario {
         System.out.println((avgRemontee));
 //        System.out.println(variance);
         System.out.println();
+        for(Switch sw : ((AdaptedDatacenter)finishedFiltered.get(0).getLastDatacenter()).getSwitchMap()) {
+        	System.out.printf("%30s",sw.getName()+ " ");
+        	for(int charge : ((AdaptedAbstractSwitch)sw).historyList) {
+        		System.out.printf("%5s",charge);        		
+        	}
+        	System.out.println();
+        }
     }
 }

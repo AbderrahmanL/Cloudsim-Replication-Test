@@ -1,10 +1,10 @@
 package org.scenario.cloudsimplus.switches;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.CloudSimTags;
-import org.cloudbus.cloudsim.core.events.PredicateType;
 import org.cloudbus.cloudsim.core.events.SimEvent;
 import org.cloudbus.cloudsim.datacenters.network.NetworkDatacenter;
 import org.cloudbus.cloudsim.hosts.network.NetworkHost;
@@ -12,8 +12,6 @@ import org.cloudbus.cloudsim.network.HostPacket;
 import org.cloudbus.cloudsim.network.switches.AbstractSwitch;
 import org.cloudbus.cloudsim.network.switches.Switch;
 import org.cloudbus.cloudsim.util.Conversion;
-import org.cloudbus.cloudsim.vms.Vm;
-import org.cloudbus.cloudsim.vms.network.NetworkVm;
 
 /**
  * An base class for implementing Network Switch.
@@ -26,13 +24,16 @@ import org.cloudbus.cloudsim.vms.network.NetworkVm;
 public abstract class AdaptedAbstractSwitch extends AbstractSwitch{
 		
 		public int numberOfPacketsBeingProcessed = 0;
+		public int cumulatedCharge = 0;
+		public int skipCount =0;
+		public List<Integer> historyList = new ArrayList<>();
 		
 		public AdaptedAbstractSwitch(CloudSim simulation, NetworkDatacenter dc) {
 			super(simulation, dc);
 			// TODO Auto-generated constructor stub
 		}
-		 
-			 /**
+		
+		 /**
 		 * Computes the network delay to send a packet through the network.
 		 *
 		 * @param netPkt     the packet to be sent
@@ -76,18 +77,21 @@ public abstract class AdaptedAbstractSwitch extends AbstractSwitch{
 		@Override
 		public void addPacketToBeSentToDownlinkSwitch(final Switch downlinkSwitch, final HostPacket packet) {
 			numberOfPacketsBeingProcessed++;
+			cumulatedCharge++;
 		    getDownlinkSwitchPacketList(downlinkSwitch).add(packet);
 		}
 		
 		@Override
 		public void addPacketToBeSentToUplinkSwitch(final Switch uplinkSwitch, final HostPacket packet) {
 			numberOfPacketsBeingProcessed++;
+			cumulatedCharge++;
 		    getUplinkSwitchPacketList(uplinkSwitch).add(packet);
 		}
 		
 		@Override
 		public void addPacketToBeSentToHost(final NetworkHost host, final HostPacket packet) {
 			numberOfPacketsBeingProcessed++;
+			cumulatedCharge++;
 		    getHostPacketList(host).add(packet);
 		}
 }

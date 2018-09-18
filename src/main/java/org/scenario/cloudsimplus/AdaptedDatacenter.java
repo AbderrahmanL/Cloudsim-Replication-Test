@@ -5,16 +5,12 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
-import org.cloudbus.cloudsim.cloudlets.Cloudlet.Status;
 import org.cloudbus.cloudsim.cloudlets.CloudletExecution;
 import org.cloudbus.cloudsim.cloudlets.network.CloudletExecutionTask;
 import org.cloudbus.cloudsim.cloudlets.network.NetworkCloudlet;
-import org.cloudbus.cloudsim.core.CloudSimEntity;
 import org.cloudbus.cloudsim.core.CloudSimTags;
 import org.cloudbus.cloudsim.core.Simulation;
 import org.cloudbus.cloudsim.core.events.SimEvent;
@@ -30,7 +26,9 @@ import org.cloudbus.cloudsim.util.Conversion;
 import org.cloudbus.cloudsim.vms.Vm;
 import org.scenario.autoadaptive.CloudDataTags;
 import org.scenario.autoadaptive.LoadBalancer;
+import org.scenario.cloudsimplus.resources.AdaptedFile;
 import org.scenario.cloudsimplus.resources.FileMetadata;
+import org.scenario.cloudsimplus.switches.AdaptedAbstractSwitch;
 import org.scenario.config.SimulationParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +57,22 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 		this.balancer.setDatacenter(this);
 	}
 	
-	
+	@Override
+    public void processEvent(final SimEvent ev) {
+		for(Switch sw : this.getSwitchMap()) {			
+			((AdaptedAbstractSwitch)sw).skipCount++;
+			if( ((AdaptedAbstractSwitch)sw).skipCount > 50) {
+				((AdaptedAbstractSwitch)sw).historyList.add(((AdaptedAbstractSwitch)sw).cumulatedCharge);
+				((AdaptedAbstractSwitch)sw).cumulatedCharge = 0;
+				((AdaptedAbstractSwitch)sw).skipCount = 0;
+			}
+		}
+		if(this.getSimulation().clock() > 10) {
+			// TODO place this after checking history of switch
+			this.getDatacenterStorage().getStorageList().get(1).addFile(new AdaptedFile("newlyPlaced",100));
+		}
+        super.processEvent(ev);
+    }
 	
 	@Override
 	protected void processCloudletSubmit(final SimEvent ev, final boolean ack) {
@@ -162,7 +175,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 		Switch sw = ((AdaptedHost)cloudlet.getVm().getHost()).getEdgeSwitch();
 		((AdaptedCloudlet) cloudlet).setLeftVmToBrokerTime(this.getSimulation().clock());
 		pkt = new HostPacket((AdaptedHost)cloudlet.getVm().getHost(), new VmPacket(cloudlet.getVm(), null, (long) (fileSize * Conversion.MEGABYTE), null, cloudlet));	
-//		pkt = new HostPacket((AdaptedHost)cloudlet.getVm().getHost(), new VmPacket(cloudlet.getVm(), null, CloudDataTags.PKT_SIZE, null, cloudlet));
+//		pkt = new HostPacket((AdaptedHost)cloudlet.getVm().getHost(), new VmPacket(cloudlet.getVm(), null, DataCloudTags.PKT_SIZE, null, cloudlet));
 		double delay = Conversion.bytesToMegaBits( pkt.getSize()) / bwAvailableForThisPacket;
 		((AdaptedVm) cloudlet.getVm()).getOrUpdateRequestCount(-1);
 		// TODO share bw across concurrent cloudlets 
