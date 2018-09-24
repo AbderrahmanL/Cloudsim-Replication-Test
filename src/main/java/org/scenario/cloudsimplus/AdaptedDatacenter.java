@@ -26,6 +26,7 @@ import org.cloudbus.cloudsim.util.Conversion;
 import org.cloudbus.cloudsim.vms.Vm;
 import org.scenario.autoadaptive.CloudDataTags;
 import org.scenario.autoadaptive.LoadBalancer;
+import org.scenario.autoadaptive.MetadataManager;
 import org.scenario.cloudsimplus.resources.AdaptedFile;
 import org.scenario.cloudsimplus.resources.FileMetadata;
 import org.scenario.cloudsimplus.switches.AdaptedAbstractSwitch;
@@ -67,9 +68,10 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 				((AdaptedAbstractSwitch)sw).skipCount = 0;
 			}
 		}
-		if(this.getSimulation().clock() > 10) {
+		if(this.getSimulation().clock() > SimulationParameters.DEPLOY_NEW_FILE && !MetadataManager.getCatalogInstance().hasEntry("newlyPlaced")) {
 			// TODO place this after checking history of switch
-			this.getDatacenterStorage().getStorageList().get(1).addFile(new AdaptedFile("newlyPlaced",100));
+			this.getDatacenterStorage().getStorageList().get(1).addFile(new AdaptedFile("newlyPlaced",110));
+			debugCount++;
 		}
         super.processEvent(ev);
     }

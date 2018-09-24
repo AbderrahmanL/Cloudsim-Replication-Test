@@ -139,7 +139,8 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
     
     @SuppressWarnings("unused")
 	public void setArrivalTimeForCloudlet(Cloudlet cloudlet ) {
-    	
+    	if(cloudlet.getSubmissionDelay() != 0)
+    		cloudlet.setSubmissionDelay(Utils.getuniformRealDist( ).sample() * (SimulationParameters.RANDOM_INTERVAL_RIGHT_LIMIT - SimulationParameters.DEPLOY_NEW_FILE +2));
     	if( SimulationParameters.PERIODIC && !SimulationParameters.RANDOMIZED)
     		cloudlet.setSubmissionDelay(SimulationParameters.RANDOM_INTERVAL_RIGHT_LIMIT * cloudlet.getId() / SimulationParameters.NO_CLOUDLETS);
     	else if(!SimulationParameters.PERIODIC && SimulationParameters.RANDOMIZED )

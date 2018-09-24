@@ -142,8 +142,16 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 			        .setUtilizationModelRam(new UtilizationModelFull())
 			        .setUtilizationModelCpu(new UtilizationModelFull())
 			        .setUtilizationModelBw(new UtilizationModelFull());
-	        
-	        cloudlet.setRequestedFileId(Utils.getuniformIntegerDist(0, 5).sample());
+	        cloudlet.setSubmissionDelay(0);
+	        if(debugCount < SimulationParameters.NO_CLOUDLETS -1) {	        	
+	        	cloudlet.setRequestedFileId(Utils.getuniformIntegerDist(0, 5).sample());
+	        	debugCount++;
+	        }
+	        else {
+	        	cloudlet.setRequestedFileId(6);
+	        	cloudlet.setSubmissionDelay(SimulationParameters.DEPLOY_NEW_FILE + 1 );
+	        	debugCount++;
+	        }
 //	        if(debugCount <  150 * SimulationParameters.SCALE_FACTOR) {
 //	        	cloudlet.setRequestedFileId(0);
 //	        }
@@ -183,7 +191,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 //	        if(debugCount < 1300* SimulationParameters.SCALE_FACTOR  && debugCount >= 1200* SimulationParameters.SCALE_FACTOR) {
 //	        	cloudlet.setRequestedFileId(9);
 //	        }
-	        debugCount++;
+//	        debugCount++;
 	        cloudlet.addTask(new CloudletExecutionTask(numberOfCpuCores, 2));
 //	        cloudlet.setVm(vm);
 	        return cloudlet;

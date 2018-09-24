@@ -15,6 +15,8 @@ public interface MetadataInterface {
 	
 	public boolean hasEntry(int identifier) ;
 	
+	public boolean hasEntry(String name) ;
+	
 	public void registerReplica(FileAttribute attr);
 	
 	public void removeReplica(String path);

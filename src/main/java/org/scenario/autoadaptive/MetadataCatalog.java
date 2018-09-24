@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import org.cloudbus.cloudsim.resources.FileAttribute;
 import org.cloudbus.cloudsim.resources.FileStorage;
+import org.scenario.cloudsimplus.resources.FileMetadata;
 
 
 public class MetadataCatalog extends HashMap<Integer,LinkedList<FileAttribute>> implements MetadataInterface {
@@ -48,6 +49,16 @@ public class MetadataCatalog extends HashMap<Integer,LinkedList<FileAttribute>> 
 	public void updateMetadataAfterMove(FileAttribute attr, FileStorage newContainingDevice) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean hasEntry(String name) {
+		 for(int i = 0 ; i  < this.size() ; i++){
+			 if(((FileMetadata) this.get(i).get(0)).getName().equals(name)) {
+				 return true;
+			 }
+		 }
+		 return false;
 	}
 
 
