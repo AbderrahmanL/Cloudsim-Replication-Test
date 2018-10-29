@@ -4,7 +4,7 @@ public class SimulationParameters {
 	
 	public static final double DEPLOY_NEW_FILE = 7D;
 	public static final int SCALE_FACTOR = 1;
-	public static final int NO_CLOUDLETS = 5000 * SCALE_FACTOR;
+	public static final int NO_CLOUDLETS = 500 * SCALE_FACTOR;
 	public static final int SAN_INDEX = 1;
 	public static final int SINGLE_WORKER = 0;
 	public static final double RANDOM_INTERVAL_RIGHT_LIMIT = 10D;

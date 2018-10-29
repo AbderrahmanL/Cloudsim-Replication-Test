@@ -143,13 +143,13 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 			        .setUtilizationModelCpu(new UtilizationModelFull())
 			        .setUtilizationModelBw(new UtilizationModelFull());
 	        cloudlet.setSubmissionDelay(0);
-	        if(debugCount < SimulationParameters.NO_CLOUDLETS -1) {	        	
+	        if(debugCount < SimulationParameters.NO_CLOUDLETS -10) {	        	
 	        	cloudlet.setRequestedFileId(Utils.getuniformIntegerDist(0, 5).sample());
 	        	debugCount++;
 	        }
 	        else {
 	        	cloudlet.setRequestedFileId(6);
-	        	cloudlet.setSubmissionDelay(SimulationParameters.DEPLOY_NEW_FILE + 1 );
+	        	cloudlet.setSubmissionDelay(SimulationParameters.DEPLOY_NEW_FILE );
 	        	debugCount++;
 	        }
 //	        if(debugCount <  150 * SimulationParameters.SCALE_FACTOR) {

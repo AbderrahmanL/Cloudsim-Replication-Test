@@ -69,7 +69,8 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 			}
 		}
 		if(this.getSimulation().clock() > SimulationParameters.DEPLOY_NEW_FILE && !MetadataManager.getCatalogInstance().hasEntry("newlyPlaced")) {
-			// TODO place this after checking history of switch
+//		if(debugCount == 0) {
+			// TODO placer this after checking the load history
 			this.getDatacenterStorage().getStorageList().get(1).addFile(new AdaptedFile("newlyPlaced",110));
 			debugCount++;
 		}

@@ -139,16 +139,23 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
     
     @SuppressWarnings("unused")
 	public void setArrivalTimeForCloudlet(Cloudlet cloudlet ) {
-    	if(cloudlet.getSubmissionDelay() != 0)
-    		cloudlet.setSubmissionDelay(Utils.getuniformRealDist( ).sample() * (SimulationParameters.RANDOM_INTERVAL_RIGHT_LIMIT - SimulationParameters.DEPLOY_NEW_FILE +2));
-    	if( SimulationParameters.PERIODIC && !SimulationParameters.RANDOMIZED)
+    	if(cloudlet.getSubmissionDelay() != 0) {
+    		cloudlet.setSubmissionDelay(SimulationParameters.DEPLOY_NEW_FILE  + Utils.getuniformRealDist( ).sample() * (SimulationParameters.RANDOM_INTERVAL_RIGHT_LIMIT - SimulationParameters.DEPLOY_NEW_FILE));
+    		return;
+    	}
+    	if( SimulationParameters.PERIODIC && !SimulationParameters.RANDOMIZED) {
     		cloudlet.setSubmissionDelay(SimulationParameters.RANDOM_INTERVAL_RIGHT_LIMIT * cloudlet.getId() / SimulationParameters.NO_CLOUDLETS);
-    	else if(!SimulationParameters.PERIODIC && SimulationParameters.RANDOMIZED )
+    		return;
+    	}
+    	if(!SimulationParameters.PERIODIC && SimulationParameters.RANDOMIZED ) {
             cloudlet.setSubmissionDelay(Utils.getuniformRealDist( ).sample() * SimulationParameters.RANDOM_INTERVAL_RIGHT_LIMIT);
-    	else if(SimulationParameters.PERIODIC && SimulationParameters.RANDOMIZED) {
+            return;
+    	}
+    	if(SimulationParameters.PERIODIC && SimulationParameters.RANDOMIZED) {
     		double leftLimit = SimulationParameters.RANDOM_INTERVAL_RIGHT_LIMIT * cloudlet.getId()/ SimulationParameters.NO_CLOUDLETS;
     		double rightLimit = SimulationParameters.RANDOM_INTERVAL_RIGHT_LIMIT * (cloudlet.getId() + 1) / SimulationParameters.NO_CLOUDLETS;
     		cloudlet.setSubmissionDelay( Utils.getuniformRealDist(leftLimit, rightLimit).sample());
+    		return;
     	}
     	else
     		return;
