@@ -38,9 +38,15 @@ public class AdaptedAggregateSwitch extends AdaptedAbstractSwitch {
      * {@link EdgeSwitch} that can be connected to it.
      */
     public static final int PORTS = 1;
+    
+    /**
+     * Counter to assign id to switch among the switches of the same level
+     */
+    private static int counter = 0;
 
     public AdaptedAggregateSwitch(CloudSim simulation, NetworkDatacenter dc) {
         super(simulation, dc);
+        this.setIdAmongSameLevel(this.counter++);
         setUplinkBandwidth(AdaptedRootSwitch.DOWNLINK_BW);
         setDownlinkBandwidth(DOWNLINK_BW);
         setSwitchingDelay(SWITCHING_DELAY);

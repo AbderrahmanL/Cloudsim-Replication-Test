@@ -37,6 +37,11 @@ public class AdaptedEdgeSwitch extends AdaptedAbstractSwitch {
      * Default switching delay in the order of microseconds.
      */
     public static final double SWITCHING_DELAY = 0.00000285;
+    
+    /**
+     * Counter to assign id to switch among the switches of the same level
+     */
+    private static int counter = 0;
 
     /**
      * Instantiates a EdgeSwitch specifying Datacenter that are connected to its
@@ -48,7 +53,7 @@ public class AdaptedEdgeSwitch extends AdaptedAbstractSwitch {
      */
     public AdaptedEdgeSwitch(CloudSim simulation, NetworkDatacenter dc) {
         super(simulation, dc);
-
+        this.setIdAmongSameLevel(this.counter++);
         setUplinkBandwidth(AdaptedAggregateSwitch.DOWNLINK_BW);
         setDownlinkBandwidth(DOWNLINK_BW);
         setSwitchingDelay(SWITCHING_DELAY);

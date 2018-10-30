@@ -24,12 +24,23 @@ public abstract class AdaptedAbstractSwitch extends AbstractSwitch{
 		
 		public int numberOfPacketsBeingProcessed = 0;
 		public int cumulatedCharge = 0;
+		/**
+		 * The count between traffic load logs 
+		 * (a log is adding a value to history list)
+		 * i.e. how many clock ticks passed since last log
+		 */
 		public int skipCount =0;
+		
 		public List<Integer> historyList = new ArrayList<>();
 		
+		  /**
+	     * Id among switches of same level
+	     */
+	    private int idAmongSameLevel;
+	    
 		public AdaptedAbstractSwitch(CloudSim simulation, NetworkDatacenter dc) {
 			super(simulation, dc);
-			// TODO Auto-generated constructor stub
+			historyList.add(0);
 		}
 		
 		 /**
@@ -69,9 +80,6 @@ public abstract class AdaptedAbstractSwitch extends AbstractSwitch{
 		    	}
 				return (netPktList.isEmpty() ? bwCapacity : bwCapacity / (netPktList.size() + packetsBeingSentFromTheOppositSide));
 		    }
-		 
-		
-		
 		
 		@Override
 		public void addPacketToBeSentToDownlinkSwitch(final Switch downlinkSwitch, final HostPacket packet) {
@@ -93,4 +101,14 @@ public abstract class AdaptedAbstractSwitch extends AbstractSwitch{
 			cumulatedCharge++;
 		    getHostPacketList(host).add(packet);
 		}
+
+		public int getIdAmongSameLevel() {
+			return idAmongSameLevel;
+		}
+
+		public void setIdAmongSameLevel(int idAmongSameLevel) {
+			this.idAmongSameLevel = idAmongSameLevel;
+		}
+		
+		
 }

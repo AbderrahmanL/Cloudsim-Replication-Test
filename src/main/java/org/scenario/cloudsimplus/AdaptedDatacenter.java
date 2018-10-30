@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
@@ -47,6 +48,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 	
 	
 	private LoadBalancer balancer;
+	private NetworkLoadGraph loadGraph;
 
 	// Used for many purposes
 	private static int debugCount = 0;
@@ -60,19 +62,45 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 	
 	@Override
     public void processEvent(final SimEvent ev) {
-		for(Switch sw : this.getSwitchMap()) {			
-			((AdaptedAbstractSwitch)sw).skipCount++;
-			if( ((AdaptedAbstractSwitch)sw).skipCount > 50) {
-				((AdaptedAbstractSwitch)sw).historyList.add(((AdaptedAbstractSwitch)sw).cumulatedCharge);
-				((AdaptedAbstractSwitch)sw).cumulatedCharge = 0;
-				((AdaptedAbstractSwitch)sw).skipCount = 0;
+		if(this.getSwitchMap().size() > 0) {
+			if (loadGraph == null) {
+				this.loadGraph = new NetworkLoadGraph(this.getSwitchMap());
 			}
-		}
-		if(this.getSimulation().clock() > SimulationParameters.DEPLOY_NEW_FILE && !MetadataManager.getCatalogInstance().hasEntry("newlyPlaced")) {
-//		if(debugCount == 0) {
-			// TODO placer this after checking the load history
-			this.getDatacenterStorage().getStorageList().get(1).addFile(new AdaptedFile("newlyPlaced",110));
-			debugCount++;
+			for(Switch sw : this.getSwitchMap()) {			
+				((AdaptedAbstractSwitch)sw).skipCount++;
+				if( ((AdaptedAbstractSwitch)sw).skipCount > 50) {
+					((AdaptedAbstractSwitch)sw).historyList.add(((AdaptedAbstractSwitch)sw).cumulatedCharge);
+					((AdaptedAbstractSwitch)sw).cumulatedCharge = 0;
+					((AdaptedAbstractSwitch)sw).skipCount = 0;
+				}
+			}
+			if(((AdaptedAbstractSwitch)this.getSwitchMap().get(0)).skipCount == 0) {
+				this.loadGraph.updateGraph(this.getSwitchMap());
+			}
+			
+			if(this.getSimulation().clock() > SimulationParameters.DEPLOY_NEW_FILE && !MetadataManager.getCatalogInstance().hasEntry("newlyPlaced")) {
+//			if(debugCount == 0) {
+				this.loadGraph.bestRoute();
+				Entry<String, Integer> minimum = null;
+				try {					
+					for (Entry<String, Integer> entry : this.loadGraph.getRoutesWeight().entrySet()) {
+						if (minimum == null || minimum.getValue() > entry.getValue()) {
+							minimum = entry;
+						}
+					}
+					if(minimum == null)
+						throw new NullPointerException();
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+				String switchName = minimum.getKey();
+				this.getDatacenterStorage().getStorageList().get(((AdaptedAbstractSwitch) this.getSwitchMap().stream().filter(
+						s -> s.getName().equals(switchName))
+						.findFirst().get()).getIdAmongSameLevel())
+						.addFile(new AdaptedFile("newlyPlaced",110));
+				debugCount++;
+			}
 		}
         super.processEvent(ev);
     }
