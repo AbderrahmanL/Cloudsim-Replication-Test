@@ -143,12 +143,12 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 			        .setUtilizationModelCpu(new UtilizationModelFull())
 			        .setUtilizationModelBw(new UtilizationModelFull());
 	        cloudlet.setSubmissionDelay(0);
-	        if(debugCount < SimulationParameters.NO_CLOUDLETS -100) {	        	
-	        	cloudlet.setRequestedFileId(Utils.getuniformIntegerDist(0, 4).sample());
+	        if(debugCount < SimulationParameters.NO_CLOUDLETS -50) {	        	
+	        	cloudlet.setRequestedFileId(Utils.getuniformIntegerDist(0, 5).sample());
 	        	debugCount++;
 	        }
 	        else {
-	        	cloudlet.setRequestedFileId(5);
+	        	cloudlet.setRequestedFileId(6);
 	        	cloudlet.setSubmissionDelay(SimulationParameters.DEPLOY_NEW_FILE );
 	        	debugCount++;
 	        }
@@ -250,12 +250,14 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
         File file3 = new AdaptedFile("file3.dat", 100);
         File file4 = new AdaptedFile("file4.dat", 100);
         File file5 = new AdaptedFile("file5.dat", 100);
+        File file6 = new AdaptedFile("file6.dat", 100);
         
         datacenterStorage.getStorageList().get(0).addFile(file1);
         datacenterStorage.getStorageList().get(2).addFile(file2);
         datacenterStorage.getStorageList().get(3).addFile(file3);
         datacenterStorage.getStorageList().get(1).addFile(file4); 
         datacenterStorage.getStorageList().get(5).addFile(file5); 
+        datacenterStorage.getStorageList().get(4).addFile(file6); 
           
 //        datacenterStorage.getStorageList().get(3).addFile(new AdaptedFile("file9.dat", 100));
 //        datacenterStorage.getStorageList().get(1).addFile(new AdaptedFile("file10.dat", 100));

@@ -176,7 +176,7 @@ public class RunReplicationScenario {
         System.out.println();
         for(Switch sw : ((AdaptedDatacenter)finishedFiltered.get(0).getLastDatacenter()).getSwitchMap()) {
         	System.out.printf("%30s",sw.getName()+ " ");
-        	for(int charge : ((AdaptedAbstractSwitch)sw).historyList) {
+        	for(int charge : ((AdaptedAbstractSwitch)sw).getHistoryList()) {
         		System.out.printf("%5s",charge);        		
         	}
         	System.out.println();

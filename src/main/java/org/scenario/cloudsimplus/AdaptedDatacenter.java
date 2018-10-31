@@ -63,19 +63,20 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 	
 	@Override
     public void processEvent(final SimEvent ev) {
+		//TODO refactor load graph update and new file placement into new methodes
 		if(this.getSwitchMap().size() > 0) {
 			if (loadGraph == null) {
 				this.loadGraph = new NetworkLoadGraph(this.getSwitchMap());
 			}
 			for(Switch sw : this.getSwitchMap()) {			
-				((AdaptedAbstractSwitch)sw).skipCount++;
-				if( ((AdaptedAbstractSwitch)sw).skipCount > SimulationParameters.LOAD_HISTORY_UPDATE_INTERVAL) {
-					((AdaptedAbstractSwitch)sw).historyList.add(((AdaptedAbstractSwitch)sw).cumulatedCharge);
-					((AdaptedAbstractSwitch)sw).cumulatedCharge = 0;
-					((AdaptedAbstractSwitch)sw).skipCount = 0;
+				((AdaptedAbstractSwitch)sw).setSkipCount(((AdaptedAbstractSwitch)sw).getSkipCount()+1);
+				if( ((AdaptedAbstractSwitch)sw).getSkipCount() > SimulationParameters.LOAD_HISTORY_UPDATE_INTERVAL) {
+					((AdaptedAbstractSwitch)sw).getHistoryList().add(((AdaptedAbstractSwitch)sw).getCumulatedCharge());
+					((AdaptedAbstractSwitch)sw).setCumulatedCharge(0);
+					((AdaptedAbstractSwitch)sw).setSkipCount(0);
 				}
 			}
-			if(((AdaptedAbstractSwitch)this.getSwitchMap().get(0)).skipCount == 0) {
+			if(((AdaptedAbstractSwitch)this.getSwitchMap().get(0)).getSkipCount() == 0) {
 				this.loadGraph.updateGraph(this.getSwitchMap());
 			}
 			

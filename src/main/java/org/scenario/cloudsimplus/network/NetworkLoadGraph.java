@@ -9,11 +9,18 @@ import java.util.Map;
 import org.cloudbus.cloudsim.network.switches.Switch;
 import org.scenario.cloudsimplus.network.switches.AdaptedAbstractSwitch;
 
-
+/**
+ * A class representing a simple node-weighted graph
+ * Each node as a switch and node weight is network load
+ * in that switch from the {@link historyList} 
+ * 
+ * @author Abderrahman Lahiaouni
+ *
+ */
 public class NetworkLoadGraph {
 	
 	/**
-	 * The datacenter network might have many root switches
+	 * The datacenter internal network might have many root switches
 	 */
 	private List<NetworkLoadGraphNode> rootNodes;
 
@@ -26,7 +33,7 @@ public class NetworkLoadGraph {
 			if(sw.getLevel() == 0) {
 				//assuming we have one root node if not method should note 
 				//return after finding first root/core switch
-				NetworkLoadGraphNode root = new NetworkLoadGraphNode(sw.getName(), ((AdaptedAbstractSwitch)sw).historyList.get(((AdaptedAbstractSwitch)sw).historyList.size()-1), sw.getLevel());
+				NetworkLoadGraphNode root = new NetworkLoadGraphNode(sw.getName(), ((AdaptedAbstractSwitch)sw).getHistoryList().get(((AdaptedAbstractSwitch)sw).getHistoryList().size()-1), sw.getLevel());
 				rootNodes.add(root);
 				append(sw,root);
 				return;
@@ -44,7 +51,7 @@ public class NetworkLoadGraph {
 			return;
 		for(Switch swi : sw.getDownlinkSwitches()) {
 			//assuming we have one root node
-			NetworkLoadGraphNode child  = new NetworkLoadGraphNode(swi.getName(), ((AdaptedAbstractSwitch)swi).historyList.get(((AdaptedAbstractSwitch)swi).historyList.size()-1), swi.getLevel());
+			NetworkLoadGraphNode child  = new NetworkLoadGraphNode(swi.getName(), ((AdaptedAbstractSwitch)swi).getHistoryList().get(((AdaptedAbstractSwitch)swi).getHistoryList().size()-1), swi.getLevel());
 			node.getChildren().add(child);
 			append(swi,child);
 		}
@@ -90,7 +97,7 @@ public class NetworkLoadGraph {
 	}
 	
 	private void updateGraph(Switch sw, NetworkLoadGraphNode node) {
-		node.setWeight(((AdaptedAbstractSwitch)sw).historyList.get(((AdaptedAbstractSwitch)sw).historyList.size()-1));
+		node.setWeight(((AdaptedAbstractSwitch)sw).getHistoryList().get(((AdaptedAbstractSwitch)sw).getHistoryList().size()-1));
 		Iterator<Switch> it1 = sw.getDownlinkSwitches().iterator();
 		Iterator<NetworkLoadGraphNode> it2 = node.getChildren().iterator();
 		while (it1.hasNext() && it2.hasNext()) {

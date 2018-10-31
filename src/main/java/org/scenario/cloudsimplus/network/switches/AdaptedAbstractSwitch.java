@@ -22,16 +22,16 @@ import org.cloudbus.cloudsim.util.Conversion;
 
 public abstract class AdaptedAbstractSwitch extends AbstractSwitch{
 		
-		public int numberOfPacketsBeingProcessed = 0;
-		public int cumulatedCharge = 0;
+		private int numberOfPacketsBeingProcessed = 0;
+		private int cumulatedCharge = 0;
 		/**
 		 * The count between traffic load logs 
 		 * (a log is adding a value to history list)
 		 * i.e. how many clock ticks passed since last log
 		 */
-		public int skipCount =0;
+		private int skipCount =0;
 		
-		public List<Integer> historyList = new ArrayList<>();
+		private List<Integer> historyList = new ArrayList<>();
 		
 		  /**
 	     * Id among switches of same level
@@ -109,6 +109,33 @@ public abstract class AdaptedAbstractSwitch extends AbstractSwitch{
 		public void setIdAmongSameLevel(int idAmongSameLevel) {
 			this.idAmongSameLevel = idAmongSameLevel;
 		}
-		
+
+		public int getNumberOfPacketsBeingProcessed() {
+			return numberOfPacketsBeingProcessed;
+		}
+
+		public void setNumberOfPacketsBeingProcessed(int numberOfPacketsBeingProcessed) {
+			this.numberOfPacketsBeingProcessed = numberOfPacketsBeingProcessed;
+		}
+
+		public int getCumulatedCharge() {
+			return cumulatedCharge;
+		}
+
+		public void setCumulatedCharge(int cumulatedCharge) {
+			this.cumulatedCharge = cumulatedCharge;
+		}
+
+		public int getSkipCount() {
+			return skipCount;
+		}
+
+		public void setSkipCount(int skipCount) {
+			this.skipCount = skipCount;
+		}
+
+		public List<Integer> getHistoryList() {
+			return historyList;
+		}
 		
 }
