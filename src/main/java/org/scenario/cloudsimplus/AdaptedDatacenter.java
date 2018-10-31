@@ -28,9 +28,10 @@ import org.cloudbus.cloudsim.vms.Vm;
 import org.scenario.autoadaptive.CloudDataTags;
 import org.scenario.autoadaptive.LoadBalancer;
 import org.scenario.autoadaptive.MetadataManager;
+import org.scenario.cloudsimplus.network.NetworkLoadGraph;
+import org.scenario.cloudsimplus.network.switches.AdaptedAbstractSwitch;
 import org.scenario.cloudsimplus.resources.AdaptedFile;
 import org.scenario.cloudsimplus.resources.FileMetadata;
-import org.scenario.cloudsimplus.switches.AdaptedAbstractSwitch;
 import org.scenario.config.SimulationParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +69,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 			}
 			for(Switch sw : this.getSwitchMap()) {			
 				((AdaptedAbstractSwitch)sw).skipCount++;
-				if( ((AdaptedAbstractSwitch)sw).skipCount > 50) {
+				if( ((AdaptedAbstractSwitch)sw).skipCount > SimulationParameters.LOAD_HISTORY_UPDATE_INTERVAL) {
 					((AdaptedAbstractSwitch)sw).historyList.add(((AdaptedAbstractSwitch)sw).cumulatedCharge);
 					((AdaptedAbstractSwitch)sw).cumulatedCharge = 0;
 					((AdaptedAbstractSwitch)sw).skipCount = 0;

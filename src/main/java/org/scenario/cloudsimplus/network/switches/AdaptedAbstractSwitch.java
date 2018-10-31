@@ -1,4 +1,4 @@
-package org.scenario.cloudsimplus.switches;
+package org.scenario.cloudsimplus.network.switches;
 
 import java.util.ArrayList;
 import java.util.List;

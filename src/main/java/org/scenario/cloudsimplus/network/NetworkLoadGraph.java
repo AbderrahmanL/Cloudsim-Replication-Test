@@ -1,4 +1,4 @@
-package org.scenario.cloudsimplus;
+package org.scenario.cloudsimplus.network;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.cloudbus.cloudsim.network.switches.Switch;
-import org.scenario.cloudsimplus.switches.AdaptedAbstractSwitch;
+import org.scenario.cloudsimplus.network.switches.AdaptedAbstractSwitch;
 
 
 public class NetworkLoadGraph {
@@ -15,7 +15,7 @@ public class NetworkLoadGraph {
 	/**
 	 * The datacenter network might have many root switches
 	 */
-	private List<Node> rootNodes;
+	private List<NetworkLoadGraphNode> rootNodes;
 
 	private Map<String,Integer> routesWeight;
 	
@@ -26,7 +26,7 @@ public class NetworkLoadGraph {
 			if(sw.getLevel() == 0) {
 				//assuming we have one root node if not method should note 
 				//return after finding first root/core switch
-				Node root = new Node(sw.getName(), ((AdaptedAbstractSwitch)sw).historyList.get(((AdaptedAbstractSwitch)sw).historyList.size()-1), sw.getLevel());
+				NetworkLoadGraphNode root = new NetworkLoadGraphNode(sw.getName(), ((AdaptedAbstractSwitch)sw).historyList.get(((AdaptedAbstractSwitch)sw).historyList.size()-1), sw.getLevel());
 				rootNodes.add(root);
 				append(sw,root);
 				return;
@@ -39,13 +39,13 @@ public class NetworkLoadGraph {
 	 * @param sw switch
 	 * @param node node that will be weighted with sw load
 	 */
-	private void append(Switch sw, Node node) {
+	private void append(Switch sw, NetworkLoadGraphNode node) {
 		if(sw.getLevel() == 2)
 			return;
 		for(Switch swi : sw.getDownlinkSwitches()) {
 			//assuming we have one root node
-			Node child  = new Node(swi.getName(), ((AdaptedAbstractSwitch)swi).historyList.get(((AdaptedAbstractSwitch)swi).historyList.size()-1), swi.getLevel());
-			node.children.add(child);
+			NetworkLoadGraphNode child  = new NetworkLoadGraphNode(swi.getName(), ((AdaptedAbstractSwitch)swi).historyList.get(((AdaptedAbstractSwitch)swi).historyList.size()-1), swi.getLevel());
+			node.getChildren().add(child);
 			append(swi,child);
 		}
 	}
@@ -57,9 +57,9 @@ public class NetworkLoadGraph {
 		display(rootNodes.get(0));
 	}
 	
-	private void display(Node node) {
-		System.out.println("Node "+ node.label + ": "+ node.weight);
-		for(Node childNode: node.children) {
+	private void display(NetworkLoadGraphNode node) {
+		System.out.println("Node "+ node.getLabel()+ ": "+ node.getWeight());
+		for(NetworkLoadGraphNode childNode: node.getChildren()) {
 			display(childNode);
 		}
 		if(node.getLevel() == 2)
@@ -67,16 +67,16 @@ public class NetworkLoadGraph {
 	}
 	
 	public void bestRoute() {
-		bestRoute(rootNodes.get(0),rootNodes.get(0).weight);
+		bestRoute(rootNodes.get(0),rootNodes.get(0).getWeight());
 	}
 	
-	public void bestRoute(Node node ,int weight) {
+	public void bestRoute(NetworkLoadGraphNode node ,int weight) {
 		if(node.getLevel() == 2) {
 			routesWeight.put(node.getLabel(), node.getWeight() + weight);
 			return;
 		}
-		for(Node childNode: node.children) {
-			bestRoute(childNode,childNode.weight+weight);
+		for(NetworkLoadGraphNode childNode: node.getChildren()) {
+			bestRoute(childNode,childNode.getWeight()+weight);
 		}
 	}
 	
@@ -89,10 +89,10 @@ public class NetworkLoadGraph {
 		}
 	}
 	
-	private void updateGraph(Switch sw, Node node) {
-		node.weight = ((AdaptedAbstractSwitch)sw).historyList.get(((AdaptedAbstractSwitch)sw).historyList.size()-1);
+	private void updateGraph(Switch sw, NetworkLoadGraphNode node) {
+		node.setWeight(((AdaptedAbstractSwitch)sw).historyList.get(((AdaptedAbstractSwitch)sw).historyList.size()-1));
 		Iterator<Switch> it1 = sw.getDownlinkSwitches().iterator();
-		Iterator<Node> it2 = node.children.iterator();
+		Iterator<NetworkLoadGraphNode> it2 = node.getChildren().iterator();
 		while (it1.hasNext() && it2.hasNext()) {
 			updateGraph(it1.next(),it2.next());
 		}
@@ -100,11 +100,11 @@ public class NetworkLoadGraph {
 			return;
 	}
 	
-	public List<Node> getRootNodes() {
+	public List<NetworkLoadGraphNode> getRootNodes() {
 		return rootNodes;
 	}
 
-	public void setRootNodes(List<Node> rootNodes) {
+	public void setRootNodes(List<NetworkLoadGraphNode> rootNodes) {
 		this.rootNodes = rootNodes;
 	}
 
@@ -115,39 +115,4 @@ public class NetworkLoadGraph {
 	public void setRoutesWeight(Map<String, Integer> routesWeight) {
 		this.routesWeight = routesWeight;
 	}
-
-	public class Node {
-		private String label;
-		private int level;
-		private int weight;
-		private List<Node> children;
-		  
-		  public Node(String label, int weight, int level) {
-			  this.label = label;
-			  this.weight = weight;
-			  this.level = level;
-			  children = new ArrayList<>();
-		  }
-
-		public String getLabel() {
-			return label;
-		}
-		
-		public int getLevel() {
-			return level;
-		}
-
-		public void setLevel(int level) {
-			this.level = level;
-		}
-
-		public int getWeight() {
-			return weight;
-		}
-
-		public void setWeight(int weight) {
-			this.weight = weight;
-		}		  		  
-	}
-
 }

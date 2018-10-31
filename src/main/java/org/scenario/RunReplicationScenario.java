@@ -15,9 +15,9 @@ import org.scenario.autoadaptive.MetadataCatalog;
 import org.scenario.cloudsimplus.AdaptedCloudlet;
 import org.scenario.cloudsimplus.AdaptedDatacenter;
 import org.scenario.cloudsimplus.AdaptedDatacenterStorage;
-import org.scenario.cloudsimplus.NetworkLoadGraph;
+import org.scenario.cloudsimplus.network.NetworkLoadGraph;
+import org.scenario.cloudsimplus.network.switches.AdaptedAbstractSwitch;
 import org.scenario.cloudsimplus.resources.FileMetadata;
-import org.scenario.cloudsimplus.switches.AdaptedAbstractSwitch;
 import org.scenario.config.InitializeReplicationScenarioBasicTreeTopology;
 
 import jxl.Workbook;

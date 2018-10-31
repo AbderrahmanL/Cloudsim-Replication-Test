@@ -20,9 +20,9 @@ import org.cloudbus.cloudsim.vms.Vm;
 import org.scenario.Utils.Utils;
 import org.scenario.cloudsimplus.AdaptedCloudlet;
 import org.scenario.cloudsimplus.AdaptedDatacenter;
-import org.scenario.cloudsimplus.switches.AdaptedAggregateSwitch;
-import org.scenario.cloudsimplus.switches.AdaptedEdgeSwitch;
-import org.scenario.cloudsimplus.switches.AdaptedRootSwitch;
+import org.scenario.cloudsimplus.network.switches.AdaptedAggregateSwitch;
+import org.scenario.cloudsimplus.network.switches.AdaptedEdgeSwitch;
+import org.scenario.cloudsimplus.network.switches.AdaptedRootSwitch;
 
 import jdk.internal.org.objectweb.asm.commons.StaticInitMerger;
 
