@@ -37,6 +37,7 @@ public class AdaptedHost extends NetworkHost{
 
 	@Override
 	protected void receivePackets() {
+		//TODO find how to get received packets
 		for (final HostPacket hostPkt : getHostPktsReceived()) {
             hostPkt.getVmPacket().setReceiveTime(getSimulation().clock());
 

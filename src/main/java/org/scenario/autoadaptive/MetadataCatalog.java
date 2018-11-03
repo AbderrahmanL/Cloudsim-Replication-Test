@@ -32,7 +32,8 @@ public class MetadataCatalog extends HashMap<Integer,LinkedList<FileAttribute>> 
 	public void registerNewFile(FileAttribute attr) {
 		LinkedList<FileAttribute> holder = new LinkedList<>();
 		holder.add(attr);
-		this.put(attr.getRegistrationID(), holder);
+		//TODO change Integer to long in the hashmap
+		this.put((int) attr.getRegistrationID(), holder);
 	}
 
 	public void registerReplica(FileAttribute attr) {

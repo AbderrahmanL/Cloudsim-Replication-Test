@@ -30,7 +30,8 @@ public class MetadataManager {
 	public static void onFileCreate(FileAttribute attr) {
 	
 		MetadataInterface catalog = instance;
-		if(! catalog.hasEntry(attr.getRegistrationID())){
+		//TODO change Integer to long in the hashmap
+		if(! catalog.hasEntry((int) attr.getRegistrationID())){
 			catalog.registerNewFile(attr);		
 		}
 		else {

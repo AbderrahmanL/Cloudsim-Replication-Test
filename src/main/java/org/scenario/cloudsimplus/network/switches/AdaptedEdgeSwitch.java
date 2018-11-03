@@ -72,7 +72,7 @@ public class AdaptedEdgeSwitch extends AdaptedAbstractSwitch {
         super.processPacketDown(ev);
         send(this.getDatacenter(),
                 0,
-                CloudSimTags.VM_UPDATE_CLOUDLET_PROCESSING_EVENT);	
+                CloudSimTags.VM_UPDATE_CLOUDLET_PROCESSING);	
     }
 
 	 @Override

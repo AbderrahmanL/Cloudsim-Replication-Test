@@ -57,9 +57,9 @@ public class AdaptedRootSwitch extends AdaptedAbstractSwitch {
         
         final HostPacket netPkt = (HostPacket) ev.getData();
 
-        final int srcID = this.getDatacenter().getId();
+        final long srcID = this.getDatacenter().getId();
         final Vm receiverVm = netPkt.getVmPacket().getDestination();
-        int destID = 0;
+        long destID = 0;
         if(receiverVm == null){
         	destID = netPkt.getVmPacket().getSource().getBroker().getId();        	
         }
@@ -82,7 +82,7 @@ public class AdaptedRootSwitch extends AdaptedAbstractSwitch {
         }
         else {
         	// broker submit cloudlet to dc or cloudlet to cloudlet same dc
-        	final Switch edgeSwitch = getVmEdgeSwitch(receiverVm);
+        	final Switch edgeSwitch = getVmEdgeSwitch(netPkt);
         	final Switch aggSwitch = findAggregateSwitchConnectedToGivenEdgeSwitch(edgeSwitch);
         	if (destID == srcID ){	
 	        	if (aggSwitch == Switch.NULL) {

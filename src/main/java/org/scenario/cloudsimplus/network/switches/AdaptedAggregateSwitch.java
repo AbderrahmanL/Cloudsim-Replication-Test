@@ -63,7 +63,7 @@ public class AdaptedAggregateSwitch extends AdaptedAbstractSwitch {
 	
 	        // packet is coming from root so need to be sent to edgelevel swich
 	        // find the id for edgelevel switch
-	        final Switch netSwitch = getVmEdgeSwitch(receiverVm);
+	        final Switch netSwitch = getVmEdgeSwitch(netPkt);
 	        addPacketToBeSentToDownlinkSwitch(netSwitch, netPkt);
 	    }
 
@@ -78,7 +78,7 @@ public class AdaptedAggregateSwitch extends AdaptedAbstractSwitch {
 	        // find the id for edge level switch
 	        if(  receiverVm != null){
 	        	
-	        	final Switch edgeSwitch = getVmEdgeSwitch(receiverVm);
+	        	final Switch edgeSwitch = getVmEdgeSwitch(netPkt);
 	        	if (findConnectedEdgeSwitch(edgeSwitch)) {
 	        		addPacketToBeSentToDownlinkSwitch(edgeSwitch, netPkt);
 	        	}

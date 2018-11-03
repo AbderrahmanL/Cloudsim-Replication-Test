@@ -1,21 +1,12 @@
 package org.scenario.config;
 
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.math3.distribution.UniformRealDistribution;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
-import org.cloudbus.cloudsim.cloudlets.CloudletExecution;
 import org.cloudbus.cloudsim.cloudlets.network.CloudletReceiveTask;
 import org.cloudbus.cloudsim.cloudlets.network.CloudletSendTask;
 import org.cloudbus.cloudsim.cloudlets.network.NetworkCloudlet;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.hosts.network.NetworkHost;
-import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletScheduler;
-import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerCompletelyFair;
-import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerSpaceShared;
-import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerTimeShared;
-import org.cloudbus.cloudsim.schedulers.cloudlet.network.CloudletTaskScheduler;
+import org.cloudbus.cloudsim.network.switches.Switch;
 import org.cloudbus.cloudsim.vms.Vm;
 import org.scenario.Utils.Utils;
 import org.scenario.cloudsimplus.AdaptedCloudlet;
@@ -24,12 +15,9 @@ import org.scenario.cloudsimplus.network.switches.AdaptedAggregateSwitch;
 import org.scenario.cloudsimplus.network.switches.AdaptedEdgeSwitch;
 import org.scenario.cloudsimplus.network.switches.AdaptedRootSwitch;
 
-import jdk.internal.org.objectweb.asm.commons.StaticInitMerger;
-
 public class InitializeReplicationScenarioBasicTreeTopology extends InitializeReplicationScenarioWithInternalNetwork{
 
 	private static final long TASK_RAM = 100;
-	private static final int NUMBER_OF_PACKETS_TO_SEND = 1;
 	
 	
 	/**
@@ -41,7 +29,7 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
 	protected void createNetwork(AdaptedDatacenter datacenter) {
 		AdaptedRootSwitch rootSwitch = new AdaptedRootSwitch((CloudSim) datacenter.getSimulation(), datacenter);
           AdaptedAggregateSwitch[] aggregateSwitches = new AdaptedAggregateSwitch[3];
-          AdaptedEdgeSwitch[] edgeSwitches = new AdaptedEdgeSwitch[6];
+          Switch[] edgeSwitches = new AdaptedEdgeSwitch[6];
         datacenter.addSwitch(rootSwitch);
         
         for (int i = 0; i < datacenter.getHostList().size()/SimulationParameters.HOSTS_PER_SWITCH; i++) {
@@ -75,7 +63,7 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
         int  hostPerSwitchcounter = 0;
         for (NetworkHost host : datacenter.<NetworkHost>getHostList()) {
         	
-            int switchNum = host.getId() / SimulationParameters.HOSTS_PER_SWITCH;
+            int switchNum = (int) (host.getId() / SimulationParameters.HOSTS_PER_SWITCH);
             /**
             @TODO these two calls below are redundant.
             When connecting a host to a switch, the
@@ -115,7 +103,7 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
         CloudletSendTask task = new CloudletSendTask(sourceCloudlet.getTasks().size());
         task.setMemory(TASK_RAM);
         sourceCloudlet.addTask(task);
-        for (int i = 0; i < NUMBER_OF_PACKETS_TO_SEND; i++) {
+        for (int i = 0; i < 4; i++) {
             task.addPacket(destinationCloudlet, 2000);
         }
     }
@@ -133,7 +121,6 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
         CloudletReceiveTask task = new CloudletReceiveTask(
                 cloudlet.getTasks().size(), sourceCloudlet.getVm());
         task.setMemory(TASK_RAM);
-        task.setNumberOfExpectedPacketsToReceive(NUMBER_OF_PACKETS_TO_SEND);
         cloudlet.addTask(task);
     }
     

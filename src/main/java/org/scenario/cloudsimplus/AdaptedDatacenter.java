@@ -160,7 +160,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
         if (estimatedFinishTime > 0.0 && !Double.isInfinite(estimatedFinishTime)) {
             send(this,
                 getCloudletProcessingUpdateInterval(estimatedFinishTime) ,
-                CloudSimTags.VM_UPDATE_CLOUDLET_PROCESSING_EVENT);
+                CloudSimTags.VM_UPDATE_CLOUDLET_PROCESSING);
         }
 
         sendAcknowledgement(ack, cl);
@@ -207,7 +207,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 		HostPacket pkt = null;
 		Switch sw = ((AdaptedHost)cloudlet.getVm().getHost()).getEdgeSwitch();
 		((AdaptedCloudlet) cloudlet).setLeftVmToBrokerTime(this.getSimulation().clock());
-		pkt = new HostPacket((AdaptedHost)cloudlet.getVm().getHost(), new VmPacket(cloudlet.getVm(), null, (long) (fileSize * Conversion.MEGABYTE), null, cloudlet));	
+		pkt = new HostPacket((AdaptedHost)cloudlet.getVm().getHost(), new VmPacket(cloudlet.getVm(), null, (long) (fileSize * Conversion.MEGA), null, cloudlet));	
 //		pkt = new HostPacket((AdaptedHost)cloudlet.getVm().getHost(), new VmPacket(cloudlet.getVm(), null, DataCloudTags.PKT_SIZE, null, cloudlet));
 		double delay = Conversion.bytesToMegaBits( pkt.getSize()) / bwAvailableForThisPacket;
 		((AdaptedVm) cloudlet.getVm()).getOrUpdateRequestCount(-1);

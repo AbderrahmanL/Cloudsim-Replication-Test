@@ -9,7 +9,7 @@ import org.cloudbus.cloudsim.resources.FileStorage;
 
 public class FileMetadata extends FileAttribute{
 	
-	private static int registrationId = 0; // id of the file
+	private static long registrationId = 0; // id of the file
 	
 	private static int uniqueIdCounter = 0;
 	
@@ -33,12 +33,12 @@ public class FileMetadata extends FileAttribute{
 	}
 	
 	@Override
-	public boolean setRegistrationId(int registrationId) {
+	public boolean setRegistrationId(long registrationId) {
 		return super.setRegistrationId(registrationId);
 	}
 	
 	@Override
-	public int getRegistrationID() {
+	public long getRegistrationID() {
 		return super.getRegistrationID();
 	}
 
