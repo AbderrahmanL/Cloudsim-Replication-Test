@@ -6,6 +6,7 @@ import org.cloudbus.cloudsim.cloudlets.network.CloudletSendTask;
 import org.cloudbus.cloudsim.cloudlets.network.NetworkCloudlet;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.hosts.network.NetworkHost;
+import org.cloudbus.cloudsim.network.switches.EdgeSwitch;
 import org.cloudbus.cloudsim.network.switches.Switch;
 import org.cloudbus.cloudsim.vms.Vm;
 import org.scenario.Utils.Utils;
@@ -71,7 +72,7 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
             to create the bi-directional association.
             */
             edgeSwitches[switchNum].connectHost(host);
-            host.setEdgeSwitch(edgeSwitches[switchNum]);
+            host.setEdgeSwitch((EdgeSwitch) edgeSwitches[switchNum]);
             hostPerSwitchcounter++;
             if(hostPerSwitchcounter == SimulationParameters.HOSTS_PER_SWITCH){
             	hostPerSwitchcounter = 0;

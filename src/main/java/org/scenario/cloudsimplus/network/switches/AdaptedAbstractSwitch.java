@@ -31,6 +31,11 @@ public abstract class AdaptedAbstractSwitch extends AbstractSwitch{
 		 */
 		private int skipCount =0;
 		
+		/**
+		 * A simplified network traffic load log on a switch
+		 * A similar thing might be found on real switches 
+		 * but how it is represented, used, extracted will differ 
+		 */
 		private List<Integer> historyList = new ArrayList<>();
 		
 		  /**
