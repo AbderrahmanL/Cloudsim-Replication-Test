@@ -72,7 +72,7 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
             to create the bi-directional association.
             */
             edgeSwitches[switchNum].connectHost(host);
-            host.setEdgeSwitch((EdgeSwitch) edgeSwitches[switchNum]);
+            host.setEdgeSwitch((Switch) edgeSwitches[switchNum]);
             hostPerSwitchcounter++;
             if(hostPerSwitchcounter == SimulationParameters.HOSTS_PER_SWITCH){
             	hostPerSwitchcounter = 0;
