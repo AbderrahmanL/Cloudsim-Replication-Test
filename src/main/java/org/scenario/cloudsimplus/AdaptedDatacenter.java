@@ -47,7 +47,9 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 	
 	private static final Logger logger = LoggerFactory.getLogger(DatacenterSimple.class.getSimpleName());
 	
-	
+	/* TODO Load balancing at the core switch level is not enough
+	 A balancing service/daemon inside {@link #MetadataManager} should watch the state of the nodes
+	 and then decide to move/replicate a problematic resource to optimize load */
 	private LoadBalancer balancer;
 	private NetworkLoadGraph loadGraph;
 

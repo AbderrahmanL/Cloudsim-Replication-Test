@@ -148,6 +148,8 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 	        	debugCount++;
 	        }
 	        else {
+	        	/*TODO Identification mechanism for files needs to change 
+	        	 to something more usable */
 	        	cloudlet.setRequestedFileId(6);
 	        	cloudlet.setSubmissionDelay(SimulationParameters.DEPLOY_NEW_FILE );
 	        	debugCount++;
