@@ -15,8 +15,9 @@ public class AdaptedVm extends NetworkVm{
     }
 	
 	/**
-	 * Gets the {@link #currentRequestsCount} if the step is 0
-	 * increments/decrements if it's 1/-1
+	 * Gets or updates the {@link #currentRequestsCount} 
+	 * Returns the current value if the parameter is 0
+	 * Updates (increments/decrements) if the parameter is 1/-1
 	 * 
 	 * @param length
 	 * @return {@link #currentRequestsCount}
