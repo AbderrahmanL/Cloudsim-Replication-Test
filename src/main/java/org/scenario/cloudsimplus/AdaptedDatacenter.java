@@ -51,9 +51,6 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 	private LoadBalancer balancer;
 	private NetworkLoadGraph loadGraph;
 
-	// Used for many purposes
-	private static int debugCount = 0;
-	
 	public AdaptedDatacenter(Simulation simulation,
 							List<? extends Host> hostList, VmAllocationPolicy vmAllocationPolicy, LoadBalancer balancer) {
 		super(simulation, hostList, vmAllocationPolicy);
@@ -63,7 +60,35 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 	
 	@Override
     public void processEvent(final SimEvent ev) {
-		//TODO refactor load graph update and new file placement into new methodes
+		updateNetworkGraph();
+		placeNewFile();
+        super.processEvent(ev);
+    }
+	
+	private void placeNewFile() {
+		if(this.getSimulation().clock() > SimulationParameters.DEPLOY_NEW_FILE && !MetadataManager.getCatalogInstance().hasEntry("newlyPlaced")) {
+			Entry<String, Integer> minimum = null;
+			try {					
+				for (Entry<String, Integer> entry : this.loadGraph.getRoutesWeight().entrySet()) {
+					if (minimum == null || minimum.getValue() > entry.getValue()) {
+						minimum = entry;
+					}
+				}
+				if(minimum == null)
+					throw new NullPointerException();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			String switchName = minimum.getKey();
+			this.getDatacenterStorage().getStorageList().get(((AdaptedAbstractSwitch) this.getSwitchMap().stream().filter(
+					s -> s.getName().equals(switchName))
+					.findFirst().get()).getIdAmongSameLevel())
+					.addFile(new AdaptedFile("newlyPlaced",110));
+		}	
+	}
+
+	private void updateNetworkGraph() {
 		if(this.getSwitchMap().size() > 0) {
 			if (loadGraph == null) {
 				this.loadGraph = new NetworkLoadGraph(this.getSwitchMap());
@@ -78,35 +103,11 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 			}
 			if(((AdaptedAbstractSwitch)this.getSwitchMap().get(0)).getSkipCount() == 0) {
 				this.loadGraph.updateGraph(this.getSwitchMap());
-			}
-			
-			if(this.getSimulation().clock() > SimulationParameters.DEPLOY_NEW_FILE && !MetadataManager.getCatalogInstance().hasEntry("newlyPlaced")) {
-//			if(debugCount == 0) {
-				this.loadGraph.bestRoute();
-				Entry<String, Integer> minimum = null;
-				try {					
-					for (Entry<String, Integer> entry : this.loadGraph.getRoutesWeight().entrySet()) {
-						if (minimum == null || minimum.getValue() > entry.getValue()) {
-							minimum = entry;
-						}
-					}
-					if(minimum == null)
-						throw new NullPointerException();
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
-				String switchName = minimum.getKey();
-				this.getDatacenterStorage().getStorageList().get(((AdaptedAbstractSwitch) this.getSwitchMap().stream().filter(
-						s -> s.getName().equals(switchName))
-						.findFirst().get()).getIdAmongSameLevel())
-						.addFile(new AdaptedFile("newlyPlaced",110));
-				debugCount++;
+				this.loadGraph.ComputeBestRoute();
 			}
 		}
-        super.processEvent(ev);
-    }
-	
+	}
+
 	@Override
 	protected void processCloudletSubmit(final SimEvent ev, final boolean ack) {
 		final Cloudlet cl = (Cloudlet) ev.getData();
@@ -148,10 +149,8 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 	
 	public void submitCloudletToVm(final Cloudlet cl, final boolean ack) {
         // time to transfer cloudlet's files
-
 		List<String> fileNames = new ArrayList<>(); 
-		fileNames.add(((FileMetadata)((AdaptedDatacenterStorage) getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet) cl).getRequestedFileId(),null,false)).getName());
-		
+		fileNames.add(((FileMetadata)((AdaptedDatacenterStorage) getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet) cl).getRequestedFileId(),null,false)).getName());	
         final double fileTransferTime = getDatacenterStorage().predictFileTransferTime(fileNames);
         ((AdaptedCloudlet)cl).setFileRetrievalTime(fileTransferTime);
         ((CloudletExecutionTask)((NetworkCloudlet)cl).getTasks().get(0)).setLength((long) (fileTransferTime * cl.getVm().getMips()));
@@ -162,13 +161,11 @@ public class AdaptedDatacenter extends NetworkDatacenter{
                 getCloudletProcessingUpdateInterval(estimatedFinishTime) ,
                 CloudSimTags.VM_UPDATE_CLOUDLET_PROCESSING);
         }
-
         sendAcknowledgement(ack, cl);
     }
 
 	private void sendCloudletReturn(Cloudlet cl) {
-		sendNow(cl.getBroker(), CloudSimTags.CLOUDLET_RETURN, cl);
-		
+		sendNow(cl.getBroker(), CloudSimTags.CLOUDLET_RETURN, cl);		
 	}
 
 	private void sendAcknowledgement(boolean ack, Cloudlet cl) {

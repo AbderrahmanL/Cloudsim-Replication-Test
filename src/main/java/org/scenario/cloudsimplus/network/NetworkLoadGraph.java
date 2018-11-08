@@ -73,7 +73,7 @@ public class NetworkLoadGraph {
 			return;
 	}
 	
-	public void bestRoute() {
+	public void ComputeBestRoute() {
 		bestRoute(rootNodes.get(0),rootNodes.get(0).getWeight());
 	}
 	
