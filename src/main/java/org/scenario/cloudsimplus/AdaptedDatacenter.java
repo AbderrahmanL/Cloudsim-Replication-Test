@@ -3,9 +3,12 @@ package org.scenario.cloudsimplus;
 
 import static java.util.stream.Collectors.toList;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
+
+import javax.rmi.CORBA.Util;
 
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
@@ -25,6 +28,7 @@ import org.cloudbus.cloudsim.network.switches.Switch;
 import org.cloudbus.cloudsim.resources.FileAttribute;
 import org.cloudbus.cloudsim.util.Conversion;
 import org.cloudbus.cloudsim.vms.Vm;
+import org.scenario.Utils.Utils;
 import org.scenario.autoadaptive.CloudDataTags;
 import org.scenario.autoadaptive.LoadBalancer;
 import org.scenario.autoadaptive.MetadataManager;
@@ -35,6 +39,9 @@ import org.scenario.cloudsimplus.resources.FileMetadata;
 import org.scenario.config.SimulationParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jxl.read.biff.BiffException;
+import jxl.write.WriteException;
 
 /**
  * Adapted dc with possibility to inject strategies to choose execution node
@@ -63,12 +70,37 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 	@Override
     public void processEvent(final SimEvent ev) {
 		updateNetworkGraph();
-		placeNewFile();
+		if(this.getSimulation().clock() > SimulationParameters.DEPLOY_NEW_FILE * 1 && !MetadataManager.getCatalogInstance().hasEntry("newlyPlaced1")) {
+			placeNewFile(1);
+			try {
+				Utils.writeToXls(this.loadGraph.getRoutesWeight(),2);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		}
+		if(this.getSimulation().clock() > SimulationParameters.DEPLOY_NEW_FILE * 2 && !MetadataManager.getCatalogInstance().hasEntry("newlyPlaced2")) {
+			placeNewFile(2);
+			try {
+				Utils.writeToXls(this.loadGraph.getRoutesWeight(),4);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		}
+		if(this.getSimulation().clock() > SimulationParameters.DEPLOY_NEW_FILE * 3 && !MetadataManager.getCatalogInstance().hasEntry("newlyPlaced3")) {
+			placeNewFile(3);	
+			try {
+				Utils.writeToXls(this.loadGraph.getRoutesWeight(),6);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		}
         super.processEvent(ev);
     }
 	
-	private void placeNewFile() {
-		if(this.getSimulation().clock() > SimulationParameters.DEPLOY_NEW_FILE && !MetadataManager.getCatalogInstance().hasEntry("newlyPlaced")) {
+	private void placeNewFile(int fileNumber) {
 			Entry<String, Integer> minimum = null;
 			try {					
 				for (Entry<String, Integer> entry : this.loadGraph.getRoutesWeight().entrySet()) {
@@ -86,8 +118,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 			this.getDatacenterStorage().getStorageList().get(((AdaptedAbstractSwitch) this.getSwitchMap().stream().filter(
 					s -> s.getName().equals(switchName))
 					.findFirst().get()).getIdAmongSameLevel())
-					.addFile(new AdaptedFile("newlyPlaced",110));
-		}	
+					.addFile(new AdaptedFile("newlyPlaced"+fileNumber,100 + 10 * fileNumber));
 	}
 
 	private void updateNetworkGraph() {

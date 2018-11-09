@@ -5,12 +5,12 @@ public class SimulationParameters {
 	/**
 	 * Workload configuration
 	 */
-	public static final double DEPLOY_NEW_FILE = 7D;
+	public static final double DEPLOY_NEW_FILE = 5D;
 	public static final int LOAD_HISTORY_UPDATE_INTERVAL = 65;
 	public static final int SCALE_FACTOR = 1;
-	public static final int NO_CLOUDLETS = 500 * SCALE_FACTOR;
+	public static final int NO_CLOUDLETS = 1000 * SCALE_FACTOR;
 	public static final int SINGLE_WORKER = 0;
-	public static final double RANDOM_INTERVAL_RIGHT_LIMIT = 10D;
+	public static final double RANDOM_INTERVAL_RIGHT_LIMIT = 20D;
 	public static final boolean RANDOMIZED = true;
 	public static final boolean PERIODIC = false;
 	/**

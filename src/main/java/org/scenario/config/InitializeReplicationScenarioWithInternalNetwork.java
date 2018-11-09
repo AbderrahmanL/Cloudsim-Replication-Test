@@ -49,7 +49,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
      */
     protected abstract void createNetwork(AdaptedDatacenter datacenter);
 	
-    public static int debugCount = 0;
+    public static int cloudletsCount = 0;
     
     @Override
     public List<DatacenterBroker> init() {
@@ -143,16 +143,17 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 			        .setUtilizationModelCpu(new UtilizationModelFull())
 			        .setUtilizationModelBw(new UtilizationModelFull());
 	        cloudlet.setSubmissionDelay(0);
-	        if(debugCount < SimulationParameters.NO_CLOUDLETS -40) {	        	
-	        	cloudlet.setRequestedFileId(Utils.getuniformIntegerDist(0, 4).sample());
-	        	debugCount++;
+	        if(cloudletsCount < SimulationParameters.NO_CLOUDLETS -375) {	        	
+	        	cloudlet.setRequestedFileId(Utils.getuniformIntegerDist(0, 5).sample());
+	        	cloudletsCount++;
 	        }
 	        else {
 	        	/*TODO Identification mechanism for files needs to change 
 	        	 to something more usable */
-	        	cloudlet.setRequestedFileId(6);
-	        	cloudlet.setSubmissionDelay(SimulationParameters.DEPLOY_NEW_FILE );
-	        	debugCount++;
+	        	int random = Utils.getuniformIntegerDist(1, 3).sample() ;
+	        	cloudlet.setRequestedFileId(5 + random);
+	        	cloudlet.setSubmissionDelay(SimulationParameters.DEPLOY_NEW_FILE * random);
+	        	cloudletsCount++;
 	        }
 //	        if(debugCount <  150 * SimulationParameters.SCALE_FACTOR) {
 //	        	cloudlet.setRequestedFileId(0);
