@@ -93,6 +93,7 @@ public class AdaptedRootSwitch extends AdaptedAbstractSwitch {
         	}
 	        else {
 	        	// cloudlet to cloudlet diff dc
+				// TODO here get 0 since the order of creation begins with a core switch
 	        	send(((AdaptedDatacenter)netPkt.getVmPacket().getDestination().getHost().getDatacenter()).getSwitchMap().get(0) ,transferDelay, CloudSimTags.NETWORK_EVENT_UP, netPkt);        	
 	        }
         }

@@ -61,6 +61,7 @@ public class NetworkLoadGraph {
 	 * Method for testing
 	 */
 	public void display() {
+		// TODO here get 0 since we have one core switch must change otherwise
 		display(rootNodes.get(0));
 	}
 	
@@ -74,6 +75,7 @@ public class NetworkLoadGraph {
 	}
 	
 	public void ComputeBestRoute() {
+		// here get 0 since we have one core switch must change otherwise
 		bestRoute(rootNodes.get(0),rootNodes.get(0).getWeight());
 	}
 	
@@ -90,6 +92,7 @@ public class NetworkLoadGraph {
 	public void updateGraph(List<Switch> switchList) {
 		for(Switch sw : switchList) {
 			if(sw.getLevel() == 0) {
+				// here get 0 since we have one core switch must change otherwise
 				updateGraph(sw, rootNodes.get(0));
 				return;
 			}

@@ -105,6 +105,7 @@ public class InitializeReplicationScenarioNoInternalNetwork extends InitializeRe
         }
         List<FileStorage> storageList = new ArrayList<FileStorage>();
 	    storageList.add(createStorage("name",1000000000, 10.0, 5));
+		// TODO here get 0 since we have one san per DC must change otherwise
 	    storageList.get(0).addFile(new AdaptedFile("file1.dat", 20));
 	    storageList.get(0).addFile(new AdaptedFile("file2.dat", 100));
 	    storageList.get(0).addFile(new AdaptedFile("file3.dat", 700));

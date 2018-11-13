@@ -83,6 +83,7 @@ public class AdaptedAggregateSwitch extends AdaptedAbstractSwitch {
 	        		addPacketToBeSentToDownlinkSwitch(edgeSwitch, netPkt);
 	        	}
 	        	} else { // send to up
+					// TODO here get 0 since we have one core switch must change otherwise
 	        		final Switch sw = getUplinkSwitches().get(0);
 	        		addPacketToBeSentToUplinkSwitch(sw, netPkt);
 	        	}

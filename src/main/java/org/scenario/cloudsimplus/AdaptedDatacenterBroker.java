@@ -49,6 +49,7 @@ public class AdaptedDatacenterBroker extends DatacenterBrokerSimple{
             /* TODO Here the dc should be elected, in the cloudsimplus it's done using the vm but vm wont be chosen until arrival to dc
              this next line is a dummy dc selection for test*/
 ////            if(cloudlet.getId() < SimulationConstParameters.NO_CLOUDLETS/2)
+            //TODO get 0 here is for simplification reasons
             electedDc = this.getDatacenterList().get(0); 
 ////            else
 //            electedDc = this.getDatacenterList().get(1); 

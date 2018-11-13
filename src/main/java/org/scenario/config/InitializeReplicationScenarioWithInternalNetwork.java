@@ -56,6 +56,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 	    	List<DatacenterBroker> brokers = super.init();
 	    	populateBriteFile(brokers);
 	    	NetworkTopology networkTopology = BriteNetworkTopology.getInstance("topology.brite");
+			// TODO here get 0 since we have one broker must change otherwise
 		  	brokers.get(0).getSimulation().setNetworkTopology(networkTopology);
 		  	for (int i=1 ; i<brokers.get(0).getSimulation().getEntityList().size() ; i++)
 		  	networkTopology.mapNode(i, i);
@@ -143,7 +144,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 			        .setUtilizationModelCpu(new UtilizationModelFull())
 			        .setUtilizationModelBw(new UtilizationModelFull());
 	        cloudlet.setSubmissionDelay(0);
-	        if(cloudletsCount < SimulationParameters.NO_CLOUDLETS -375) {	        	
+	        if(cloudletsCount < SimulationParameters.NO_CLOUDLETS -15) {	        	
 	        	cloudlet.setRequestedFileId(Utils.getuniformIntegerDist(0, 5).sample());
 	        	cloudletsCount++;
 	        }

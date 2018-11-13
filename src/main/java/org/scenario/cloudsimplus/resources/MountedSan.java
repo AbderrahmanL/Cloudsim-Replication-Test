@@ -48,6 +48,7 @@ public class MountedSan extends SanStorage{
         try {
         	int hostindex = 0 ; 
         	for(Host host : hostsAccessingThisSan) {
+				// TODO here get 0 since we have one vm per host in scenario must change otherwise
         		processesReading += host.getVmList().get(0).getCloudletScheduler().getCloudletExecList().size();
         		if(processesReading > 7 + 8 * hostindex )
         			processesReading = 7 + 8 * hostindex;

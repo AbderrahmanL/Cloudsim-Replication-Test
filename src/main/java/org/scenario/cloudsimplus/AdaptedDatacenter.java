@@ -108,6 +108,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 						minimum = entry;
 					}
 				}
+				// TODO inspect why sometimes NullPointerException here
 				if(minimum == null)
 					throw new NullPointerException();
 			}
@@ -115,6 +116,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 				e.printStackTrace();
 			}
 			String switchName = minimum.getKey();
+			// TODO inspect why sometimes IndexOutOfBoundException here
 			this.getDatacenterStorage().getStorageList().get(((AdaptedAbstractSwitch) this.getSwitchMap().stream().filter(
 					s -> s.getName().equals(switchName))
 					.findFirst().get()).getIdAmongSameLevel())
@@ -134,6 +136,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 					((AdaptedAbstractSwitch)sw).setSkipCount(0);
 				}
 			}
+			//TODO Here get 0 is because we just want any switch
 			if(((AdaptedAbstractSwitch)this.getSwitchMap().get(0)).getSkipCount() == 0) {
 				this.loadGraph.updateGraph(this.getSwitchMap());
 				this.loadGraph.ComputeBestRoute();
@@ -166,6 +169,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
         }
         Vm electedVm = Vm.NULL;
         if(SimulationParameters.SINGLE_WORKER == 1)
+        	//TODO Here get 0 is because we just want any node
         electedVm = vmsThatHasAccessToFile.get(0);
         else
         electedVm = balancer.electVm(vmsThatHasAccessToFile);
@@ -186,6 +190,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 		fileNames.add(((FileMetadata)((AdaptedDatacenterStorage) getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet) cl).getRequestedFileId(),null,false)).getName());	
         final double fileTransferTime = getDatacenterStorage().predictFileTransferTime(fileNames);
         ((AdaptedCloudlet)cl).setFileRetrievalTime(fileTransferTime);
+        //TODO Here get 0 is because the execution task in a NetworkCloudlet has index 0
         ((CloudletExecutionTask)((NetworkCloudlet)cl).getTasks().get(0)).setLength((long) (fileTransferTime * cl.getVm().getMips()));
         double estimatedFinishTime = cl.getVm().getCloudletScheduler().cloudletSubmit(cl,0);
         // if this cloudlet is in the exec queue 

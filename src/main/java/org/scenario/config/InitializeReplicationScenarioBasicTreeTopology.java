@@ -92,6 +92,7 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
 	    	setArrivalTimeForCloudlet(cloudlet);
 	    	cloudletList.add(cloudlet);
 	    }
+		// TODO here get 0 since we have one broker must change otherwise
 	    brokers.get(0).submitVmList(vmList);
 	    brokers.get(0).submitCloudletList(cloudletList);
 	    

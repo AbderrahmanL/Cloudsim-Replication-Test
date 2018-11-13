@@ -8,7 +8,7 @@ public class SimulationParameters {
 	public static final double DEPLOY_NEW_FILE = 5D;
 	public static final int LOAD_HISTORY_UPDATE_INTERVAL = 65;
 	public static final int SCALE_FACTOR = 1;
-	public static final int NO_CLOUDLETS = 1000 * SCALE_FACTOR;
+	public static final int NO_CLOUDLETS = 100 * SCALE_FACTOR;
 	public static final int SINGLE_WORKER = 0;
 	public static final double RANDOM_INTERVAL_RIGHT_LIMIT = 20D;
 	public static final boolean RANDOMIZED = true;
@@ -16,7 +16,7 @@ public class SimulationParameters {
 	/**
 	 * Architecture configuration
 	 */
-    public static final int DC_SUPER = 1;
+    public static final int DC_SUPER = 3;
 	public static final int DC_MID = 0;
 	public static final int DC_STANDARD = 0;
 	public static final int HOST_SUPER = 18;

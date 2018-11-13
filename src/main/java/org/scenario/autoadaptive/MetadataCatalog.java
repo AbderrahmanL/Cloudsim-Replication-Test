@@ -55,6 +55,8 @@ public class MetadataCatalog extends HashMap<Integer,LinkedList<FileAttribute>> 
 	@Override
 	public boolean hasEntry(String name) {
 		 for(int i = 0 ; i  < this.size() ; i++){
+			 //TODO Here get 0 since all metadata in linked list of index i
+			 //carry to copies of the same file
 			 if(((FileMetadata) this.get(i).get(0)).getName().equals(name)) {
 				 return true;
 			 }

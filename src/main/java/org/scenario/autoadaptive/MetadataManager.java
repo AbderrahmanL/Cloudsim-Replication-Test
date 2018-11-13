@@ -54,6 +54,8 @@ public class MetadataManager {
 			metadata = ((HashMap<Integer, LinkedList<FileAttribute>>) instance).get(id).stream().filter(m -> ((FileMetadata) m).getContainingDevice().getName().equals(((MountedSan)containingSan).getName())).findFirst().get();
 		}
 		else {
+			//Here we just want metadata for a file to retreive some info that is the
+			// same across all copies of it
 			metadata = ((HashMap<Integer, LinkedList<FileAttribute>>) instance).get(id).get(0);			
 		}
 		if(plusOneAccess) {
