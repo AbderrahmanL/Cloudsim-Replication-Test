@@ -8,7 +8,7 @@ import org.cloudbus.cloudsim.resources.File;
 import org.cloudbus.cloudsim.resources.FileStorage;
 import org.cloudbus.cloudsim.util.DataCloudTags;
 import org.scenario.autoadaptive.MetadataManager;
-import org.scenario.cloudsimplus.resources.FileMetadata;
+import org.scenario.cloudsimplus.resources.AdaptedMetadata;
 
 public class AdaptedDatacenterStorage extends DatacenterStorage {
 	
@@ -35,7 +35,7 @@ public class AdaptedDatacenterStorage extends DatacenterStorage {
 	        for (final FileStorage storage : getStorageList()) {
 	            if (storage.isAmountAvailable((long) file.getSize())) {
 	                storage.addFile(file);
-	                ((FileMetadata)file.getAttribute()).setContainingDevice(storage);
+	                ((AdaptedMetadata)file.getAttribute()).setContainingDevice(storage);
 	                MetadataManager.onFileCreate(file.getAttribute());
 	                return DataCloudTags.FILE_ADD_SUCCESSFUL;
 	            }

@@ -16,7 +16,7 @@ public class AdaptedFile extends File{
 	
 	@Override
 	protected void createAttribute(final int fileSize) {
-        this.setAttribute(new FileMetadata(this, fileSize));
+        this.setAttribute(new AdaptedMetadata(this, fileSize));
     }
 	
 	@Override

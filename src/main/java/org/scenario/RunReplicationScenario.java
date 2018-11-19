@@ -17,7 +17,7 @@ import org.scenario.cloudsimplus.AdaptedDatacenter;
 import org.scenario.cloudsimplus.AdaptedDatacenterStorage;
 import org.scenario.cloudsimplus.network.NetworkLoadGraph;
 import org.scenario.cloudsimplus.network.switches.AdaptedAbstractSwitch;
-import org.scenario.cloudsimplus.resources.FileMetadata;
+import org.scenario.cloudsimplus.resources.AdaptedMetadata;
 import org.scenario.config.InitializeReplicationScenarioBasicTreeTopology;
 
 import jxl.Workbook;
@@ -163,7 +163,7 @@ public class RunReplicationScenario {
         	System.out.print("file "+ (int)(i+1) + " & replicas :");
         	for(FileAttribute metadata : ((MetadataCatalog)((AdaptedDatacenterStorage)finishedFiltered.get(0).getLastDatacenter().getDatacenterStorage())
         			.getMetadataManager().getCatalogInstance()).get(i)) {
-        		System.out.print(((FileMetadata)metadata).getNoOfAccesses()+ " id:" + ((FileMetadata)metadata).getUniqueId()+ " ");
+        		System.out.print(((AdaptedMetadata)metadata).getNoOfAccesses()+ " id:" + ((AdaptedMetadata)metadata).getUniqueId()+ " ");
         	}
         	System.out.println();
         }

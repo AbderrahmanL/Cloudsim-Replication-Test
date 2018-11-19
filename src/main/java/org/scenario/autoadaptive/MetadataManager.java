@@ -8,8 +8,8 @@ import java.util.List;
 import org.cloudbus.cloudsim.hosts.Host;
 import org.cloudbus.cloudsim.resources.FileAttribute;
 import org.cloudbus.cloudsim.resources.FileStorage;
-import org.scenario.cloudsimplus.resources.FileMetadata;
-import org.scenario.cloudsimplus.resources.MountedSan;
+import org.scenario.cloudsimplus.resources.AdaptedMetadata;
+import org.scenario.cloudsimplus.resources.AdaptedSan;
 
 
 public class MetadataManager {
@@ -51,7 +51,7 @@ public class MetadataManager {
 	public FileAttribute getFileMetadataWithId(int id, FileStorage containingSan ,boolean plusOneAccess) {
 		FileAttribute metadata = null;
 		if(containingSan != null) {
-			metadata = ((HashMap<Integer, LinkedList<FileAttribute>>) instance).get(id).stream().filter(m -> ((FileMetadata) m).getContainingDevice().getName().equals(((MountedSan)containingSan).getName())).findFirst().get();
+			metadata = ((HashMap<Integer, LinkedList<FileAttribute>>) instance).get(id).stream().filter(m -> ((AdaptedMetadata) m).getContainingDevice().getName().equals(((AdaptedSan)containingSan).getName())).findFirst().get();
 		}
 		else {
 			//Here we just want metadata for a file to retreive some info that is the
@@ -59,7 +59,7 @@ public class MetadataManager {
 			metadata = ((HashMap<Integer, LinkedList<FileAttribute>>) instance).get(id).get(0);			
 		}
 		if(plusOneAccess) {
-			((FileMetadata) metadata).incrementNoOfAccesses();			
+			((AdaptedMetadata) metadata).incrementNoOfAccesses();			
 		}
 		return metadata;
 	}
@@ -73,7 +73,7 @@ public class MetadataManager {
 	public int getTotalAccessCountForGivenFile(int id) {
 		int temp = 0;
 		for( FileAttribute attr : ((HashMap<Integer, LinkedList<FileAttribute>>) instance).get(id)) {
-			temp += ((FileMetadata) attr).getNoOfAccesses();
+			temp += ((AdaptedMetadata) attr).getNoOfAccesses();
 		}
 		return temp;
 		
@@ -84,7 +84,7 @@ public class MetadataManager {
 		if(!((HashMap<Integer, LinkedList<FileAttribute>>) instance).containsKey(requestedFileId))
 			return listToReturn;
 		for (FileAttribute fileMetaData : ((HashMap<Integer, LinkedList<FileAttribute>>) instance).get(requestedFileId)) {
-			listToReturn.addAll(((MountedSan)((FileMetadata)fileMetaData).getContainingDevice()).getAccessingHosts());
+			listToReturn.addAll(((AdaptedSan)((AdaptedMetadata)fileMetaData).getContainingDevice()).getAccessingHosts());
 		}
 		return listToReturn;
 	}

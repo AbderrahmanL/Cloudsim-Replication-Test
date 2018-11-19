@@ -7,7 +7,7 @@ import org.cloudbus.cloudsim.resources.File;
 import org.cloudbus.cloudsim.resources.FileAttribute;
 import org.cloudbus.cloudsim.resources.FileStorage;
 
-public class FileMetadata extends FileAttribute{
+public class AdaptedMetadata extends FileAttribute{
 	
 	private static long registrationId = 0; // id of the file
 	
@@ -23,7 +23,7 @@ public class FileMetadata extends FileAttribute{
 	
 	private String name;
 	
-	public FileMetadata(File file, int fileSize) {
+	public AdaptedMetadata(File file, int fileSize) {
 		super(file, fileSize);
 		this.name = file.getName();
 		setCreationTime(new Date().getTime());
@@ -78,7 +78,7 @@ public class FileMetadata extends FileAttribute{
 		this.uniqueId = uniqueId ;
 	}
 	public static int incrementUniqueId() {
-		return FileMetadata.uniqueIdCounter ++;
+		return AdaptedMetadata.uniqueIdCounter ++;
 	}
 
 }

@@ -38,7 +38,7 @@ import org.scenario.cloudsimplus.AdaptedDatacenterStorage;
 import org.scenario.cloudsimplus.AdaptedHost;
 import org.scenario.cloudsimplus.AdaptedVm;
 import org.scenario.cloudsimplus.resources.AdaptedFile;
-import org.scenario.cloudsimplus.resources.MountedSan;
+import org.scenario.cloudsimplus.resources.AdaptedSan;
 
 public abstract class InitializeReplicationScenarioWithInternalNetwork extends InitializeReplicationScenario {
 
@@ -228,14 +228,14 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 
 	@Override
 	protected FileStorage createStorage(String name, int capacity, double Bandwidth, double networkLatency) {	
-		return new MountedSan(name,capacity, Bandwidth, networkLatency);
+		return new AdaptedSan(name,capacity, Bandwidth, networkLatency);
 	}
 
 	@Override
 	protected Datacenter createSuperDatacenter(CloudSim simulation) {
 		List<Host> hostList = new ArrayList<>(SimulationParameters.HOST_SUPER);
 		List<FileStorage> storageList = new ArrayList<FileStorage>();
-		FileStorage san = new MountedSan("temporary", 1, 1, 1);
+		FileStorage san = new AdaptedSan("temporary", 1, 1, 1);
         for(int j = 0; j < SimulationParameters.HOST_SUPER; j++) {
         	Host host = createHost(32768,4000,16);
             hostList.add(host);
@@ -243,7 +243,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
             		san = createStorage("San" + j / SimulationParameters.HOSTS_PER_SWITCH,1000000000, 16000.0, 0.003);
             		storageList.add(san);  
             	}
-            	((MountedSan)san).addAccessingHost(host);
+            	((AdaptedSan)san).addAccessingHost(host);
             	((AdaptedHost)host).setStorage(san);   	
         }
         DatacenterStorage datacenterStorage = new  AdaptedDatacenterStorage(storageList);

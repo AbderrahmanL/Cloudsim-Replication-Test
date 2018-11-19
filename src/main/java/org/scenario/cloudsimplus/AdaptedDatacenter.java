@@ -35,7 +35,7 @@ import org.scenario.autoadaptive.MetadataManager;
 import org.scenario.cloudsimplus.network.NetworkLoadGraph;
 import org.scenario.cloudsimplus.network.switches.AdaptedAbstractSwitch;
 import org.scenario.cloudsimplus.resources.AdaptedFile;
-import org.scenario.cloudsimplus.resources.FileMetadata;
+import org.scenario.cloudsimplus.resources.AdaptedMetadata;
 import org.scenario.config.SimulationParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -187,7 +187,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 	public void submitCloudletToVm(final Cloudlet cl, final boolean ack) {
         // time to transfer cloudlet's files
 		List<String> fileNames = new ArrayList<>(); 
-		fileNames.add(((FileMetadata)((AdaptedDatacenterStorage) getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet) cl).getRequestedFileId(),null,false)).getName());	
+		fileNames.add(((AdaptedMetadata)((AdaptedDatacenterStorage) getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet) cl).getRequestedFileId(),null,false)).getName());	
         final double fileTransferTime = getDatacenterStorage().predictFileTransferTime(fileNames);
         ((AdaptedCloudlet)cl).setFileRetrievalTime(fileTransferTime);
         //TODO Here get 0 is because the execution task in a NetworkCloudlet has index 0

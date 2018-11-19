@@ -8,12 +8,12 @@ import org.cloudbus.cloudsim.resources.File;
 import org.cloudbus.cloudsim.resources.SanStorage;
 import org.scenario.autoadaptive.MetadataManager;
 
-public class MountedSan extends SanStorage{
+public class AdaptedSan extends SanStorage{
 	
 	
 	private List<Host> hostsAccessingThisSan;
 	
-	public MountedSan(String name , long capacity, double bandwidth, double networkLatency) throws IllegalArgumentException {
+	public AdaptedSan(String name , long capacity, double bandwidth, double networkLatency) throws IllegalArgumentException {
 		super(name, capacity, bandwidth, networkLatency);
 		this.hostsAccessingThisSan = new ArrayList<>();
 	}
@@ -28,7 +28,7 @@ public class MountedSan extends SanStorage{
 	
 	@Override
 	public double addFile(File file) {
-		((FileMetadata)file.getAttribute()).setContainingDevice(this);
+		((AdaptedMetadata)file.getAttribute()).setContainingDevice(this);
         MetadataManager.onFileCreate(file.getAttribute());
 		return super.addFile(file);
 		

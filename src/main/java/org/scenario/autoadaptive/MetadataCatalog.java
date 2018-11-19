@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 import org.cloudbus.cloudsim.resources.FileAttribute;
 import org.cloudbus.cloudsim.resources.FileStorage;
-import org.scenario.cloudsimplus.resources.FileMetadata;
+import org.scenario.cloudsimplus.resources.AdaptedMetadata;
 
 
 public class MetadataCatalog extends HashMap<Integer,LinkedList<FileAttribute>> implements MetadataInterface {
@@ -57,7 +57,7 @@ public class MetadataCatalog extends HashMap<Integer,LinkedList<FileAttribute>> 
 		 for(int i = 0 ; i  < this.size() ; i++){
 			 //TODO Here get 0 since all metadata in linked list of index i
 			 //carry to copies of the same file
-			 if(((FileMetadata) this.get(i).get(0)).getName().equals(name)) {
+			 if(((AdaptedMetadata) this.get(i).get(0)).getName().equals(name)) {
 				 return true;
 			 }
 		 }
