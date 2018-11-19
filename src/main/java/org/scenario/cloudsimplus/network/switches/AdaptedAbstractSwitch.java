@@ -22,8 +22,10 @@ import org.cloudbus.cloudsim.util.Conversion;
 
 public abstract class AdaptedAbstractSwitch extends AbstractSwitch{
 		
-		private int numberOfPacketsBeingProcessed = 0;
-		private int cumulatedCharge = 0;
+		private int numberOfDownlinkPacketsBeingProcessed = 0;
+		private int numberOfUplinkPacketsBeingProcessed = 0;
+		private int cumulatedUplinkCharge = 0;
+		private int cumulatedDownlinkCharge = 0;
 		/**
 		 * The count between traffic load logs 
 		 * (a log is adding a value to history list)
@@ -58,10 +60,17 @@ public abstract class AdaptedAbstractSwitch extends AbstractSwitch{
 		 * @return the expected time to transfer the packet through the network (in seconds)
 		 */
 		    protected double networkDelayForPacketTransmission(final HostPacket netPkt, final double bwCapacity, final List<HostPacket> netPktList, int upOrDownOrHosts) {
-		    	int temp = numberOfPacketsBeingProcessed;
-		    	// TODO Test this number Packets of more
-		    	//System.out.println(numberOfPacketsBeingProcessed);
-		    	numberOfPacketsBeingProcessed--;
+		    	int temp = 0 ;
+		    	if(upOrDownOrHosts == 1 ) {
+		    		temp = numberOfUplinkPacketsBeingProcessed;
+		    		numberOfUplinkPacketsBeingProcessed--;	
+		    		temp += numberOfDownlinkPacketsBeingProcessed;
+		    	}
+		    	else {
+		    		temp = numberOfDownlinkPacketsBeingProcessed;
+		    		numberOfDownlinkPacketsBeingProcessed--;
+		    		temp += numberOfUplinkPacketsBeingProcessed;
+		    	}
 		        return  temp * 0.00001  + Conversion.bytesToMegaBits(netPkt.getVmPacket().getSize()) / getAvailableBwForEachPacket(bwCapacity, netPktList ,upOrDownOrHosts);
 		    }
 		    
@@ -88,22 +97,22 @@ public abstract class AdaptedAbstractSwitch extends AbstractSwitch{
 		
 		@Override
 		public void addPacketToBeSentToDownlinkSwitch(final Switch downlinkSwitch, final HostPacket packet) {
-			numberOfPacketsBeingProcessed++;
-			cumulatedCharge++;
+			numberOfDownlinkPacketsBeingProcessed++;
+			cumulatedDownlinkCharge++;
 		    getDownlinkSwitchPacketList(downlinkSwitch).add(packet);
 		}
 		
 		@Override
 		public void addPacketToBeSentToUplinkSwitch(final Switch uplinkSwitch, final HostPacket packet) {
-			numberOfPacketsBeingProcessed++;
-			cumulatedCharge++;
+			numberOfUplinkPacketsBeingProcessed++;
+			cumulatedUplinkCharge++;
 		    getUplinkSwitchPacketList(uplinkSwitch).add(packet);
 		}
 		
 		@Override
 		public void addPacketToBeSentToHost(final NetworkHost host, final HostPacket packet) {
-			numberOfPacketsBeingProcessed++;
-			cumulatedCharge++;
+			numberOfDownlinkPacketsBeingProcessed++;
+			cumulatedDownlinkCharge++;
 		    getHostPacketList(host).add(packet);
 		}
 
@@ -115,20 +124,36 @@ public abstract class AdaptedAbstractSwitch extends AbstractSwitch{
 			this.idAmongSameLevel = idAmongSameLevel;
 		}
 
-		public int getNumberOfPacketsBeingProcessed() {
-			return numberOfPacketsBeingProcessed;
+		public int getNumberOfDownlinkPacketsBeingProcessed() {
+			return numberOfDownlinkPacketsBeingProcessed;
+		}
+		
+		public int getNumberOfUplinkPacketsBeingProcessed() {
+			return numberOfUplinkPacketsBeingProcessed;
 		}
 
-		public void setNumberOfPacketsBeingProcessed(int numberOfPacketsBeingProcessed) {
-			this.numberOfPacketsBeingProcessed = numberOfPacketsBeingProcessed;
+		public void setNumberOfDownlinkPacketsBeingProcessed(int numberOfDownlinkPacketsBeingProcessed) {
+			this.numberOfDownlinkPacketsBeingProcessed = numberOfDownlinkPacketsBeingProcessed;
 		}
 
-		public int getCumulatedCharge() {
-			return cumulatedCharge;
+		public void setNumberOfUplinkPacketsBeingProcessed(int numberOfUplinkPacketsBeingProcessed) {
+			this.numberOfUplinkPacketsBeingProcessed = numberOfUplinkPacketsBeingProcessed;
+		}
+		
+		public int getCumulatedUplinkCharge() {
+			return cumulatedUplinkCharge;
 		}
 
-		public void setCumulatedCharge(int cumulatedCharge) {
-			this.cumulatedCharge = cumulatedCharge;
+		public void setCumulatedUplinkCharge(int cumulatedUplinkCharge) {
+			this.cumulatedUplinkCharge = cumulatedUplinkCharge;
+		}
+
+		public int getCumulatedDownlinkCharge() {
+			return cumulatedDownlinkCharge;
+		}
+
+		public void setCumulatedDownlinkCharge(int cumulatedDownlinkCharge) {
+			this.cumulatedDownlinkCharge = cumulatedDownlinkCharge;
 		}
 
 		public int getSkipCount() {

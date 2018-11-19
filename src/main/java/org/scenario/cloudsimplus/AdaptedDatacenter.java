@@ -131,8 +131,10 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 			for(Switch sw : this.getSwitchMap()) {			
 				((AdaptedAbstractSwitch)sw).setSkipCount(((AdaptedAbstractSwitch)sw).getSkipCount()+1);
 				if( ((AdaptedAbstractSwitch)sw).getSkipCount() > SimulationParameters.LOAD_HISTORY_UPDATE_INTERVAL) {
-					((AdaptedAbstractSwitch)sw).getHistoryList().add(((AdaptedAbstractSwitch)sw).getCumulatedCharge());
-					((AdaptedAbstractSwitch)sw).setCumulatedCharge(0);
+					//Now we only use Downlink traffic load
+					((AdaptedAbstractSwitch)sw).getHistoryList().add(((AdaptedAbstractSwitch)sw).getCumulatedDownlinkCharge());
+					((AdaptedAbstractSwitch)sw).setCumulatedDownlinkCharge(0);
+					((AdaptedAbstractSwitch)sw).setCumulatedUplinkCharge(0);
 					((AdaptedAbstractSwitch)sw).setSkipCount(0);
 				}
 			}
