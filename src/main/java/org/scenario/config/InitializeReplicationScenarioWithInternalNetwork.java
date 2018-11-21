@@ -144,27 +144,23 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 			        .setUtilizationModelCpu(new UtilizationModelFull())
 			        .setUtilizationModelBw(new UtilizationModelFull());
 	        cloudlet.setSubmissionDelay(0);
-	        if(cloudletsCount < SimulationParameters.NO_CLOUDLETS -15) {	        	
-	        	cloudlet.setRequestedFileId(Utils.getuniformIntegerDist(0, 5).sample());
-	        	cloudletsCount++;
-	        }
-	        else {
 	        	/*TODO Identification mechanism for files needs to change 
 	        	 to something more usable */
-	        	int random = Utils.getuniformIntegerDist(1, 3).sample() ;
-	        	cloudlet.setRequestedFileId(5 + random);
-	        	cloudlet.setSubmissionDelay(SimulationParameters.DEPLOY_NEW_FILE * random);
-	        	cloudletsCount++;
+	        	
+	        if(cloudletsCount <  150 * SimulationParameters.SCALE_FACTOR) {
+	        	cloudlet.setRequestedFileId(0);
 	        }
-//	        if(debugCount <  150 * SimulationParameters.SCALE_FACTOR) {
-//	        	cloudlet.setRequestedFileId(0);
-//	        }
-//	        if(debugCount < 250 * SimulationParameters.SCALE_FACTOR && debugCount >= 150* SimulationParameters.SCALE_FACTOR) {
-//	        	cloudlet.setRequestedFileId(1);
-//	        }
-//	        if(debugCount < 300* SimulationParameters.SCALE_FACTOR  && debugCount >= 250* SimulationParameters.SCALE_FACTOR ) {
-//	        	cloudlet.setRequestedFileId(2);
-//	        }
+	        else if(cloudletsCount < 200 * SimulationParameters.SCALE_FACTOR && cloudletsCount >= 150* SimulationParameters.SCALE_FACTOR) {
+	        	cloudlet.setRequestedFileId(1);
+	        }
+	        else if(cloudletsCount < 350* SimulationParameters.SCALE_FACTOR  && cloudletsCount >= 250* SimulationParameters.SCALE_FACTOR ) {
+	        	cloudlet.setRequestedFileId(2);
+	        }
+	        else {
+	        	int rand = Utils.getuniformIntegerDist(3, 9).sample();
+	        	cloudlet.setRequestedFileId(rand);
+	        	cloudlet.setSubmissionDelay(rand);
+	        }
 //	        if(debugCount < 400* SimulationParameters.SCALE_FACTOR  && debugCount >= 300* SimulationParameters.SCALE_FACTOR) {
 //	        	cloudlet.setRequestedFileId(3);
 //	        }
@@ -195,7 +191,7 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 //	        if(debugCount < 1300* SimulationParameters.SCALE_FACTOR  && debugCount >= 1200* SimulationParameters.SCALE_FACTOR) {
 //	        	cloudlet.setRequestedFileId(9);
 //	        }
-//	        debugCount++;
+	        cloudletsCount++;
 	        cloudlet.addTask(new CloudletExecutionTask(numberOfCpuCores, 2));
 //	        cloudlet.setVm(vm);
 	        return cloudlet;
@@ -252,16 +248,10 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
         File file1 = new AdaptedFile("file1.dat", 100);
         File file2 = new AdaptedFile("file2.dat", 100);
         File file3 = new AdaptedFile("file3.dat", 100);
-        File file4 = new AdaptedFile("file4.dat", 100);
-        File file5 = new AdaptedFile("file5.dat", 100);
-        File file6 = new AdaptedFile("file6.dat", 100);
         
         datacenterStorage.getStorageList().get(0).addFile(file1);
         datacenterStorage.getStorageList().get(2).addFile(file2);
-        datacenterStorage.getStorageList().get(3).addFile(file3);
-        datacenterStorage.getStorageList().get(1).addFile(file4); 
-        datacenterStorage.getStorageList().get(5).addFile(file5); 
-        datacenterStorage.getStorageList().get(4).addFile(file6); 
+        datacenterStorage.getStorageList().get(4).addFile(file3);
           
 //        datacenterStorage.getStorageList().get(3).addFile(new AdaptedFile("file9.dat", 100));
 //        datacenterStorage.getStorageList().get(1).addFile(new AdaptedFile("file10.dat", 100));

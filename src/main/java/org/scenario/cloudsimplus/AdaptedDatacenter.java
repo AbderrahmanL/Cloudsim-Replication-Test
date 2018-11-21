@@ -3,12 +3,13 @@ package org.scenario.cloudsimplus;
 
 import static java.util.stream.Collectors.toList;
 
-import java.io.IOException;
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-
-import javax.rmi.CORBA.Util;
 
 import org.cloudbus.cloudsim.allocationpolicies.VmAllocationPolicy;
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
@@ -28,7 +29,6 @@ import org.cloudbus.cloudsim.network.switches.Switch;
 import org.cloudbus.cloudsim.resources.FileAttribute;
 import org.cloudbus.cloudsim.util.Conversion;
 import org.cloudbus.cloudsim.vms.Vm;
-import org.scenario.Utils.Utils;
 import org.scenario.autoadaptive.CloudDataTags;
 import org.scenario.autoadaptive.LoadBalancer;
 import org.scenario.autoadaptive.MetadataManager;
@@ -39,9 +39,6 @@ import org.scenario.cloudsimplus.resources.AdaptedMetadata;
 import org.scenario.config.SimulationParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import jxl.read.biff.BiffException;
-import jxl.write.WriteException;
 
 /**
  * Adapted dc with possibility to inject strategies to choose execution node
@@ -69,33 +66,24 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 	
 	@Override
     public void processEvent(final SimEvent ev) {
+		/*TODO move this out of this class and use addOnclouckTickListener 
+		 * from simulation like : simulation.addOnClockTickListener(this::createRandomCloudlets);
+		 */
 		updateNetworkGraph();
-		if(this.getSimulation().clock() > SimulationParameters.DEPLOY_NEW_FILE * 1 && !MetadataManager.getCatalogInstance().hasEntry("newlyPlaced1")) {
-			placeNewFile(1);
+		for(int i = 3 ; i < 10 ; i++ )
+		if(this.getSimulation().clock() > i && !MetadataManager.getCatalogInstance().hasEntry("newlyPlaced"+i)) {
+			placeNewFile(i);
 			try {
-				Utils.writeToXls(this.loadGraph.getRoutesWeight(),2);
-			} catch (Exception e) {
+				System.setOut(new PrintStream(new FileOutputStream("log",true)));
+				for(String edge : loadGraph.getRoutesWeight().keySet()) {
+					System.out.print(edge.substring(17)+":"+loadGraph.getRoutesWeight().get(edge) + " ");
+				}
+				System.out.println();
+				System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out))); 
+			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} 
-		}
-		if(this.getSimulation().clock() > SimulationParameters.DEPLOY_NEW_FILE * 2 && !MetadataManager.getCatalogInstance().hasEntry("newlyPlaced2")) {
-			placeNewFile(2);
-			try {
-				Utils.writeToXls(this.loadGraph.getRoutesWeight(),4);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-		}
-		if(this.getSimulation().clock() > SimulationParameters.DEPLOY_NEW_FILE * 3 && !MetadataManager.getCatalogInstance().hasEntry("newlyPlaced3")) {
-			placeNewFile(3);	
-			try {
-				Utils.writeToXls(this.loadGraph.getRoutesWeight(),6);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
+			}
 		}
         super.processEvent(ev);
     }
@@ -120,7 +108,7 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 			this.getDatacenterStorage().getStorageList().get(((AdaptedAbstractSwitch) this.getSwitchMap().stream().filter(
 					s -> s.getName().equals(switchName))
 					.findFirst().get()).getIdAmongSameLevel())
-					.addFile(new AdaptedFile("newlyPlaced"+fileNumber,100 + 10 * fileNumber));
+					.addFile(new AdaptedFile("newlyPlaced"+fileNumber,100));
 	}
 
 	private void updateNetworkGraph() {
