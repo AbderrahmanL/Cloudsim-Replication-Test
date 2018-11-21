@@ -45,39 +45,14 @@ public class RunReplicationScenario {
         List<DatacenterBroker> brokers = new InitializeReplicationScenarioBasicTreeTopology().init(); 
         Utils.writeInAGivenFile("Log",  "" , false);
         brokers.get(0).getSimulation().start();
-//        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out))); // make out go back to default
-//        try {
-//			System.setOut(new PrintStream(new FileOutputStream("1000req_1MB_Fair")));
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
         List<AdaptedCloudlet> finished = brokers.get(0).getCloudletFinishedList();
-//        AdaptedCloudlet finishedMax = finished.stream().filter(c -> 
-//        (((AdaptedDatacenterStorage)c.getLastDatacenter().getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet)c).getRequestedFileId()).getFileSize() == 300))
-//        		.max((c1,c2) -> c1.getGotToBrokerTime() > c2.getGotToBrokerTime() ? 1 : -1).get();
-//        AdaptedCloudlet finishedMax1 = finished.stream().filter(c -> 
-//        (((AdaptedDatacenterStorage)c.getLastDatacenter().getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet)c).getRequestedFileId()).getFileSize() == 100))
-//        		.max((c1,c2) -> c1.getGotToBrokerTime() > c2.getGotToBrokerTime() ? 1 : -1).get();
-//        AdaptedCloudlet finishedMax2 = finished.stream().filter(c -> 
-//        (((AdaptedDatacenterStorage)c.getLastDatacenter().getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet)c).getRequestedFileId()).getFileSize() == 200))
-//        		.max((c1,c2) -> c1.getGotToBrokerTime() > c2.getGotToBrokerTime() ? 1 : -1).get();
-//        AdaptedCloudlet finishedMax3 = finished.stream().filter(c -> 
-//        (((AdaptedDatacenterStorage)c.getLastDatacenter().getDatacenterStorage()).getMetadataManager().getFileMetadataWithId(((AdaptedCloudlet)c).getRequestedFileId()).getFileSize() == 150))
-//        		.max((c1,c2) -> c1.getGotToBrokerTime() > c2.getGotToBrokerTime() ? 1 : -1).get();
         
         DetailedCloudletsTableBuilder results = new DetailedCloudletsTableBuilder(finished);
         		results.build();
         		
 //        		writeToXls(finished);
-        	    
-//        	    printResults(finishedMax);
-//        	    printResults(finishedMax1);
-//        	    printResults(finishedMax2);
-//        	    printResults(finishedMax3);
+
         	    printResults(finished);
-//        	    NetworkLoadGraph graph = new NetworkLoadGraph(((AdaptedDatacenter)finished.get(0).getLastDatacenter()).getSwitchMap());
-//        	    graph.display();
         	    
     }
     

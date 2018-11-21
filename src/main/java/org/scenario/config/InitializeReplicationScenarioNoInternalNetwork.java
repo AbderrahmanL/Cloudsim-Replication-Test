@@ -26,6 +26,7 @@ import org.cloudbus.cloudsim.schedulers.vm.VmSchedulerSpaceShared;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelDynamic;
 import org.cloudbus.cloudsim.vms.Vm;
 import org.cloudbus.cloudsim.vms.VmSimple;
+import org.cloudsimplus.listeners.EventInfo;
 import org.scenario.cloudsimplus.resources.AdaptedFile;
 
 
@@ -36,7 +37,12 @@ public class InitializeReplicationScenarioNoInternalNetwork extends InitializeRe
 		DatacenterBroker broker = new DatacenterBrokerSimple(simulation);
 		List<DatacenterBroker> brokers = new ArrayList<>();
 		brokers.add(broker);
+		broker.getSimulation().addOnClockTickListener(this::func);
 		return brokers;
+	}
+	
+	public void func(EventInfo evt) {
+		
 	}
 	
 	protected Host createHost(int ram,long mips,int pes) {
@@ -66,7 +72,7 @@ public class InitializeReplicationScenarioNoInternalNetwork extends InitializeRe
                 .setCloudletScheduler(new CloudletSchedulerTimeShared());
     }
 
-    protected Cloudlet createCloudlet(int id, Vm vm) {
+    protected Cloudlet createCloudlet() {
         final long length = 10000; //in Million Structions (MI)
         final long fileSize = 300; //Size (in bytes) before execution
         final long outputSize = 300; //Size (in bytes) after execution
@@ -74,7 +80,7 @@ public class InitializeReplicationScenarioNoInternalNetwork extends InitializeRe
 
         Cloudlet cloudlet
                 = new CloudletSimple(
-                        id, length, numberOfCpuCores)
+                        -1, length, numberOfCpuCores)
                         .setFileSize(fileSize)
                         .setOutputSize(outputSize)
                         .setUtilizationModelRam(new UtilizationModelDynamic(0.5))

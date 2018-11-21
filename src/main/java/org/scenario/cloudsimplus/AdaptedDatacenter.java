@@ -69,22 +69,22 @@ public class AdaptedDatacenter extends NetworkDatacenter{
 		/*TODO move this out of this class and use addOnclouckTickListener 
 		 * from simulation like : simulation.addOnClockTickListener(this::createRandomCloudlets);
 		 */
-		updateNetworkGraph();
-		for(int i = 3 ; i < 10 ; i++ )
-		if(this.getSimulation().clock() > i && !MetadataManager.getCatalogInstance().hasEntry("newlyPlaced"+i)) {
-			placeNewFile(i);
-			try {
-				System.setOut(new PrintStream(new FileOutputStream("log",true)));
-				for(String edge : loadGraph.getRoutesWeight().keySet()) {
-					System.out.print(edge.substring(17)+":"+loadGraph.getRoutesWeight().get(edge) + " ");
-				}
-				System.out.println();
-				System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out))); 
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+//		updateNetworkGraph();
+//		for(int i = 3 ; i < 10 ; i++ )
+//		if(this.getSimulation().clock() > i && !MetadataManager.getCatalogInstance().hasEntry("newlyPlaced"+i)) {
+//			placeNewFile(i);
+//			try {
+//				System.setOut(new PrintStream(new FileOutputStream("log",true)));
+//				for(String edge : loadGraph.getRoutesWeight().keySet()) {
+//					System.out.print(edge.substring(17)+":"+loadGraph.getRoutesWeight().get(edge) + " ");
+//				}
+//				System.out.println();
+//				System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out))); 
+//			} catch (FileNotFoundException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
         super.processEvent(ev);
     }
 	

@@ -28,7 +28,7 @@ public abstract class InitializeReplicationScenario {
 
 			protected abstract Vm createVm(int id, int ram,long mips,int pes);
 			
-			protected abstract Cloudlet createCloudlet(int id, Vm vm);
+			protected abstract Cloudlet createCloudlet();
 			
 			protected abstract  Host createHost(int ram,long mips,int pes);
 
@@ -46,6 +46,7 @@ public abstract class InitializeReplicationScenario {
 				CloudSim simulation = new CloudSim();
 			    dcs = createDatacenters(simulation);
 			    simulation.getDatacenterList().addAll(dcs);
+			    simulation.terminateAt(100);
 			    brokers = createBrokers(simulation);
 		
 			    vmList = new ArrayList<>();

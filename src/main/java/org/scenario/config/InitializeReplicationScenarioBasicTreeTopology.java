@@ -87,14 +87,14 @@ public class InitializeReplicationScenarioBasicTreeTopology extends InitializeRe
 	        Vm vm = createVm(vmList.size(), 32768,4000,16);
 	        vmList.add(vm);
 	    }
-	    for (int j = 0; j < SimulationParameters.NO_CLOUDLETS; j++) {
-	    	AdaptedCloudlet cloudlet = (AdaptedCloudlet)createCloudlet(cloudletList.size(), Vm.NULL);
-	    	setArrivalTimeForCloudlet(cloudlet);
-	    	cloudletList.add(cloudlet);
-	    }
+//	    for (int j = 0; j < SimulationParameters.NO_CLOUDLETS; j++) {
+//	    	AdaptedCloudlet cloudlet = (AdaptedCloudlet)createCloudlet();
+//	    	setArrivalTimeForCloudlet(cloudlet);
+//	    	cloudletList.add(cloudlet);
+//	    }
 		// TODO here get 0 since we have one broker must change otherwise
 	    brokers.get(0).submitVmList(vmList);
-	    brokers.get(0).submitCloudletList(cloudletList);
+//	    brokers.get(0).submitCloudletList(cloudletList);
 	    
 	}
 	

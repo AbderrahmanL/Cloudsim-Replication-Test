@@ -31,8 +31,8 @@ public class LoadBalancerWeightedLeastConnections implements LoadBalancer{
 
 	@Override
 	public Vm electVm(List<Vm> vmList) {
-//		Vm candidate = vmList.get(Utils.getuniformIntegerDist(0, vmList.size()-1).sample());
-		Vm candidate = Collections.min(vmList, (vm1,vm2) -> ((AdaptedVm) vm1).getOrUpdateRequestCount(0) > ((AdaptedVm) vm2).getOrUpdateRequestCount(0) ? 1 : -1);
+		Vm candidate = vmList.get(Utils.getuniformIntegerDist(0, vmList.size()-1).sample());
+//		Vm candidate = Collections.min(vmList, (vm1,vm2) -> ((AdaptedVm) vm1).getOrUpdateRequestCount(0) > ((AdaptedVm) vm2).getOrUpdateRequestCount(0) ? 1 : -1);
 //		Vm candidate = vmList.get(vmList.size()-1);
 		// TODO connections to a dc should be ++
 		// Also update avgCloudletLenght 

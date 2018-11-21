@@ -29,6 +29,7 @@ import org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerCompletelyFair
 import org.cloudbus.cloudsim.schedulers.vm.VmSchedulerSpaceShared;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelFull;
 import org.cloudbus.cloudsim.vms.Vm;
+import org.cloudsimplus.listeners.EventInfo;
 import org.scenario.Utils.Utils;
 import org.scenario.autoadaptive.LoadBalancerWeightedLeastConnections;
 import org.scenario.cloudsimplus.AdaptedCloudlet;
@@ -53,16 +54,28 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
     
     @Override
     public List<DatacenterBroker> init() {
-	    	List<DatacenterBroker> brokers = super.init();
+	    	brokers = super.init();
 	    	populateBriteFile(brokers);
 	    	NetworkTopology networkTopology = BriteNetworkTopology.getInstance("topology.brite");
 			// TODO here get 0 since we have one broker must change otherwise
 		  	brokers.get(0).getSimulation().setNetworkTopology(networkTopology);
 		  	for (int i=1 ; i<brokers.get(0).getSimulation().getEntityList().size() ; i++)
 		  	networkTopology.mapNode(i, i);
+		  	brokers.get(0).getSimulation().addOnClockTickListener(this::func);
 		  	return brokers;
     }
     
+    public void func(EventInfo evt) {
+    	if(Utils.getuniformRealDist().sample() <= 0.11 && evt.getTime()<20){
+            System.out.printf("\n# Randomly creating 1 Cloudlet at time %.2f\n", evt.getTime());
+            Cloudlet cloudlet = createCloudlet();
+            int rand = Utils.getuniformIntegerDist(0, 2).sample();
+        	((AdaptedCloudlet)cloudlet).setRequestedFileId(rand);
+            cloudletList.add(cloudlet);
+            brokers.get(0).submitCloudlet(cloudlet);
+        }
+	}
+
 	private void populateBriteFile(List<DatacenterBroker> brokers) {
 		try {
 			int edgeCounter = 0;
@@ -130,14 +143,14 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 	}
 
 	@Override
-	protected Cloudlet createCloudlet(int id, Vm vm) {
+	protected Cloudlet createCloudlet() {
 	        final long fileSize = 300; //Size (in bytes) before execution
 	        final long outputSize = 300; //Size (in bytes) after execution
 	        final int  numberOfCpuCores = 1; // cores used by cloudlet
 
 	        AdaptedCloudlet cloudlet
 	                = (AdaptedCloudlet) new AdaptedCloudlet(
-			        id, 100, numberOfCpuCores)
+			        -1, 100, numberOfCpuCores)
 			        .setFileSize(fileSize)
 			        .setOutputSize(outputSize)
 			        .setUtilizationModelRam(new UtilizationModelFull())
@@ -156,11 +169,11 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 	        else if(cloudletsCount < 350* SimulationParameters.SCALE_FACTOR  && cloudletsCount >= 250* SimulationParameters.SCALE_FACTOR ) {
 	        	cloudlet.setRequestedFileId(2);
 	        }
-	        else {
-	        	int rand = Utils.getuniformIntegerDist(3, 9).sample();
-	        	cloudlet.setRequestedFileId(rand);
-	        	cloudlet.setSubmissionDelay(rand);
-	        }
+//	        else {
+//	        	int rand = Utils.getuniformIntegerDist(3, 9).sample();
+//	        	cloudlet.setRequestedFileId(rand);
+//	        	cloudlet.setSubmissionDelay(rand);
+//	        }
 //	        if(debugCount < 400* SimulationParameters.SCALE_FACTOR  && debugCount >= 300* SimulationParameters.SCALE_FACTOR) {
 //	        	cloudlet.setRequestedFileId(3);
 //	        }
@@ -193,7 +206,6 @@ public abstract class InitializeReplicationScenarioWithInternalNetwork extends I
 //	        }
 	        cloudletsCount++;
 	        cloudlet.addTask(new CloudletExecutionTask(numberOfCpuCores, 2));
-//	        cloudlet.setVm(vm);
 	        return cloudlet;
 	}
 
